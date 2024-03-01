@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <h1>Duordle</h1>
+      <h1 className='text-slate-600'>Duordle</h1>
     </>
   );
 }
