@@ -10,9 +10,13 @@
 ![MongoDb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![AWS](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
-# Description
+## Description
 
 Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Typescript, Tailwind CSS, and AWS for hosting.
+
+## Note
+
+This project is under active development.
 
 ## License
 
