@@ -2,6 +2,10 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+# Description
+
+Duordle is an online game inspired by the wildly popular Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Duordle offers a way to create words for your opponents to solve or solve the daily puzzle together.
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
