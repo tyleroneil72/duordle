@@ -25,7 +25,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-This project was inspired by Wordle, a game created by Josh Wardle and popularized by the New York Times. Our game is an independent creation and is not affiliated with, sponsored by, or endorsed by the New York Times or the creators of Wordle.
+This project was inspired by Wordle, a game created by Josh Wardle and popularized by the New York Times. This game is an independent creation and is not affiliated with, sponsored by, or endorsed by the New York Times or the creators of Wordle.
 
 ## Contact
 
