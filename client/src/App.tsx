@@ -1,26 +1,33 @@
-import { useState } from "react";
-import io from "socket.io-client";
+import { useState, ChangeEvent } from "react";
+import io, { Socket } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+// Create a type for the word object to be sent over the socket
+type WordObject = {
+  room: string;
+  word: string;
+};
+
+const socket: Socket = io("http://localhost:3000");
 
 function App() {
-  const [room, setRoom] = useState("");
-  const [word, setWord] = useState("");
-  const [receivedWord, setReceivedWord] = useState("");
+  const [room, setRoom] = useState<string>("");
+  const [word, setWord] = useState<string>("");
+  const [receivedWord, setReceivedWord] = useState<string>("");
 
-  const handleCreateRoom = () => {
+  const handleCreateRoom = (): void => {
     socket.emit("create_room", room);
   };
 
-  const handleJoinRoom = () => {
+  const handleJoinRoom = (): void => {
     socket.emit("join_room", room);
   };
 
-  const handleSetWord = () => {
-    socket.emit("set_word", { room, word });
+  const handleSetWord = (): void => {
+    const payload: WordObject = { room, word };
+    socket.emit("set_word", payload);
   };
 
-  socket.on("word_received", (word) => {
+  socket.on("word_received", (word: string) => {
     setReceivedWord(word);
   });
 
@@ -30,7 +37,9 @@ function App() {
         <input
           type='text'
           value={room}
-          onChange={(e) => setRoom(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setRoom(e.target.value)
+          }
           placeholder='Room Code'
           className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />
@@ -51,7 +60,9 @@ function App() {
         <input
           type='text'
           value={word}
-          onChange={(e) => setWord(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setWord(e.target.value)
+          }
           placeholder='Your Word'
           className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-4 leading-tight focus:outline-none focus:shadow-outline'
         />
