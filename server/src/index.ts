@@ -1,16 +1,36 @@
-import express, { Request, Response } from "express";
-import dotenv from "dotenv";
-dotenv.config();
-import cors from "cors";
+import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
-const app: express.Application = express();
-app.use(cors());
-const port: number = Number(process.env.PORT) || 3000;
-
-app.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Hello World!" });
+const app = express();
+const httpServer = createServer(app);
+const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
+const io = new Server(httpServer, {
+  cors: {
+    origin: `http://localhost:${CLIENT_PORT}`,
+    methods: ["GET", "POST"],
+  },
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("create_room", (room) => {
+    socket.join(room);
+    console.log(`Room created: ${room}`);
+  });
+
+  socket.on("join_room", (room) => {
+    socket.join(room);
+    console.log(`Joined room: ${room}`);
+  });
+
+  socket.on("set_word", ({ room, word }) => {
+    socket.to(room).emit("word_received", word);
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+httpServer.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
