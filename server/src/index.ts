@@ -17,7 +17,7 @@ interface RoomLimits {
 }
 
 const roomLimits: RoomLimits = {};
-const roomMembers: any = {};
+const roomMembers: any = {}; // TODO: Fix Type Any to correct type
 
 io.on("connection", (socket: Socket) => {
   console.log(`User connected: ${socket.id}`);
