@@ -1,28 +1,32 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { socket } from "../services/socket";
 
 function RoomPage() {
   const { roomCode } = useParams();
   const [word, setWord] = useState("");
   const [receivedWord, setReceivedWord] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (roomCode) {
-      // Join the room when the component mounts
       socket.emit("join_room", roomCode);
+
+      socket.on("room_full", () => {
+        navigate("/full");
+      });
 
       // Listen for words received from the server
       socket.on("word_received", (word) => {
         setReceivedWord(word);
       });
 
-      // Cleanup the effect when the component unmounts
       return () => {
-        socket.off("word_received");
+        socket.off("room_full");
+        socket.emit("leave_room", roomCode);
       };
     }
-  }, [roomCode]);
+  }, [roomCode, navigate]);
 
   const handleSetWord = () => {
     if (word) {

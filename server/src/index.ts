@@ -12,20 +12,52 @@ const io: SocketIOServer = new SocketIOServer(httpServer, {
   },
 });
 
+interface RoomLimits {
+  [key: string]: number;
+}
+
+const roomLimits: RoomLimits = {};
+const roomMembers: any = {};
+
 io.on("connection", (socket: Socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  socket.on("create_room", (room: string) => {
-    socket.join(room);
-    console.log(`Room created: ${room}`);
+  socket.on("create_room", (room) => {
+    if (!roomMembers[room]) {
+      roomMembers[room] = new Set();
+    }
+    if (roomMembers[room].size < 2 && !roomMembers[room].has(socket.id)) {
+      socket.join(room);
+      roomMembers[room].add(socket.id);
+      console.log(`Joined room: ${room}`);
+    } else if (roomMembers[room].has(socket.id)) {
+      console.log(`Already in room: ${room}`);
+    } else {
+      socket.emit("room_full");
+    }
   });
 
   socket.on("join_room", (room) => {
-    // Make sure the socket only joins if it's not already in the room
-    const rooms = Array.from(socket.rooms);
-    if (!rooms.includes(room)) {
+    if (!roomMembers[room]) {
+      roomMembers[room] = new Set();
+    }
+    if (roomMembers[room].size < 2 && !roomMembers[room].has(socket.id)) {
       socket.join(room);
+      roomMembers[room].add(socket.id);
       console.log(`Joined room: ${room}`);
+    } else if (roomMembers[room].has(socket.id)) {
+      console.log(`Already in room: ${room}`);
+    } else {
+      socket.emit("room_full");
+    }
+  });
+
+  socket.on("disconnect", () => {
+    // Decrease room limit on disconnect if the user was in a room
+    for (let room of Array.from(socket.rooms)) {
+      if (room !== socket.id && roomLimits[room] !== undefined) {
+        roomLimits[room]--;
+      }
     }
   });
 
