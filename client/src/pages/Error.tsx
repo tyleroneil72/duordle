@@ -1,7 +1,20 @@
 import { useNavigate } from "react-router-dom";
 
-const ErrorPage = ({ title, message }: { title: string; message: string }) => {
+const ErrorPage = ({ type }: { type: string }) => {
   const navigate = useNavigate();
+  let title: string, message: string;
+
+  if (type == "404") {
+    title = "Page Not Found";
+    message = "The page you are looking for does not exist.";
+  } else if (type == "full") {
+    title = "Room Full";
+    message = "This room is already full. Please try a different one.";
+  } else {
+    title = "Error";
+    message = "Sorry, there was a problem loading the page.";
+  }
+
   return (
     <div className='text-center p-10'>
       <h1 className='text-3xl text-red-500'>{title}</h1>

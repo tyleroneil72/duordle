@@ -15,24 +15,8 @@ const App = () => {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='room/:roomCode' element={<RoomPage />} />
-          <Route
-            path='full'
-            element={
-              <Error
-                title='Room Full'
-                message='This room is already full. Please try a different one.'
-              />
-            }
-          />
-          <Route
-            path='*'
-            element={
-              <Error
-                title='Error'
-                message='Sorry, there was a problem loading the page.'
-              />
-            }
-          />
+          <Route path='full' element={<Error type='full' />} />
+          <Route path='*' element={<Error type='404' />} />
         </Routes>
       </Suspense>
       <Footer />
