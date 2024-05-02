@@ -1,7 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import io, { Socket } from "socket.io-client";
 
-// Create a type for the word object to be sent over the socket
 type WordObject = {
   room: string;
   word: string;
