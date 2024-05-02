@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 
-// Initialize the socket connection outside the component if it doesn't change
-const socket = io("http://localhost:3000"); // Update this URL to your server's URL
+const socket = io("http://localhost:3000");
 
 function RoomPage() {
   const { roomCode } = useParams();
