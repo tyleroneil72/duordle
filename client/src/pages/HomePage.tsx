@@ -8,12 +8,10 @@ function HomePage() {
   const navigate = useNavigate();
 
   const handleCreateRoom = () => {
-    // Navigate to the RoomPage with a generated room code
     navigate(`/room/${room}`);
   };
 
   const handleJoinRoom = () => {
-    // Navigate to the RoomPage with the entered room code
     navigate(`/room/${room}`);
   };
 
