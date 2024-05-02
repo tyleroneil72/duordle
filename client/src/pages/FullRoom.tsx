@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 const FullRoom = () => {
   const navigate = useNavigate();
   return (
-    <div className='text-center p-5'>
+    <div className='text-center p-10'>
       <h1 className='text-3xl text-red-500'>Room Full</h1>
       <p>This room is already full. Please try a different one.</p>
       <button

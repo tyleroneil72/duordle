@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 const ErrorPage = () => {
   const navigate = useNavigate();
   return (
-    <div className='text-center p-5'>
+    <div className='text-center p-10'>
       <h1 className='text-3xl text-red-500'>Error</h1>
       <p>Sorry, there was a problem loading the page.</p>
       <button
