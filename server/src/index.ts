@@ -20,9 +20,13 @@ io.on("connection", (socket: Socket) => {
     console.log(`Room created: ${room}`);
   });
 
-  socket.on("join_room", (room: string) => {
-    socket.join(room);
-    console.log(`Joined room: ${room}`);
+  socket.on("join_room", (room) => {
+    // Make sure the socket only joins if it's not already in the room
+    const rooms = Array.from(socket.rooms);
+    if (!rooms.includes(room)) {
+      socket.join(room);
+      console.log(`Joined room: ${room}`);
+    }
   });
 
   socket.on("set_word", ({ room, word }: { room: string; word: string }) => {
