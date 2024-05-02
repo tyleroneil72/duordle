@@ -52,6 +52,14 @@ io.on("connection", (socket: Socket) => {
     }
   });
 
+  socket.on("leave_room", (room) => {
+    if (roomMembers[room] && roomMembers[room].has(socket.id)) {
+      roomMembers[room].delete(socket.id);
+      socket.leave(room);
+      console.log(`Left room: ${room}`);
+    }
+  });
+
   socket.on("disconnect", () => {
     // Decrease room limit on disconnect if the user was in a room
     for (let room of Array.from(socket.rooms)) {
