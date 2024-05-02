@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import io from "socket.io-client";
-
-const socket = io("http://localhost:3000");
+import { socket } from "../services/socket";
 
 function RoomPage() {
   const { roomCode } = useParams();
