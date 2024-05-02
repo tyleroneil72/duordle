@@ -60,10 +60,6 @@ io.on("connection", (socket: Socket) => {
       }
     }
   });
-
-  socket.on("set_word", ({ room, word }: { room: string; word: string }) => {
-    socket.to(room).emit("word_received", word);
-  });
 });
 
 const PORT: number = parseInt(process.env.PORT || "3000", 10);
