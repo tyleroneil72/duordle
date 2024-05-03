@@ -27,3 +27,15 @@ export const getRoom = asyncWrapper(async (req, res: Response, next) => {
   }
   res.status(StatusCodes.OK).json({ room });
 });
+
+export const deleteRoom = asyncWrapper(async (req, res: Response) => {
+  const { id } = req.params;
+  if (!mongoose.isValidObjectId(id)) {
+    return res.status(400).json({ message: "Invalid room ID format" });
+  }
+  const room = await Room.findByIdAndDelete(id);
+  if (!room) {
+    throw new NotFoundError(`No room with ID ${id}`);
+  }
+  res.status(StatusCodes.OK).json({ message: "Room deleted successfully" });
+});
