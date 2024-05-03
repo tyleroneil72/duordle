@@ -6,19 +6,22 @@ interface IRoom extends Document {
   word: string;
 }
 
-const RoomSchema: Schema = new Schema({
-  members: {
-    type: [String],
-    required: true,
+const RoomSchema: Schema = new Schema(
+  {
+    members: {
+      type: [String],
+      required: false,
+    },
+    roomCode: {
+      type: String,
+      required: true,
+    },
+    word: {
+      type: String,
+      required: true,
+    },
   },
-  roomCode: {
-    type: String,
-    required: true,
-  },
-  word: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 export default mongoose.model<IRoom>("Room", RoomSchema);

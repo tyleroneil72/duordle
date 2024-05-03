@@ -1,8 +1,16 @@
 import express, { Express } from "express";
 import { createServer, Server as HttpServer } from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
+import mongoose from "mongoose";
 
+import dotenv from "dotenv";
+dotenv.config();
+
+import roomRouter from "./routes/roomRouter";
 const app: Express = express();
+app.use(express.json());
+
+app.use("/room", roomRouter);
 const httpServer: HttpServer = createServer(app);
 const CLIENT_PORT: string | number = process.env.CLIENT_PORT || 5173;
 const io: SocketIOServer = new SocketIOServer(httpServer, {
@@ -71,6 +79,17 @@ io.on("connection", (socket: Socket) => {
 });
 
 const PORT: number = parseInt(process.env.PORT || "3000", 10);
-httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+const MONGO_URI: string = process.env.MONGO_URI || "";
+
+(async () => {
+  try {
+    await mongoose.connect(MONGO_URI);
+    httpServer.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to connect to MongoDB:", error);
+    process.exit(1);
+  }
+})();
