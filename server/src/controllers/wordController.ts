@@ -12,6 +12,17 @@ export const getAllWords = asyncWrapper(async (req, res: Response) => {
 
 export const createWord = asyncWrapper(async (req, res: Response) => {
   const { word, difficulty } = req.body;
+
+  if (!word || typeof word !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid word" });
+  }
+  if (!difficulty || typeof difficulty !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid difficulty" });
+  }
   const newWord = await Word.create({ word, difficulty, length: word.length });
   res.status(StatusCodes.CREATED).json({ word: newWord });
 });
@@ -33,10 +44,23 @@ export const getWord = asyncWrapper(async (req, res: Response) => {
 
 export const updateWord = asyncWrapper(async (req, res: Response) => {
   const { id } = req.params;
+  const { word, difficulty } = req.body;
+
   if (!mongoose.isValidObjectId(id)) {
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "Invalid word ID format" });
+  }
+
+  if (!word || typeof word !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid word" });
+  }
+  if (!difficulty || typeof difficulty !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid difficulty" });
   }
 
   const updateData = req.body;

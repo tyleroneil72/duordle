@@ -11,6 +11,25 @@ export const getAllRooms = asyncWrapper(async (req, res: Response) => {
 });
 
 export const createRoom = asyncWrapper(async (req, res: Response) => {
+  const { members, roomCode, word } = req.body;
+
+  // Validate input
+  if (!members || !Array.isArray(members) || members.length === 0) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid members" });
+  }
+  if (!roomCode || typeof roomCode !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid roomCode" });
+  }
+  if (!word || typeof word !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid word" });
+  }
+
   const room = await Room.create(req.body);
   res.status(StatusCodes.CREATED).json({ room });
 });
@@ -42,8 +61,26 @@ export const deleteRoom = asyncWrapper(async (req, res: Response) => {
 
 export const updateRoom = asyncWrapper(async (req, res: Response) => {
   const { id } = req.params;
+  const { members, roomCode, word } = req.body;
+
   if (!mongoose.isValidObjectId(id)) {
     return res.status(400).json({ message: "Invalid room ID format" });
+  }
+
+  if (!members || !Array.isArray(members) || members.length === 0) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid members" });
+  }
+  if (!roomCode || typeof roomCode !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid roomCode" });
+  }
+  if (!word || typeof word !== "string") {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid word" });
   }
 
   const updateData = {
