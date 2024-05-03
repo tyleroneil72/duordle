@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const RoomPage = lazy(() => import("./pages/RoomPage"));
-const ErrorPage = lazy(() => import("./pages/ErrorPage"));
+const Error = lazy(() => import("./pages/Error"));
 
 const App = () => {
   return (
@@ -15,7 +15,8 @@ const App = () => {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='room/:roomCode' element={<RoomPage />} />
-          <Route path='*' element={<ErrorPage />} />
+          <Route path='full' element={<Error type='full' />} />
+          <Route path='*' element={<Error type='404' />} />
         </Routes>
       </Suspense>
       <Footer />
