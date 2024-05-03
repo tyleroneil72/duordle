@@ -11,3 +11,8 @@ export const getAllRooms = async (req: any, res: Response) => {
   const rooms = await Room.find();
   res.status(StatusCodes.OK).json({ rooms });
 };
+
+export const getRoomById = async (req: any, res: Response) => {
+  const room = await Room.findById(req.params.id);
+  res.status(StatusCodes.OK).json({ room });
+};
