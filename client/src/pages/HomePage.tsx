@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../services/socket"; // Ensure you import socket
+import { socket } from "../services/socket";
 import RoomInput from "../components/RoomInput";
 import RoomButtons from "../components/RoomButtons";
 
@@ -10,7 +10,7 @@ function HomePage() {
 
   const handleCreateRoom = () => {
     // Emit event to create room
-    socket.emit("create_room", room, "GRAB_WORD_HERE"); // Adjust according to your word setup
+    socket.emit("create_room", room, "GRAB_WORD_HERE");
     socket.on("room_created", () => {
       navigate(`/room/${room}`);
     });
