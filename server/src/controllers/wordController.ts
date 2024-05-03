@@ -99,11 +99,11 @@ export const deleteWord = asyncWrapper(async (req, res: Response) => {
 
 export const getRandomWord = asyncWrapper(async (req, res: Response) => {
   try {
-    const count = await Word.countDocuments();
+    const count = await Word.countDocuments({ difficulty: "1" });
     const random = Math.floor(Math.random() * count);
-    const randomWord = await Word.findOne().skip(random);
+    const randomWord = await Word.findOne({ difficulty: "1" }).skip(random);
     if (!randomWord) {
-      throw new NotFoundError("No words available");
+      throw new NotFoundError("No words available with difficulty 1");
     }
     res.status(StatusCodes.OK).json({ word: randomWord });
   } catch (error) {
