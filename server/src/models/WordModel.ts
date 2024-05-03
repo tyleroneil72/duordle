@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 interface IWord extends Document {
   word: string;
-  difficulty?: string;
+  difficulty: string;
   length: number;
 }
 
