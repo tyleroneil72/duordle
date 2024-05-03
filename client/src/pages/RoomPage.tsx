@@ -14,6 +14,10 @@ function RoomPage() {
         navigate("/full");
       });
 
+      socket.on("room_not_found", () => {
+        navigate("/not-found");
+      });
+
       return () => {
         socket.off("room_full");
         socket.emit("leave_room", roomCode);
