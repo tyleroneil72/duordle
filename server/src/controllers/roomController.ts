@@ -67,6 +67,7 @@ export const updateRoom = asyncWrapper(async (req, res: Response) => {
     return res.status(400).json({ message: "Invalid room ID format" });
   }
 
+  // Validate input
   if (!members || !Array.isArray(members) || members.length === 0) {
     return res
       .status(StatusCodes.BAD_REQUEST)
