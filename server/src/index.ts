@@ -6,6 +6,7 @@ import { initSocketServer } from "./services/socket";
 import roomRouter from "./routes/roomRouter";
 import wordRouter from "./routes/wordRouter";
 import { errorHandler } from "./middleware/errorHandler";
+import limiter from "./middleware/rateLimitMiddleware";
 
 dotenvConfig();
 
@@ -15,6 +16,8 @@ const PORT: number = parseInt(process.env.PORT || "3000", 10);
 const MONGO_URI: string = process.env.MONGO_URI || "";
 
 app.use(express.json());
+app.use("/room", limiter);
+app.use("/word", limiter);
 app.use("/room", roomRouter);
 app.use("/word", wordRouter);
 initSocketServer(httpServer);
