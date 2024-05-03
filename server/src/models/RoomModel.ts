@@ -4,6 +4,7 @@ interface IRoom extends Document {
   members: string[];
   roomCode: string;
   word: string;
+  createdAt: Date;
 }
 
 const RoomSchema: Schema = new Schema(
@@ -19,6 +20,11 @@ const RoomSchema: Schema = new Schema(
     word: {
       type: String,
       required: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      index: { expires: "3600s" }, // Rooms Total Time To Live: 1 hour
     },
   },
   { timestamps: true }
