@@ -10,7 +10,7 @@ const RoomSchema: Schema = new Schema(
   {
     members: {
       type: [String],
-      required: false,
+      required: true,
     },
     roomCode: {
       type: String,

@@ -14,7 +14,7 @@ const WordSchema: Schema = new Schema(
     },
     difficulty: {
       type: String,
-      required: false,
+      required: true,
     },
     length: {
       type: Number,
