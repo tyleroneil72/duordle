@@ -1,86 +1,23 @@
 import express, { Express } from "express";
-import { createServer, Server as HttpServer } from "http";
-import { Server as SocketIOServer, Socket } from "socket.io";
+import { createServer } from "http";
+import { config as dotenvConfig } from "dotenv";
 import mongoose from "mongoose";
-
-import dotenv from "dotenv";
-dotenv.config();
-
+import { initSocketServer } from "./services/socket"; // Your separate Socket.IO module
 import roomRouter from "./routes/roomRouter";
+import { errorHandler } from "./middleware/errorHandler"; // Centralized error handler
+
+dotenvConfig();
+
 const app: Express = express();
-app.use(express.json());
-
-app.use("/room", roomRouter);
-const httpServer: HttpServer = createServer(app);
-const CLIENT_PORT: string | number = process.env.CLIENT_PORT || 5173;
-const io: SocketIOServer = new SocketIOServer(httpServer, {
-  cors: {
-    origin: `http://localhost:${CLIENT_PORT}`,
-    methods: ["GET", "POST"],
-  },
-});
-
-interface RoomLimits {
-  [key: string]: number;
-}
-
-const roomLimits: RoomLimits = {};
-const roomMembers: any = {}; // TODO: Fix Type Any to correct type
-
-io.on("connection", (socket: Socket) => {
-  console.log(`User connected: ${socket.id}`);
-
-  socket.on("create_room", (room) => {
-    if (!roomMembers[room]) {
-      roomMembers[room] = new Set();
-    }
-    if (roomMembers[room].size < 2 && !roomMembers[room].has(socket.id)) {
-      socket.join(room);
-      roomMembers[room].add(socket.id);
-      console.log(`Joined room: ${room}`);
-    } else if (roomMembers[room].has(socket.id)) {
-      console.log(`Already in room: ${room}`);
-    } else {
-      socket.emit("room_full");
-    }
-  });
-
-  socket.on("join_room", (room) => {
-    if (!roomMembers[room]) {
-      roomMembers[room] = new Set();
-    }
-    if (roomMembers[room].size < 2 && !roomMembers[room].has(socket.id)) {
-      socket.join(room);
-      roomMembers[room].add(socket.id);
-      console.log(`Joined room: ${room}`);
-    } else if (roomMembers[room].has(socket.id)) {
-      console.log(`Already in room: ${room}`);
-    } else {
-      socket.emit("room_full");
-    }
-  });
-
-  socket.on("leave_room", (room) => {
-    if (roomMembers[room] && roomMembers[room].has(socket.id)) {
-      roomMembers[room].delete(socket.id);
-      socket.leave(room);
-      console.log(`Left room: ${room}`);
-    }
-  });
-
-  socket.on("disconnect", () => {
-    // Decrease room limit on disconnect if the user was in a room
-    for (let room of Array.from(socket.rooms)) {
-      if (room !== socket.id && roomLimits[room] !== undefined) {
-        roomLimits[room]--;
-      }
-    }
-  });
-});
-
+const httpServer = createServer(app);
 const PORT: number = parseInt(process.env.PORT || "3000", 10);
-
 const MONGO_URI: string = process.env.MONGO_URI || "";
+
+app.use(express.json());
+app.use("/room", roomRouter);
+app.use(errorHandler); // Using error handling middleware
+
+initSocketServer(httpServer);
 
 (async () => {
   try {
