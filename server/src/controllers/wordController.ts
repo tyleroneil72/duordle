@@ -96,3 +96,19 @@ export const deleteWord = asyncWrapper(async (req, res: Response) => {
   }
   res.status(StatusCodes.OK).json({ message: "Word deleted successfully" });
 });
+
+export const getRandomWord = asyncWrapper(async (req, res: Response) => {
+  try {
+    const count = await Word.countDocuments();
+    const random = Math.floor(Math.random() * count);
+    const randomWord = await Word.findOne().skip(random);
+    if (!randomWord) {
+      throw new NotFoundError("No words available");
+    }
+    res.status(StatusCodes.OK).json({ word: randomWord });
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal server error" });
+  }
+});
