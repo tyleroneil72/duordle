@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { apiKeyMiddleware } from "../middleware/apiKeyMiddleware";
 const router = Router();
 
 import {
@@ -9,10 +10,10 @@ import {
   updateWord,
 } from "../controllers/wordController";
 
-router.get("/", getAllWords);
-router.post("/", createWord);
+router.get("/", apiKeyMiddleware, getAllWords);
+router.post("/", apiKeyMiddleware, createWord);
 router.get("/:id", getWord);
-router.patch("/:id", updateWord);
-router.delete("/:id", deleteWord);
+router.patch("/:id", apiKeyMiddleware, updateWord);
+router.delete("/:id", apiKeyMiddleware, deleteWord);
 
 export default router;
