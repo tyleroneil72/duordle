@@ -15,9 +15,8 @@ const MONGO_URI: string = process.env.MONGO_URI || "";
 
 app.use(express.json());
 app.use("/room", roomRouter);
-app.use(errorHandler);
-
 initSocketServer(httpServer);
+app.use(errorHandler);
 
 (async () => {
   try {

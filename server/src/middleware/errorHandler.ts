@@ -1,11 +1,26 @@
+import { StatusCodes } from "http-status-codes";
 import { Request, Response, NextFunction } from "express";
-// TODO: Fis this to use the correct status codes using the http-status-codes package
+import {
+  NotFoundError,
+  BadRequestError,
+  UnauthenticatedError,
+  UnauthorizedError,
+} from "../errors/customErrors";
+
 export const errorHandler = (
-  err: Error,
+  err:
+    | Error
+    | NotFoundError
+    | BadRequestError
+    | UnauthenticatedError
+    | UnauthorizedError,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal Server Error" });
+  console.log(err);
+  const statusCode =
+    "statusCode" in err ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR;
+  const message = err.message || "something went wrong";
+  res.status(statusCode).json({ message });
 };
