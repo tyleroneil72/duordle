@@ -13,6 +13,7 @@ export const getAllWords = asyncWrapper(async (req, res: Response) => {
 export const createWord = asyncWrapper(async (req, res: Response) => {
   const { word, difficulty } = req.body;
 
+  // Validate input
   if (!word || typeof word !== "string") {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -52,6 +53,7 @@ export const updateWord = asyncWrapper(async (req, res: Response) => {
       .json({ message: "Invalid word ID format" });
   }
 
+  // Validate input
   if (!word || typeof word !== "string") {
     return res
       .status(StatusCodes.BAD_REQUEST)
