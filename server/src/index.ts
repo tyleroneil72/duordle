@@ -2,9 +2,9 @@ import express, { Express } from "express";
 import { createServer } from "http";
 import { config as dotenvConfig } from "dotenv";
 import mongoose from "mongoose";
-import { initSocketServer } from "./services/socket"; // Your separate Socket.IO module
+import { initSocketServer } from "./services/socket";
 import roomRouter from "./routes/roomRouter";
-import { errorHandler } from "./middleware/errorHandler"; // Centralized error handler
+import { errorHandler } from "./middleware/errorHandler";
 
 dotenvConfig();
 
@@ -15,7 +15,7 @@ const MONGO_URI: string = process.env.MONGO_URI || "";
 
 app.use(express.json());
 app.use("/room", roomRouter);
-app.use(errorHandler); // Using error handling middleware
+app.use(errorHandler);
 
 initSocketServer(httpServer);
 
