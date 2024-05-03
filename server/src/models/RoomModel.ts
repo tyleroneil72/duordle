@@ -5,6 +5,7 @@ interface IRoom extends Document {
   roomCode: string;
   word: string;
   createdAt: Date;
+  checkAndDeleteIfEmpty(): Promise<void>;
 }
 
 const RoomSchema: Schema = new Schema(
@@ -29,5 +30,12 @@ const RoomSchema: Schema = new Schema(
   },
   { timestamps: true }
 );
+
+RoomSchema.methods.checkAndDeleteIfEmpty = async function () {
+  if (this.members.length === 0) {
+    await this.deleteOne();
+    console.log(`Room ${this.roomCode} deleted because it became empty.`);
+  }
+};
 
 export default mongoose.model<IRoom>("Room", RoomSchema);

@@ -1,13 +1,6 @@
 import { Server as HttpServer } from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
-
-interface RoomMembers {
-  [room: string]: Set<string>;
-}
-
-interface RoomLimits {
-  [room: string]: number;
-}
+import Room from "../models/RoomModel"; // Make sure this path is correct
 
 export const initSocketServer = (httpServer: HttpServer) => {
   const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
@@ -18,55 +11,97 @@ export const initSocketServer = (httpServer: HttpServer) => {
     },
   });
 
-  const roomMembers: RoomMembers = {};
-  const roomLimits: RoomLimits = {};
   io.on("connection", (socket: Socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    socket.on("create_room", (room) => {
-      if (!roomMembers[room]) {
-        roomMembers[room] = new Set();
-      }
-      if (roomMembers[room].size < 2 && !roomMembers[room].has(socket.id)) {
-        socket.join(room);
-        roomMembers[room].add(socket.id);
-        console.log(`Joined room: ${room}`);
-      } else if (roomMembers[room].has(socket.id)) {
-        console.log(`Already in room: ${room}`);
-      } else {
-        socket.emit("room_full");
-      }
-    });
-
-    socket.on("join_room", (room) => {
-      if (!roomMembers[room]) {
-        roomMembers[room] = new Set();
-      }
-      if (roomMembers[room].size < 2 && !roomMembers[room].has(socket.id)) {
-        socket.join(room);
-        roomMembers[room].add(socket.id);
-        console.log(`Joined room: ${room}`);
-      } else if (roomMembers[room].has(socket.id)) {
-        console.log(`Already in room: ${room}`);
-      } else {
-        socket.emit("room_full");
-      }
-    });
-
-    socket.on("leave_room", (room) => {
-      if (roomMembers[room] && roomMembers[room].has(socket.id)) {
-        roomMembers[room].delete(socket.id);
-        socket.leave(room);
-        console.log(`Left room: ${room}`);
-      }
-    });
-
-    socket.on("disconnect", () => {
-      // Decrease room limit on disconnect if the user was in a room
-      for (let room of Array.from(socket.rooms)) {
-        if (room !== socket.id && roomLimits[room] !== undefined) {
-          roomLimits[room]--;
+    socket.on("create_room", async (roomCode, word) => {
+      try {
+        // Check if a room with the given roomCode already exists
+        const existingRoom = await Room.findOne({ roomCode });
+        if (existingRoom) {
+          // If the room already exists, emit an error to the client
+          socket.emit(
+            "room_already_exists",
+            "A room with this code already exists."
+          );
+          console.log(
+            `Attempt to create a duplicate room with code: ${roomCode}`
+          );
+          return; // Stop further execution
         }
+        // If no existing room, create a new one
+        const newRoom = await Room.create({
+          members: [socket.id], // initial member
+          roomCode,
+          word,
+        });
+        socket.join(roomCode);
+        socket.emit("room_created");
+        console.log(`Room created and joined: ${roomCode}`);
+      } catch (error) {
+        console.error("Error creating room:", error);
+        socket.emit(
+          "error_creating_room",
+          "Failed to create room due to server error."
+        );
+      }
+    });
+
+    socket.on("join_room", async (roomCode) => {
+      try {
+        const room = await Room.findOne({ roomCode });
+        if (!room) {
+          socket.emit("room_not_found");
+          return;
+        }
+        if (room.members.length < 2 && !room.members.includes(socket.id)) {
+          room.members.push(socket.id);
+          await room.save();
+          socket.join(roomCode);
+          socket.emit("room_joined");
+          console.log(`Joined room: ${roomCode}`);
+        } else if (room.members.includes(socket.id)) {
+          console.log(`Already in room: ${roomCode}`);
+        } else {
+          socket.emit("room_full");
+        }
+      } catch (error) {
+        console.error("Error joining room:", error);
+        socket.emit("error_joining_room");
+      }
+    });
+
+    socket.on("leave_room", async (roomCode) => {
+      try {
+        const room = await Room.findOne({ roomCode });
+        if (room) {
+          // Remove the user from the room's members array
+          room.members = room.members.filter((member) => member !== socket.id);
+          await room.save();
+
+          // Check if the room is now empty and should be deleted
+          await room.checkAndDeleteIfEmpty();
+
+          socket.leave(roomCode);
+          console.log(`User ${socket.id} left room: ${roomCode}`);
+        } else {
+          console.log(`Room not found: ${roomCode}`);
+          socket.emit("room_not_found");
+        }
+      } catch (error) {
+        console.error("Error leaving room:", error);
+        socket.emit("error_leaving_room");
+      }
+    });
+
+    socket.on("disconnect", async () => {
+      console.log(`User ${socket.id} disconnected.`);
+      // Try to remove the user from all rooms they were part of
+      const rooms = await Room.find({ members: socket.id });
+      for (const room of rooms) {
+        room.members = room.members.filter((member) => member !== socket.id);
+        await room.save();
+        await room.checkAndDeleteIfEmpty();
       }
     });
   });

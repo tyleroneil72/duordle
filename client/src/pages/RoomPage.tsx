@@ -18,9 +18,17 @@ function RoomPage() {
         navigate("/not-found");
       });
 
+      // Adding window unload event to handle tab or window close
+      const handleUnload = (event: BeforeUnloadEvent) => {
+        event.preventDefault();
+        socket.emit("leave_room", roomCode);
+      };
+      window.addEventListener("beforeunload", handleUnload);
+
       return () => {
         socket.off("room_full");
-        socket.emit("leave_room", roomCode);
+        socket.off("room_not_found");
+        window.removeEventListener("beforeunload", handleUnload);
       };
     }
   }, [roomCode, navigate]);
