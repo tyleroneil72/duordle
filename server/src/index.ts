@@ -4,6 +4,7 @@ import { config as dotenvConfig } from "dotenv";
 import mongoose from "mongoose";
 import { initSocketServer } from "./services/socket";
 import roomRouter from "./routes/roomRouter";
+import wordRouter from "./routes/wordRouter";
 import { errorHandler } from "./middleware/errorHandler";
 
 dotenvConfig();
@@ -15,6 +16,7 @@ const MONGO_URI: string = process.env.MONGO_URI || "";
 
 app.use(express.json());
 app.use("/room", roomRouter);
+app.use("/word", wordRouter);
 initSocketServer(httpServer);
 app.use(errorHandler);
 
