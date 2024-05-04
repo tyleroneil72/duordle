@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
 import RoomButtons from "../components/RoomButtons";
-import fetchRandomWord from "../services/fetchRandomWord";
-import generateUniqueRoomCode from "../services/generateUniqueRoomCode";
+import fetchRandomWord from "../utils/fetchRandomWord";
+import generateUniqueRoomCode from "../utils/generateUniqueRoomCode";
 
 function HomePage() {
   const navigate = useNavigate();
