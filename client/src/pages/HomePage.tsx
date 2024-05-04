@@ -31,6 +31,7 @@ function HomePage() {
     socket.on("room_created", () => {
       navigate(`/room/${room}`);
     });
+
     socket.on("room_already_exists", () => {
       alert("A room with this code already exists."); // replace with modal window
     });

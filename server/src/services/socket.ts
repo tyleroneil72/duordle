@@ -14,7 +14,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
   io.on("connection", (socket: Socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    socket.on("create_room", async (roomCode, word) => {
+    socket.on("create_room", async (roomCode: string, word: string) => {
       try {
         // Check if a room with the given roomCode already exists
         const existingRoom = await Room.findOne({ roomCode });
@@ -47,18 +47,18 @@ export const initSocketServer = (httpServer: HttpServer) => {
       }
     });
 
-    socket.on("join_room", async (roomCode) => {
+    socket.on("join_room", async (roomCode: string) => {
       try {
         const room = await Room.findOne({ roomCode });
         if (!room) {
           socket.emit("room_not_found");
           return;
         }
+        socket.emit("room_joined", room.word); // Works here but not in the next snippet (Fix? it works)
         if (room.members.length < 2 && !room.members.includes(socket.id)) {
           room.members.push(socket.id);
           await room.save();
           socket.join(roomCode);
-          socket.emit("room_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
           console.log(`Already in room: ${roomCode}`);
@@ -71,7 +71,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
       }
     });
 
-    socket.on("leave_room", async (roomCode) => {
+    socket.on("leave_room", async (roomCode: string) => {
       try {
         const room = await Room.findOne({ roomCode });
         if (room) {
