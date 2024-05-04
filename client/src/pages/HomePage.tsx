@@ -4,9 +4,11 @@ import { socket } from "../services/socket";
 import RoomInput from "../components/RoomInput";
 import RoomButtons from "../components/RoomButtons";
 
+const URL = "http://localhost:3000";
+
 const fetchRandomWord = async () => {
   try {
-    const response = await fetch("http://localhost:3000/word/random");
+    const response = await fetch(`${URL}/word/random`);
     if (!response.ok) {
       throw new Error("Failed to fetch the word");
     }
