@@ -2,16 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
 import RoomButtons from "../components/RoomButtons";
 import fetchRandomWord from "../services/fetchRandomWord";
-
-const generateRoomCode = () => {
-  let result = "";
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const charactersLength = characters.length;
-  for (let i = 0; i < 4; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
+import generateRoomCode from "../services/generateRoomCode";
 
 function HomePage() {
   const navigate = useNavigate();
