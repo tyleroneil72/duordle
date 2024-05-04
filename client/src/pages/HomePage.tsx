@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
 import RoomButtons from "../components/RoomButtons";
 import fetchRandomWord from "../services/fetchRandomWord";
-import generateRoomCode from "../services/generateRoomCode";
+import generateUniqueRoomCode from "../services/generateUniqueRoomCode";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ function HomePage() {
     const randomWord = await fetchRandomWord();
     if (!randomWord) return;
 
-    const roomCode = generateRoomCode();
+    const roomCode = await generateUniqueRoomCode();
     setupRoomEventListeners(roomCode, "create");
     socket.emit("create_room", roomCode, randomWord);
   };
