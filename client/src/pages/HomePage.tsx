@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
-import RoomInput from "../components/RoomInput";
 import RoomButtons from "../components/RoomButtons";
 
 const URL = "http://localhost:3000";
@@ -16,42 +14,52 @@ const fetchRandomWord = async () => {
     return data.word.word;
   } catch (error) {
     console.error("Error fetching random word:", error);
-    alert("Error fetching random word" + error);
+    alert("Error fetching random word: " + error);
     return null; // Return null in case of error
   }
 };
 
+const generateRoomCode = () => {
+  let result = "";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 4; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 function HomePage() {
-  const [room, setRoom] = useState("");
   const navigate = useNavigate();
 
   const handleCreateRoom = async () => {
     const randomWord = await fetchRandomWord();
     if (!randomWord) return;
 
-    socket.emit("create_room", room, randomWord);
+    const roomCode = generateRoomCode();
+
+    socket.emit("create_room", roomCode, randomWord);
     socket.on("room_created", () => {
-      navigate(`/room/${room}`);
+      navigate(`/room/${roomCode}`);
     });
 
     socket.on("room_already_exists", () => {
-      alert("A room with this code already exists."); // replace with modal window
+      alert("A room with this code already exists."); // Replace with modal window
     });
 
     socket.on("error_creating_room", (error) => {
-      alert(`Failed to create room: ${error}`); // replace with modal window
+      alert(`Failed to create room: ${error}`); // Replace with modal window
     });
   };
 
   const handleJoinRoom = () => {
-    // Remove previous listeners to avoid multiple alerts
     socket.off("room_joined").off("room_not_found").off("room_full");
 
-    // Emit event to join room
-    socket.emit("join_room", room);
+    const joinRoomCode = prompt("Enter room code:");
+    socket.emit("join_room", joinRoomCode);
 
     socket.once("room_joined", () => {
-      navigate(`/room/${room}`);
+      navigate(`/room/${joinRoomCode}`);
       // No need to remove listeners here since we're navigating away
     });
 
@@ -67,7 +75,6 @@ function HomePage() {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
       <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-        <RoomInput room={room} setRoom={setRoom} />
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
     </div>
