@@ -5,7 +5,8 @@ interface IWord extends Document {
   difficulty: string;
   length: number;
 }
-
+// Difficulty of 1 means it is a valid word for the game to use as solving word
+// Difficulty of 0 means it is a valid word but not suitable for the answer, just a guess
 const WordSchema: Schema = new Schema(
   {
     word: {

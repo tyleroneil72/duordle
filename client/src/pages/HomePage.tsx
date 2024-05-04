@@ -4,16 +4,34 @@ import { socket } from "../services/socket";
 import RoomInput from "../components/RoomInput";
 import RoomButtons from "../components/RoomButtons";
 
+const fetchRandomWord = async () => {
+  try {
+    const response = await fetch("http://localhost:3000/word/random");
+    if (!response.ok) {
+      throw new Error("Failed to fetch the word");
+    }
+    const data = await response.json();
+    return data.word.word;
+  } catch (error) {
+    console.error("Error fetching random word:", error);
+    alert("Error fetching random word" + error);
+    return null; // Return null in case of error
+  }
+};
+
 function HomePage() {
   const [room, setRoom] = useState("");
   const navigate = useNavigate();
 
-  const handleCreateRoom = () => {
-    // Emit event to create room
-    socket.emit("create_room", room, "GRAB_WORD_HERE");
+  const handleCreateRoom = async () => {
+    const randomWord = await fetchRandomWord();
+    if (!randomWord) return;
+
+    socket.emit("create_room", room, randomWord);
     socket.on("room_created", () => {
       navigate(`/room/${room}`);
     });
+
     socket.on("room_already_exists", () => {
       alert("A room with this code already exists."); // replace with modal window
     });
