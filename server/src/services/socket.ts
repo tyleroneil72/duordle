@@ -1,6 +1,6 @@
 import { Server as HttpServer } from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
-import Room from "../models/RoomModel"; // Make sure this path is correct
+import Room from "../models/RoomModel";
 
 export const initSocketServer = (httpServer: HttpServer) => {
   const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
