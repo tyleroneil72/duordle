@@ -15,10 +15,6 @@ function RoomPage() {
         setWord(word);
       });
 
-      // socket.on("room_created", (word: string) => {
-      //   setWord(word);
-      // });
-
       socket.on("room_full", () => {
         navigate("/full");
       });
