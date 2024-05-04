@@ -101,3 +101,10 @@ export const updateRoom = asyncWrapper(async (req, res: Response) => {
 
   res.status(StatusCodes.OK).json({ room: updatedRoom });
 });
+
+export const checkRoomCodeExists = asyncWrapper(async (req, res) => {
+  const { roomCode } = req.params;
+  const roomExists = await Room.findOne({ roomCode });
+
+  res.status(StatusCodes.OK).json({ exists: !!roomExists });
+});
