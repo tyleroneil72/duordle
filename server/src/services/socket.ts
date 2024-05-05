@@ -55,6 +55,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           return;
         }
         socket.emit("room_joined", room.word); // Works here but not in the next snippet (Fix? it works)
+        // Only goes off the second join time since create room has the original socket id of the user inside of it already.
         if (room.members.length < 2 && !room.members.includes(socket.id)) {
           room.members.push(socket.id);
           await room.save();
