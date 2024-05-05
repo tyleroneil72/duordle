@@ -100,7 +100,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
         socket.emit("error_leaving_room");
       }
     });
-
+    // Disconnect event has VersionError (Fix?)
     socket.on("disconnect", async () => {
       try {
         console.log(`User ${socket.id} disconnected.`);
