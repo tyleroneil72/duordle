@@ -7,8 +7,7 @@ function RoomPage() {
   const { roomCode } = useParams();
   const navigate = useNavigate();
   const [word, setWord] = useState("");
-  const [connectionStatus, setConnectionStatus] =
-    useState("Waiting for Player");
+  const [connectionStatus, setConnectionStatus] = useState("waiting");
 
   useEffect(() => {
     if (roomCode) {
@@ -19,7 +18,7 @@ function RoomPage() {
       });
 
       socket.on("player_joined", () => {
-        setConnectionStatus("Both Players Connected");
+        setConnectionStatus("connected");
       });
 
       socket.on("player_left", () => {
@@ -58,7 +57,7 @@ function RoomPage() {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
       <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-        {roomCode && connectionStatus === "Waiting for Player" ? (
+        {roomCode && connectionStatus === "waiting" ? (
           <Waiting code={roomCode} />
         ) : (
           <>
