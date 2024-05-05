@@ -97,14 +97,18 @@ export const initSocketServer = (httpServer: HttpServer) => {
     });
 
     socket.on("disconnect", async () => {
-      console.log(`User ${socket.id} disconnected.`);
-      // Try to remove the user from all rooms they were part of
-      const rooms = await Room.find({ members: socket.id });
-      for (const room of rooms) {
-        room.members = room.members.filter((member) => member !== socket.id);
-        io.to(room.roomCode).emit("player_left");
-        await room.save();
-        await room.checkAndDeleteIfEmpty();
+      try {
+        console.log(`User ${socket.id} disconnected.`);
+        // Try to remove the user from all rooms they were part of
+        const rooms = await Room.find({ members: socket.id });
+        for (const room of rooms) {
+          room.members = room.members.filter((member) => member !== socket.id);
+          io.to(room.roomCode).emit("player_left");
+          await room.save();
+          await room.checkAndDeleteIfEmpty();
+        }
+      } catch (error) {
+        console.error("Error disconnecting:", error);
       }
     });
   });
