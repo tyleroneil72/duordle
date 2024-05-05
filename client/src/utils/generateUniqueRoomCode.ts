@@ -1,4 +1,4 @@
-const SERVERURL = "http://localhost:3000";
+const SERVERURL: string = "http://localhost:3000";
 
 const generateUniqueRoomCode = async () => {
   let roomCode = generateRoomCode();
