@@ -59,6 +59,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           room.members.push(socket.id);
           await room.save();
           socket.join(roomCode);
+          io.to(roomCode).emit("player_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
           console.log(`Already in room: ${roomCode}`);
@@ -81,7 +82,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
           // Check if the room is now empty and should be deleted
           await room.checkAndDeleteIfEmpty();
-
+          io.to(roomCode).emit("player_left");
           socket.leave(roomCode);
           console.log(`User ${socket.id} left room: ${roomCode}`);
         } else {
@@ -100,6 +101,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
       const rooms = await Room.find({ members: socket.id });
       for (const room of rooms) {
         room.members = room.members.filter((member) => member !== socket.id);
+        io.to(room.roomCode).emit("player_left");
         await room.save();
         await room.checkAndDeleteIfEmpty();
       }
