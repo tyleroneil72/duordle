@@ -83,8 +83,8 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
           // Check if the room is now empty and should be deleted
           await room.checkAndDeleteIfEmpty();
-          io.to(roomCode).emit("player_left");
           socket.leave(roomCode);
+          io.to(roomCode).emit("player_left");
           console.log(`User ${socket.id} left room: ${roomCode}`);
         } else {
           console.log(`Room not found: ${roomCode}`);

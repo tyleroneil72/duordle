@@ -10,6 +10,9 @@ const ErrorPage = ({ type }: { type: string }) => {
   } else if (type == "full") {
     title = "Room Full";
     message = "This room is already full. Please try a different one.";
+  } else if (type == "player-left") {
+    title = "Player Left";
+    message = "The other player has left the room.";
   } else {
     title = "Error";
     message = "Sorry, there was a problem loading the page.";
