@@ -66,8 +66,8 @@ function RoomPage() {
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
             <GameBoard />
             <Keyboard />
-            <p className='mb-4'>Word: {word}</p>
-            <p>Status: {connectionStatus}</p>
+            <p className='mb-4 hidden'>Word: {word}</p>
+            <p className='hidden'>Status: {connectionStatus}</p>
           </>
         )}
       </div>
