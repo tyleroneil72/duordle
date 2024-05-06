@@ -54,11 +54,18 @@ export const initSocketServer = (httpServer: HttpServer) => {
           socket.emit("room_not_found");
           return;
         }
+        // Avoid Emitting Room_Joined if the room is full to avoid the client side from navigating to the room
+        if (room.members.length >= 2 && !room.members.includes(socket.id)) {
+          socket.emit("room_full");
+          return;
+        }
         socket.emit("room_joined", room.word); // Works here but not in the next snippet (Fix? it works)
+        // Only goes off the second join time since create room has the original socket id of the user inside of it already.
         if (room.members.length < 2 && !room.members.includes(socket.id)) {
           room.members.push(socket.id);
           await room.save();
           socket.join(roomCode);
+          io.to(roomCode).emit("player_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
           console.log(`Already in room: ${roomCode}`);
@@ -81,8 +88,8 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
           // Check if the room is now empty and should be deleted
           await room.checkAndDeleteIfEmpty();
-
           socket.leave(roomCode);
+          io.to(roomCode).emit("player_left");
           console.log(`User ${socket.id} left room: ${roomCode}`);
         } else {
           console.log(`Room not found: ${roomCode}`);
@@ -93,15 +100,20 @@ export const initSocketServer = (httpServer: HttpServer) => {
         socket.emit("error_leaving_room");
       }
     });
-
+    // Disconnect event has VersionError (Fix?)
     socket.on("disconnect", async () => {
-      console.log(`User ${socket.id} disconnected.`);
-      // Try to remove the user from all rooms they were part of
-      const rooms = await Room.find({ members: socket.id });
-      for (const room of rooms) {
-        room.members = room.members.filter((member) => member !== socket.id);
-        await room.save();
-        await room.checkAndDeleteIfEmpty();
+      try {
+        console.log(`User ${socket.id} disconnected.`);
+        // Try to remove the user from all rooms they were part of
+        const rooms = await Room.find({ members: socket.id });
+        for (const room of rooms) {
+          room.members = room.members.filter((member) => member !== socket.id);
+          io.to(room.roomCode).emit("player_left");
+          await room.save();
+          await room.checkAndDeleteIfEmpty();
+        }
+      } catch (error) {
+        console.error("Error disconnecting:", error);
       }
     });
   });

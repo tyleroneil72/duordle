@@ -16,6 +16,7 @@ const App = () => {
           <Route path='/' element={<HomePage />} />
           <Route path='room/:roomCode' element={<RoomPage />} />
           <Route path='full' element={<Error type='full' />} />
+          <Route path='player-left' element={<Error type='player-left' />} />
           <Route path='*' element={<Error type='404' />} />
         </Routes>
       </Suspense>

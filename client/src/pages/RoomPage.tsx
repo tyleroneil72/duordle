@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { socket } from "../services/socket";
+import Waiting from "../components/Waiting";
 
 function RoomPage() {
   const { roomCode } = useParams();
   const navigate = useNavigate();
   const [word, setWord] = useState("");
+  const [connectionStatus, setConnectionStatus] = useState("waiting");
 
   useEffect(() => {
     if (roomCode) {
@@ -15,9 +17,14 @@ function RoomPage() {
         setWord(word);
       });
 
-      // socket.on("room_created", (word: string) => {
-      //   setWord(word);
-      // });
+      socket.on("player_joined", () => {
+        setConnectionStatus("connected");
+      });
+
+      socket.on("player_left", () => {
+        socket.emit("leave_room", roomCode);
+        navigate("/player-left"); // Navigate to player left error page if the other player leaves
+      });
 
       socket.on("room_full", () => {
         navigate("/full");
@@ -50,8 +57,15 @@ function RoomPage() {
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
       <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-        <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-        <p className='mb-4'>Word: {word}</p>
+        {roomCode && connectionStatus === "waiting" ? (
+          <Waiting code={roomCode} />
+        ) : (
+          <>
+            <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
+            <p className='mb-4'>Word: {word}</p>
+            <p>Status: {connectionStatus}</p>
+          </>
+        )}
       </div>
       <button
         className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
