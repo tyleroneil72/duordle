@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+// RoomPage.tsx
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
 import GameBoard from "../components/GameBoard";
@@ -57,40 +58,6 @@ const RoomPage: React.FC<RoomPageProps> = () => {
     }
   }, [roomCode, navigate]);
 
-  const handleLetterInput = (letter: string) => {
-    const newAttempt = currentAttempt.map((row) => [...row]);
-    const lastRow = newAttempt.find((row) => row.includes(""));
-    if (lastRow) {
-      const firstEmptyIndex = lastRow.indexOf("");
-      lastRow[firstEmptyIndex] = letter;
-    }
-    setCurrentAttempt(newAttempt);
-  };
-
-  const handleBackspace = useCallback(() => {
-    setCurrentAttempt((prevAttempt) => {
-      const newAttempt = prevAttempt.map((row) => [...row]); // Create a deep copy of the current attempt
-      let done = false;
-
-      // Loop backwards through the rows
-      for (let i = newAttempt.length - 1; i >= 0 && !done; i--) {
-        // Loop backwards through the columns
-        for (let j = newAttempt[i].length - 1; j >= 0 && !done; j--) {
-          if (newAttempt[i][j] !== "") {
-            newAttempt[i][j] = "";
-            done = true; // Exit both loops early once the last filled cell is cleared
-          }
-        }
-      }
-
-      return newAttempt;
-    });
-  }, []);
-
-  const handleEnter = () => {
-    setCurrentAttempt(Array(6).fill(Array(5).fill("")));
-  };
-
   const handleLeaveRoom = () => {
     socket.emit("leave_room", roomCode);
     navigate("/"); // Navigate back to the home page after leaving the room
@@ -106,9 +73,8 @@ const RoomPage: React.FC<RoomPageProps> = () => {
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
             <GameBoard attempt={currentAttempt} />
             <Keyboard
-              onLetterClick={handleLetterInput}
-              onBackspace={handleBackspace}
-              onEnter={handleEnter}
+              currentAttempt={currentAttempt}
+              setCurrentAttempt={setCurrentAttempt}
             />
             <p className='mb-4 hidden'>Word: {word}</p>
             <p className='hidden'>Status: {connectionStatus}</p>
