@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { socket } from "../services/socket";
 import Waiting from "../components/Waiting";
 import GameBoard from "../components/GameBoard";
+import Keyboard from "../components/Keyboard";
 
 function RoomPage() {
   const { roomCode } = useParams();
@@ -64,6 +65,7 @@ function RoomPage() {
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
             <GameBoard />
+            <Keyboard />
             <p className='mb-4'>Word: {word}</p>
             <p>Status: {connectionStatus}</p>
           </>
