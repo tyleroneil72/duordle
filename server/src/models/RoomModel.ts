@@ -4,6 +4,7 @@ interface IRoom extends Document {
   members: string[];
   roomCode: string;
   word: string;
+  board: string[][];
   createdAt: Date;
   checkAndDeleteIfEmpty(): Promise<void>;
 }

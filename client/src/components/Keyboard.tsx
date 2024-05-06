@@ -28,7 +28,6 @@ const Keyboard: React.FC<KeyboardProps> = ({
         }
       });
       setCurrentAttempt(newAttempt);
-      alert(newAttempt);
     },
     [currentAttempt, setCurrentAttempt]
   );

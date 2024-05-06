@@ -15,14 +15,16 @@ const RoomPage: React.FC<RoomPageProps> = () => {
   const [currentAttempt, setCurrentAttempt] = useState<string[][]>(
     Array(6).fill(Array(5).fill(""))
   );
+  const [board, setBoard] = useState<string[][]>([[]]);
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
 
   useEffect(() => {
     if (roomCode) {
       socket.emit("join_room", roomCode);
 
-      socket.on("room_joined", (word: string) => {
+      socket.on("room_joined", (word: string, board: string[][]) => {
         setWord(word);
+        setBoard(board);
         setCurrentAttempt(Array(6).fill(Array(5).fill(""))); // Reset the attempt when a new word is set
       });
 
@@ -71,7 +73,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-            <GameBoard attempt={currentAttempt} />
+            <GameBoard board={board} />
             <Keyboard
               currentAttempt={currentAttempt}
               setCurrentAttempt={setCurrentAttempt}

@@ -1,14 +1,14 @@
 interface GameBoardProps {
-  attempt: string[][]; // Array of arrays of strings
+  board: string[][];
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ attempt }) => {
+const GameBoard: React.FC<GameBoardProps> = ({ board }) => {
   return (
     <div
       className='grid grid-cols-5 gap-1 w-full max-w-md mx-auto'
       style={{ width: "70%" }}
     >
-      {attempt.map((row, rowIndex) =>
+      {board.map((row, rowIndex) =>
         row.map((letter, cellIndex) => (
           <div
             key={rowIndex * 5 + cellIndex} // Unique key for each cell
