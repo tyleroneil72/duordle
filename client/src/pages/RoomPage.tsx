@@ -108,7 +108,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-            <GameBoard board={board} />
+            <GameBoard board={board} word={word} />
             <Keyboard
               socket={socket}
               roomCode={roomCode}
@@ -122,7 +122,6 @@ const RoomPage: React.FC<RoomPageProps> = () => {
             {gameOver && <GameOver win={gameStatus} />}
 
             <p className='mb-4 hidden'>Word: {word}</p>
-            <p className='hidden'>Status: {connectionStatus}</p>
           </>
         )}
       </div>
