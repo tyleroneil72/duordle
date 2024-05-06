@@ -40,6 +40,12 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         setConnectionStatus("connected");
       });
 
+      socket.on("invalid_word", () => {
+        // Reset the current attempt, but do not advance the row
+        setCurrentAttempt(Array(5).fill(""));
+        alert("Invalid word! Please try another word.");
+      });
+
       socket.on("player_left", () => {
         socket.emit("leave_room", roomCode);
         navigate("/player-left");
@@ -74,6 +80,9 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       window.addEventListener("beforeunload", handleUnload);
 
       return () => {
+        socket.off("room_joined");
+        socket.off("player_joined");
+        socket.off("invalid_word");
         socket.off("game_over");
         socket.off("room_full");
         socket.off("room_not_found");

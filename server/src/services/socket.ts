@@ -1,6 +1,7 @@
 import { Server as HttpServer } from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import Room from "../models/RoomModel";
+import Word from "../models/WordModel";
 
 export const initSocketServer = (httpServer: HttpServer) => {
   const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
@@ -128,25 +129,38 @@ export const initSocketServer = (httpServer: HttpServer) => {
     socket.on("submit_guess", async ({ roomCode, guess, currentRow }) => {
       try {
         const room = await Room.findOne({ roomCode });
-        if (room) {
-          if (currentRow < room.board.length) {
-            room.board[currentRow] = guess.split("");
+        const validWord = await Word.findOne({
+          word: { $regex: new RegExp(`^${guess}$`, "i") },
+        });
 
-            room.currentRow = currentRow + 1;
+        console.log(`Received guess: ${guess}`);
 
-            await room.save(); // Save the updated room
-            // Broadcast the updated board to all clients in the room
-            io.to(roomCode).emit("update_board", room.board, room.currentRow);
-            let gameWon = guess.toLowerCase() === room.word;
+        if (!room) {
+          console.error("Room not found");
+          return;
+        }
 
-            if (gameWon || currentRow + 1 >= 6) {
-              io.to(roomCode).emit("game_over", gameWon);
-              console.log("Game Over");
-            }
+        if (currentRow < room.board.length) {
+          if (!validWord) {
+            console.log("Invalid word submitted:", guess);
+            socket.emit("invalid_word"); // Notify the client that the word is invalid
+            return;
           } else {
-            // Handle error: row index out of bounds
-            console.error("Row index out of bounds");
+            socket.emit("valid_word");
           }
+
+          room.board[currentRow] = guess.split("");
+          room.currentRow = currentRow + 1;
+          await room.save(); // Save the updated room
+          io.to(roomCode).emit("update_board", room.board, room.currentRow);
+
+          let gameWon = guess.toLowerCase() === room.word.toLowerCase();
+          if (gameWon || currentRow + 1 >= 6) {
+            io.to(roomCode).emit("game_over", gameWon);
+            console.log("Game Over");
+          }
+        } else {
+          console.error("Row index out of bounds");
         }
       } catch (error) {
         console.error("Error handling guess submission:", error);

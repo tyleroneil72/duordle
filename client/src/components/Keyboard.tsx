@@ -61,9 +61,11 @@ const Keyboard: React.FC<KeyboardProps> = ({
       });
 
       setCurrentAttempt(Array(5).fill(""));
-      setCurrentRow((prevRow) =>
-        prevRow + 1 < board.length ? prevRow + 1 : prevRow
-      );
+      socket.on("valid_word", () => {
+        setCurrentRow((prevRow) =>
+          prevRow + 1 < board.length ? prevRow + 1 : prevRow
+        );
+      });
     }
   }, [
     currentAttempt,
