@@ -149,6 +149,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
               setCurrentRow={setCurrentRow}
               board={board}
               disabled={gameOver}
+              word={word}
             />
             {gameOver && <GameOver win={gameStatus} />}
             {gameOver && <p className='mb-4'>Word: {word}</p>}
