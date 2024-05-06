@@ -76,6 +76,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           await room.save();
           socket.join(roomCode);
           socket.data.player = 2;
+          io.to(room.members[0]).emit("your_turn", true);
           io.to(roomCode).emit("player_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
@@ -145,8 +146,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
           console.error("Not this player's turn");
           socket.emit("not_your_turn");
           return;
-        } else {
-          room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
         }
 
         if (currentRow < room.board.length) {
@@ -156,6 +155,11 @@ export const initSocketServer = (httpServer: HttpServer) => {
             return;
           } else {
             socket.emit("valid_word");
+            room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
+            const currentPlayerIndex = room.currentPlayer === 1 ? 0 : 1;
+            const nextPlayerIndex = room.currentPlayer === 1 ? 1 : 0;
+            io.to(room.members[currentPlayerIndex]).emit("your_turn", true);
+            io.to(room.members[nextPlayerIndex]).emit("your_turn", false);
           }
 
           room.board[currentRow] = guess.split("");
