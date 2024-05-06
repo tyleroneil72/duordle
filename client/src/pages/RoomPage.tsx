@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
 import GameBoard from "../components/GameBoard";
@@ -59,27 +59,34 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   const handleLetterInput = (letter: string) => {
     const newAttempt = currentAttempt.map((row) => [...row]);
-    const lastRow = newAttempt.find((row) => row.includes(""));
-    if (lastRow) {
+    const lastRow = newAttempt.find((row) => row.includes("")); // Find the last incomplete row
+    if (lastRow && lastRow.filter((char) => char !== "").length < 5) {
+      // Check if the row has less than 5 letters
       const firstEmptyIndex = lastRow.indexOf("");
       lastRow[firstEmptyIndex] = letter;
+      setCurrentAttempt(newAttempt);
     }
-    setCurrentAttempt(newAttempt);
   };
 
-  const handleBackspace = () => {
-    const newAttempt = currentAttempt.map((row) => [...row]);
-    for (let i = newAttempt.length - 1; i >= 0; i--) {
-      const index = newAttempt[i].lastIndexOf(
-        newAttempt[i].find((char) => char !== "") as string
-      );
-      if (index !== -1) {
-        newAttempt[i][index] = "";
-        break;
+  const handleBackspace = useCallback(() => {
+    setCurrentAttempt((prevAttempt) => {
+      const newAttempt = prevAttempt.map((row) => [...row]); // Create a deep copy of the current attempt
+      let done = false;
+
+      // Loop backwards through the rows
+      for (let i = newAttempt.length - 1; i >= 0 && !done; i--) {
+        // Loop backwards through the columns
+        for (let j = newAttempt[i].length - 1; j >= 0 && !done; j--) {
+          if (newAttempt[i][j] !== "") {
+            newAttempt[i][j] = "";
+            done = true; // Exit both loops early once the last filled cell is cleared
+          }
+        }
       }
-    }
-    setCurrentAttempt(newAttempt);
-  };
+
+      return newAttempt;
+    });
+  }, []);
 
   const handleEnter = () => {
     setCurrentAttempt(Array(6).fill(Array(5).fill("")));
