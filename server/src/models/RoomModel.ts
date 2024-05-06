@@ -7,6 +7,7 @@ interface IRoom extends Document {
   board: string[][];
   currentRow: number;
   createdAt: Date;
+  currentPlayer: number;
   checkAndDeleteIfEmpty(): Promise<void>;
 }
 
@@ -31,6 +32,10 @@ const RoomSchema: Schema = new Schema(
     currentRow: {
       type: Number,
       default: 0,
+    },
+    currentPlayer: {
+      type: Number,
+      default: 1,
     },
     createdAt: {
       type: Date,

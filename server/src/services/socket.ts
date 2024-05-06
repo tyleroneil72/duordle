@@ -45,6 +45,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           ],
         });
         socket.join(roomCode);
+        socket.data.player = 1;
         socket.emit("room_created");
         console.log(`Room created and joined: ${roomCode}`);
       } catch (error) {
@@ -74,6 +75,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           room.members.push(socket.id);
           await room.save();
           socket.join(roomCode);
+          socket.data.player = 2;
           io.to(roomCode).emit("player_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
@@ -138,6 +140,13 @@ export const initSocketServer = (httpServer: HttpServer) => {
         if (!room) {
           console.error("Room not found");
           return;
+        }
+        if (socket.data.player !== room.currentPlayer) {
+          console.error("Not this player's turn");
+          socket.emit("not_your_turn");
+          return;
+        } else {
+          room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
         }
 
         if (currentRow < room.board.length) {

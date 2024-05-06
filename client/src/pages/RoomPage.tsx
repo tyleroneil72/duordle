@@ -46,6 +46,13 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         alert("Invalid word! Please try another word.");
       });
 
+      socket.on("not_your_turn", () => {
+        setCurrentAttempt(Array(5).fill(""));
+        alert(
+          "It's not your turn! Please wait for the other player to finish."
+        );
+      });
+
       socket.on("player_left", () => {
         socket.emit("leave_room", roomCode);
         navigate("/player-left");
@@ -83,6 +90,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         socket.off("room_joined");
         socket.off("player_joined");
         socket.off("invalid_word");
+        socket.off("not_your_turn");
         socket.off("game_over");
         socket.off("room_full");
         socket.off("room_not_found");
