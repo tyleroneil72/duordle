@@ -58,6 +58,12 @@ const Keyboard = () => {
         ))}
       </div>
       <div className='flex justify-center mb-1'>
+        <button
+          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xs p-2 rounded'
+          style={{ width: "70px", height: "58px", margin: "0 3px" }}
+        >
+          Enter
+        </button>
         {thirdRow.map((letter, index) => (
           <button
             key={index}
@@ -72,12 +78,6 @@ const Keyboard = () => {
           style={{ width: "115px", height: "58px", margin: "0 3px" }}
         >
           Backspace
-        </button>
-        <button
-          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded'
-          style={{ width: "85px", height: "58px", margin: "0 3px" }}
-        >
-          Enter
         </button>
       </div>
     </div>
