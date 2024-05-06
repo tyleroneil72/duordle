@@ -13,13 +13,22 @@ const Keyboard: React.FC<KeyboardProps> = ({
   // TODO: Only allow for 5 letters to be inputted per turn
   const handleLetterInput = useCallback(
     (letter: string) => {
-      const newAttempt = currentAttempt.map((row) => [...row]);
-      const lastRow = newAttempt.find((row) => row.includes(""));
-      if (lastRow) {
-        const firstEmptyIndex = lastRow.indexOf("");
-        lastRow[firstEmptyIndex] = letter;
-      }
+      const newAttempt = currentAttempt.map((row, rowIndex) => {
+        if (rowIndex === 0) {
+          // Only modify the first row
+          const newRow = [...row];
+          const emptyIndex = newRow.indexOf("");
+          if (emptyIndex >= 0 && emptyIndex < 5) {
+            // Check if there's space for a new letter
+            newRow[emptyIndex] = letter;
+          }
+          return newRow;
+        } else {
+          return row;
+        }
+      });
       setCurrentAttempt(newAttempt);
+      alert(newAttempt);
     },
     [currentAttempt, setCurrentAttempt]
   );
