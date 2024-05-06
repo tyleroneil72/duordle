@@ -131,7 +131,9 @@ export const initSocketServer = (httpServer: HttpServer) => {
         if (room) {
           if (currentRow < room.board.length) {
             room.board[currentRow] = guess.split("");
-            room.currentRow = currentRow + 1;
+            if (room.currentRow < 5) {
+              room.currentRow = currentRow + 1;
+            }
             // io.to(roomCode).emit("update_row", room.currentRow);
             await room.save(); // Save the updated room
 
