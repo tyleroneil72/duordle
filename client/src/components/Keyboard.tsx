@@ -1,3 +1,5 @@
+import { FaDeleteLeft } from "react-icons/fa6";
+
 const Keyboard = () => {
   const letters = [
     "Q",
@@ -74,10 +76,17 @@ const Keyboard = () => {
           </button>
         ))}
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded'
-          style={{ width: "115px", height: "58px", margin: "0 3px" }}
+          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded flex items-center justify-center'
+          style={{
+            width: "70px",
+            height: "58px",
+            margin: "0 3px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          Backspace
+          <FaDeleteLeft size={25} />
         </button>
       </div>
     </div>
