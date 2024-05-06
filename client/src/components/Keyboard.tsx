@@ -1,8 +1,8 @@
 import { FaDeleteLeft } from "react-icons/fa6";
 interface KeyboardProps {
-  onLetterClick: (letter: string) => void; // Function that takes a string and returns void
-  onBackspace: () => void; // Function that takes no arguments and returns void
-  onEnter: () => void; // Function that takes no arguments and returns void
+  onLetterClick: (letter: string) => void;
+  onBackspace: () => void;
+  onEnter: () => void;
 }
 
 const Keyboard: React.FC<KeyboardProps> = ({
