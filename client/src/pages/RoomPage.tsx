@@ -25,6 +25,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<boolean>(false);
+  const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
 
   useEffect(() => {
     if (roomCode) {
@@ -51,6 +52,10 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         alert(
           "It's not your turn! Please wait for the other player to finish."
         );
+      });
+
+      socket.on("your_turn", (isYourTurn) => {
+        setCurrentPlayer(isYourTurn);
       });
 
       socket.on("player_left", () => {
@@ -91,6 +96,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         socket.off("player_joined");
         socket.off("invalid_word");
         socket.off("not_your_turn");
+        socket.off("your_turn");
         socket.off("game_over");
         socket.off("room_full");
         socket.off("room_not_found");
@@ -125,20 +131,28 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
+
+            {!gameOver &&
+              (currentPlayer ? (
+                <p>It's your turn!</p>
+              ) : (
+                <p>Waiting for the other player...</p>
+              ))}
+
             <GameBoard board={board} word={word} currentRow={currentRow} />
             <Keyboard
               socket={socket}
               roomCode={roomCode}
               currentAttempt={currentAttempt}
               setCurrentAttempt={setCurrentAttempt}
-              currentRow={currentRow} // Ensure this is defined and passed
+              currentRow={currentRow}
               setCurrentRow={setCurrentRow}
               board={board}
               disabled={gameOver}
+              word={word}
             />
             {gameOver && <GameOver win={gameStatus} />}
-
-            <p className='mb-4 hidden'>Word: {word}</p>
+            {gameOver && <p className='mb-4'>Word: {word}</p>}
           </>
         )}
       </div>

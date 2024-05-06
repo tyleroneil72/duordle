@@ -69,13 +69,14 @@ export const initSocketServer = (httpServer: HttpServer) => {
           socket.emit("room_full");
           return;
         }
-        socket.emit("room_joined", room.word, room.board); // Works here but not in the next snippet (Fix? it works)
+        socket.emit("room_joined", room.word, room.board);
         // Only goes off the second join time since create room has the original socket id of the user inside of it already.
         if (room.members.length < 2 && !room.members.includes(socket.id)) {
           room.members.push(socket.id);
           await room.save();
           socket.join(roomCode);
           socket.data.player = 2;
+          io.to(room.members[0]).emit("your_turn", true);
           io.to(roomCode).emit("player_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
@@ -145,8 +146,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
           console.error("Not this player's turn");
           socket.emit("not_your_turn");
           return;
-        } else {
-          room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
         }
 
         if (currentRow < room.board.length) {
@@ -156,12 +155,18 @@ export const initSocketServer = (httpServer: HttpServer) => {
             return;
           } else {
             socket.emit("valid_word");
+            room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
+            const currentPlayerIndex = room.currentPlayer === 1 ? 0 : 1;
+            const nextPlayerIndex = room.currentPlayer === 1 ? 1 : 0;
+            io.to(room.members[currentPlayerIndex]).emit("your_turn", true);
+            io.to(room.members[nextPlayerIndex]).emit("your_turn", false);
           }
 
           room.board[currentRow] = guess.split("");
           room.currentRow = currentRow + 1;
           await room.save(); // Save the updated room
           io.to(roomCode).emit("update_board", room.board, room.currentRow);
+          io.to(roomCode).emit("update_keyboard");
 
           let gameWon = guess.toLowerCase() === room.word.toLowerCase();
           if (gameWon || currentRow + 1 >= 6) {
