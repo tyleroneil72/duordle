@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+// import Header from "./components/Header";
+// import Footer from "./components/Footer";
+import Loading from "./components/Loading";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const RoomPage = lazy(() => import("./pages/RoomPage"));
@@ -10,8 +11,8 @@ const Error = lazy(() => import("./pages/Error"));
 const App = () => {
   return (
     <Router>
-      <Header />
-      <Suspense fallback={<div>Loading...</div>}>
+      {/* <Header /> */}
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='room/:roomCode' element={<RoomPage />} />
@@ -20,7 +21,7 @@ const App = () => {
           <Route path='*' element={<Error type='404' />} />
         </Routes>
       </Suspense>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 };

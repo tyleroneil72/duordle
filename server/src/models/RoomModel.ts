@@ -4,6 +4,7 @@ interface IRoom extends Document {
   members: string[];
   roomCode: string;
   word: string;
+  board: string[][];
   createdAt: Date;
   checkAndDeleteIfEmpty(): Promise<void>;
 }
@@ -20,6 +21,10 @@ const RoomSchema: Schema = new Schema(
     },
     word: {
       type: String,
+      required: true,
+    },
+    board: {
+      type: [[String]],
       required: true,
     },
     createdAt: {

@@ -1,20 +1,36 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
+import GameBoard from "../components/GameBoard";
+import Keyboard from "../components/Keyboard";
 import Waiting from "../components/Waiting";
 
-function RoomPage() {
-  const { roomCode } = useParams();
+interface RoomPageProps {}
+
+const RoomPage: React.FC<RoomPageProps> = () => {
+  const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
-  const [word, setWord] = useState("");
-  const [connectionStatus, setConnectionStatus] = useState("waiting");
+  const [word, setWord] = useState<string>("");
+  const [currentAttempt, setCurrentAttempt] = useState<string[]>(
+    Array(5).fill("")
+  );
+  const [board, setBoard] = useState<string[][]>(
+    Array(6)
+      .fill(null)
+      .map(() => Array(5).fill(""))
+  );
+
+  const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
+  const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
 
   useEffect(() => {
     if (roomCode) {
       socket.emit("join_room", roomCode);
 
-      socket.on("room_joined", (word: string) => {
+      socket.on("room_joined", (word: string, board: string[][]) => {
         setWord(word);
+        setBoard(board);
+        setCurrentAttempt(Array(5).fill(""));
       });
 
       socket.on("player_joined", () => {
@@ -23,7 +39,7 @@ function RoomPage() {
 
       socket.on("player_left", () => {
         socket.emit("leave_room", roomCode);
-        navigate("/player-left"); // Navigate to player left error page if the other player leaves
+        navigate("/player-left");
       });
 
       socket.on("room_full", () => {
@@ -32,6 +48,10 @@ function RoomPage() {
 
       socket.on("room_not_found", () => {
         navigate("/not-found");
+      });
+
+      socket.on("update_board", (newBoard) => {
+        setBoard(newBoard);
       });
 
       // Adding window unload event to handle tab or window close
@@ -49,10 +69,23 @@ function RoomPage() {
     }
   }, [roomCode, navigate]);
 
+  // Update board with current attempt
+  useEffect(() => {
+    setBoard((prevBoard) => {
+      const newBoard = [...prevBoard];
+      newBoard[currentRow] = [...currentAttempt]; // Update the current row with the current attempt
+      return newBoard;
+    });
+  }, [currentAttempt, currentRow]);
+
   const handleLeaveRoom = () => {
     socket.emit("leave_room", roomCode);
     navigate("/"); // Navigate back to the home page after leaving the room
   };
+
+  if (!roomCode) {
+    return <div>Room code is required!</div>;
+  }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
@@ -62,8 +95,19 @@ function RoomPage() {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-            <p className='mb-4'>Word: {word}</p>
-            <p>Status: {connectionStatus}</p>
+            <GameBoard board={board} />
+            <Keyboard
+              socket={socket}
+              roomCode={roomCode}
+              currentAttempt={currentAttempt}
+              setCurrentAttempt={setCurrentAttempt}
+              currentRow={currentRow} // Ensure this is defined and passed
+              setCurrentRow={setCurrentRow}
+              board={board} // Pass board if needed for any reason
+            />
+
+            <p className='mb-4 hidden'>Word: {word}</p>
+            <p className='hidden'>Status: {connectionStatus}</p>
           </>
         )}
       </div>
@@ -75,6 +119,6 @@ function RoomPage() {
       </button>
     </div>
   );
-}
+};
 
 export default RoomPage;

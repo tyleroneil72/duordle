@@ -34,6 +34,14 @@ export const initSocketServer = (httpServer: HttpServer) => {
           members: [socket.id], // initial member
           roomCode,
           word,
+          board: [
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+          ],
         });
         socket.join(roomCode);
         socket.emit("room_created");
@@ -59,7 +67,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           socket.emit("room_full");
           return;
         }
-        socket.emit("room_joined", room.word); // Works here but not in the next snippet (Fix? it works)
+        socket.emit("room_joined", room.word, room.board); // Works here but not in the next snippet (Fix? it works)
         // Only goes off the second join time since create room has the original socket id of the user inside of it already.
         if (room.members.length < 2 && !room.members.includes(socket.id)) {
           room.members.push(socket.id);
@@ -114,6 +122,26 @@ export const initSocketServer = (httpServer: HttpServer) => {
         }
       } catch (error) {
         console.error("Error disconnecting:", error);
+      }
+    });
+
+    socket.on("submit_guess", async ({ roomCode, guess, currentRow }) => {
+      try {
+        const room = await Room.findOne({ roomCode });
+        if (room) {
+          if (currentRow < room.board.length) {
+            room.board[currentRow] = guess.split("");
+            await room.save(); // Save the updated room
+
+            // Broadcast the updated board to all clients in the room
+            io.to(roomCode).emit("update_board", room.board);
+          } else {
+            // Handle error: row index out of bounds
+            console.error("Row index out of bounds");
+          }
+        }
+      } catch (error) {
+        console.error("Error handling guess submission:", error);
       }
     });
   });
