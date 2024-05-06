@@ -134,11 +134,15 @@ export const initSocketServer = (httpServer: HttpServer) => {
             if (room.currentRow < 5) {
               room.currentRow = currentRow + 1;
             }
-            // io.to(roomCode).emit("update_row", room.currentRow);
             await room.save(); // Save the updated room
-
             // Broadcast the updated board to all clients in the room
             io.to(roomCode).emit("update_board", room.board, room.currentRow);
+            console.log(room.currentRow);
+            if (currentRow + 1 >= 6) {
+              let gameWon = false;
+              io.to(roomCode).emit("game_over", gameWon);
+              console.log("Game Over");
+            }
           } else {
             // Handle error: row index out of bounds
             console.error("Row index out of bounds");

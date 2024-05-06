@@ -4,6 +4,7 @@ import { socket } from "../services/socket";
 import GameBoard from "../components/GameBoard";
 import Keyboard from "../components/Keyboard";
 import Waiting from "../components/Waiting";
+import GameOver from "../components/GameOver";
 
 interface RoomPageProps {}
 
@@ -22,6 +23,8 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [gameStatus, setGameStatus] = useState<boolean>(false);
 
   useEffect(() => {
     if (roomCode) {
@@ -58,6 +61,11 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         }
       );
 
+      socket.on("game_over", (gameStatus) => {
+        setGameOver(true);
+        setGameStatus(gameStatus);
+      });
+
       // Adding window unload event to handle tab or window close
       const handleUnload = (event: BeforeUnloadEvent) => {
         event.preventDefault();
@@ -66,6 +74,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       window.addEventListener("beforeunload", handleUnload);
 
       return () => {
+        socket.off("game_over");
         socket.off("room_full");
         socket.off("room_not_found");
         window.removeEventListener("beforeunload", handleUnload);
@@ -109,6 +118,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
               setCurrentRow={setCurrentRow}
               board={board} // Pass board if needed for any reason
             />
+            {gameOver && <GameOver win={gameStatus} />}
 
             <p className='mb-4 hidden'>Word: {word}</p>
             <p className='hidden'>Status: {connectionStatus}</p>
