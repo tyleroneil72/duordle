@@ -59,13 +59,12 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   const handleLetterInput = (letter: string) => {
     const newAttempt = currentAttempt.map((row) => [...row]);
-    const lastRow = newAttempt.find((row) => row.includes("")); // Find the last incomplete row
-    if (lastRow && lastRow.filter((char) => char !== "").length < 5) {
-      // Check if the row has less than 5 letters
+    const lastRow = newAttempt.find((row) => row.includes(""));
+    if (lastRow) {
       const firstEmptyIndex = lastRow.indexOf("");
       lastRow[firstEmptyIndex] = letter;
-      setCurrentAttempt(newAttempt);
     }
+    setCurrentAttempt(newAttempt);
   };
 
   const handleBackspace = useCallback(() => {
