@@ -15,8 +15,11 @@ const RoomPage: React.FC<RoomPageProps> = () => {
     Array(5).fill("")
   );
   const [board, setBoard] = useState<string[][]>(
-    Array(6).fill(Array(5).fill(""))
+    Array(6)
+      .fill(null)
+      .map(() => Array(5).fill(""))
   );
+
   const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
 
@@ -45,6 +48,10 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
       socket.on("room_not_found", () => {
         navigate("/not-found");
+      });
+
+      socket.on("update_board", (newBoard) => {
+        setBoard(newBoard);
       });
 
       // Adding window unload event to handle tab or window close
