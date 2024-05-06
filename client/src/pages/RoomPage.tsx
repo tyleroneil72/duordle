@@ -145,13 +145,13 @@ const RoomPage: React.FC<RoomPageProps> = () => {
               roomCode={roomCode}
               currentAttempt={currentAttempt}
               setCurrentAttempt={setCurrentAttempt}
-              currentRow={currentRow} // Ensure this is defined and passed
+              currentRow={currentRow}
               setCurrentRow={setCurrentRow}
               board={board}
               disabled={gameOver}
             />
             {gameOver && <GameOver win={gameStatus} />}
-            {!gameOver && <p className='mb-4 hidden'>Word: {word}</p>}
+            {gameOver && <p className='mb-4'>Word: {word}</p>}
           </>
         )}
       </div>
