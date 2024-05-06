@@ -1,39 +1,18 @@
 import { FaDeleteLeft } from "react-icons/fa6";
+interface KeyboardProps {
+  onLetterClick: (letter: string) => void; // Function that takes a string and returns void
+  onBackspace: () => void; // Function that takes no arguments and returns void
+  onEnter: () => void; // Function that takes no arguments and returns void
+}
 
-const Keyboard = () => {
-  const letters = [
-    "Q",
-    "W",
-    "E",
-    "R",
-    "T",
-    "Y",
-    "U",
-    "I",
-    "O",
-    "P",
-    "A",
-    "S",
-    "D",
-    "F",
-    "G",
-    "H",
-    "J",
-    "K",
-    "L",
-    "Z",
-    "X",
-    "C",
-    "V",
-    "B",
-    "N",
-    "M",
-  ];
-
-  // Define keyboard rows for structured layout
-  const firstRow = letters.slice(0, 10);
-  const secondRow = letters.slice(10, 19);
-  const thirdRow = letters.slice(19, 26);
+const Keyboard: React.FC<KeyboardProps> = ({
+  onLetterClick,
+  onBackspace,
+  onEnter,
+}) => {
+  const firstRow = "QWERTYUIOP".split("");
+  const secondRow = "ASDFGHJKL".split("");
+  const thirdRow = "ZXCVBNM".split("");
 
   return (
     <div className='p-1'>
@@ -43,6 +22,7 @@ const Keyboard = () => {
             key={index}
             className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xl p-2 rounded'
             style={{ width: "40px", height: "58px", margin: "0 3px" }}
+            onClick={() => onLetterClick(letter)}
           >
             {letter}
           </button>
@@ -54,6 +34,7 @@ const Keyboard = () => {
             key={index}
             className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xl p-2 rounded'
             style={{ width: "40px", height: "58px", margin: "0 3px" }}
+            onClick={() => onLetterClick(letter)}
           >
             {letter}
           </button>
@@ -63,6 +44,7 @@ const Keyboard = () => {
         <button
           className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xs p-2 rounded'
           style={{ width: "70px", height: "58px", margin: "0 3px" }}
+          onClick={onEnter}
         >
           Enter
         </button>
@@ -71,20 +53,15 @@ const Keyboard = () => {
             key={index}
             className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xl p-2 rounded'
             style={{ width: "40px", height: "58px", margin: "0 3px" }}
+            onClick={() => onLetterClick(letter)}
           >
             {letter}
           </button>
         ))}
         <button
           className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded flex items-center justify-center'
-          style={{
-            width: "70px",
-            height: "58px",
-            margin: "0 3px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={{ width: "70px", height: "58px", margin: "0 3px" }}
+          onClick={onBackspace}
         >
           <FaDeleteLeft size={25} />
         </button>

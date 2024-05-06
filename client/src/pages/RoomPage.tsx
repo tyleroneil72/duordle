@@ -1,15 +1,20 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
-import Waiting from "../components/Waiting";
 import GameBoard from "../components/GameBoard";
 import Keyboard from "../components/Keyboard";
+import Waiting from "../components/Waiting";
 
-function RoomPage() {
-  const { roomCode } = useParams();
+interface RoomPageProps {}
+
+const RoomPage: React.FC<RoomPageProps> = () => {
+  const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
-  const [word, setWord] = useState("");
-  const [connectionStatus, setConnectionStatus] = useState("waiting");
+  const [word, setWord] = useState<string>("");
+  const [currentAttempt, setCurrentAttempt] = useState<string[][]>(
+    Array(6).fill(Array(5).fill(""))
+  );
+  const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
 
   useEffect(() => {
     if (roomCode) {
@@ -17,6 +22,7 @@ function RoomPage() {
 
       socket.on("room_joined", (word: string) => {
         setWord(word);
+        setCurrentAttempt(Array(6).fill(Array(5).fill(""))); // Reset the attempt when a new word is set
       });
 
       socket.on("player_joined", () => {
@@ -51,6 +57,34 @@ function RoomPage() {
     }
   }, [roomCode, navigate]);
 
+  const handleLetterInput = (letter: string) => {
+    const newAttempt = currentAttempt.map((row) => [...row]);
+    const lastRow = newAttempt.find((row) => row.includes(""));
+    if (lastRow) {
+      const firstEmptyIndex = lastRow.indexOf("");
+      lastRow[firstEmptyIndex] = letter;
+    }
+    setCurrentAttempt(newAttempt);
+  };
+
+  const handleBackspace = () => {
+    const newAttempt = currentAttempt.map((row) => [...row]);
+    for (let i = newAttempt.length - 1; i >= 0; i--) {
+      const index = newAttempt[i].lastIndexOf(
+        newAttempt[i].find((char) => char !== "") as string
+      );
+      if (index !== -1) {
+        newAttempt[i][index] = "";
+        break;
+      }
+    }
+    setCurrentAttempt(newAttempt);
+  };
+
+  const handleEnter = () => {
+    setCurrentAttempt(Array(6).fill(Array(5).fill("")));
+  };
+
   const handleLeaveRoom = () => {
     socket.emit("leave_room", roomCode);
     navigate("/"); // Navigate back to the home page after leaving the room
@@ -64,8 +98,12 @@ function RoomPage() {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-            <GameBoard />
-            <Keyboard />
+            <GameBoard attempt={currentAttempt} />
+            <Keyboard
+              onLetterClick={handleLetterInput}
+              onBackspace={handleBackspace}
+              onEnter={handleEnter}
+            />
             <p className='mb-4 hidden'>Word: {word}</p>
             <p className='hidden'>Status: {connectionStatus}</p>
           </>
@@ -79,6 +117,6 @@ function RoomPage() {
       </button>
     </div>
   );
-}
+};
 
 export default RoomPage;
