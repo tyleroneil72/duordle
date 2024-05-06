@@ -35,8 +35,8 @@ export const initSocketServer = (httpServer: HttpServer) => {
           roomCode,
           word,
           board: [
-            ["", "", "", "", ""],
-            ["", "", "", "", ""],
+            ["h", "e", "l", "l", "o"],
+            ["w", "o", "r", "l", "d"],
             ["", "", "", "", ""],
             ["", "", "", "", ""],
             ["", "", "", "", ""],
