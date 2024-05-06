@@ -50,9 +50,13 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         navigate("/not-found");
       });
 
-      socket.on("update_board", (newBoard) => {
-        setBoard(newBoard);
-      });
+      socket.on(
+        "update_board",
+        (newBoard: string[][], newCurrentRow: number): void => {
+          setBoard(newBoard);
+          setCurrentRow(newCurrentRow);
+        }
+      );
 
       // Adding window unload event to handle tab or window close
       const handleUnload = (event: BeforeUnloadEvent) => {
