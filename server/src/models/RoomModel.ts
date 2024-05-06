@@ -22,6 +22,10 @@ const RoomSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    board: {
+      type: [String],
+      required: true,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
