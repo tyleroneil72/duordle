@@ -34,7 +34,14 @@ export const initSocketServer = (httpServer: HttpServer) => {
           members: [socket.id], // initial member
           roomCode,
           word,
-          board: ["", "", "", "", "", ""],
+          board: [
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+            ["", "", "", "", ""],
+          ],
         });
         socket.join(roomCode);
         socket.emit("room_created");

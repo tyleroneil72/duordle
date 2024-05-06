@@ -23,7 +23,7 @@ const RoomSchema: Schema = new Schema(
       required: true,
     },
     board: {
-      type: [String],
+      type: [[String]],
       required: true,
     },
     createdAt: {
