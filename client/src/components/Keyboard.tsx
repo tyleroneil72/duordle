@@ -40,15 +40,16 @@ const Keyboard: React.FC<KeyboardProps> = ({
   const handleBackspace = useCallback(() => {
     setCurrentAttempt((prevAttempt) => {
       const newAttempt = [...prevAttempt];
-      const lastFilledIndex = newAttempt.lastIndexOf(""); // Find the last filled index
-      if (lastFilledIndex !== -1) {
-        newAttempt[lastFilledIndex - 1] = ""; // Clear the last filled character
-      } else if (newAttempt.length > 0) {
-        newAttempt[newAttempt.length - 1] = ""; // If no empty slots, clear the last character
+      for (let i = newAttempt.length - 1; i >= 0; i--) {
+        if (newAttempt[i] !== "") {
+          newAttempt[i] = ""; // Clear the last filled character and stop
+          break;
+        }
       }
       return newAttempt;
     });
   }, [setCurrentAttempt]);
+
   // Dependencies list, only needs setCurrentAttempt
 
   const handleEnter = useCallback(() => {
