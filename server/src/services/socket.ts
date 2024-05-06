@@ -137,7 +137,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
             await room.save(); // Save the updated room
             // Broadcast the updated board to all clients in the room
             io.to(roomCode).emit("update_board", room.board, room.currentRow);
-            console.log(room.currentRow);
             let gameWon = guess.toLowerCase() === room.word;
 
             if (gameWon || currentRow + 1 >= 6) {
