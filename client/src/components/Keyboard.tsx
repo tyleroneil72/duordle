@@ -1,4 +1,5 @@
 import { FaDeleteLeft } from "react-icons/fa6";
+import { useEffect, useCallback } from "react";
 
 interface KeyboardProps {
   currentAttempt: string[][];
@@ -9,37 +10,65 @@ const Keyboard: React.FC<KeyboardProps> = ({
   currentAttempt,
   setCurrentAttempt,
 }) => {
-  const handleLetterInput = (letter: string) => {
-    const newAttempt = currentAttempt.map((row) => [...row]);
-    const lastRow = newAttempt.find((row) => row.includes(""));
-    if (lastRow) {
-      const firstEmptyIndex = lastRow.indexOf("");
-      lastRow[firstEmptyIndex] = letter;
-    }
-    setCurrentAttempt(newAttempt);
-  };
+  const handleLetterInput = useCallback(
+    (letter: string) => {
+      const newAttempt = currentAttempt.map((row) => [...row]);
+      const lastRow = newAttempt.find((row) => row.includes(""));
+      if (lastRow) {
+        const firstEmptyIndex = lastRow.indexOf("");
+        lastRow[firstEmptyIndex] = letter;
+      }
+      setCurrentAttempt(newAttempt);
+    },
+    [currentAttempt, setCurrentAttempt]
+  );
 
-  const handleBackspace = () => {
+  const handleBackspace = useCallback(() => {
     setCurrentAttempt((prevAttempt) => {
-      const newAttempt = prevAttempt.map((row) => [...row]); // Create a deep copy of the current attempt
+      const newAttempt = prevAttempt.map((row) => [...row]);
       let done = false;
 
       for (let i = newAttempt.length - 1; i >= 0 && !done; i--) {
         for (let j = newAttempt[i].length - 1; j >= 0 && !done; j--) {
           if (newAttempt[i][j] !== "") {
             newAttempt[i][j] = "";
-            done = true; // Exit both loops early once the last filled cell is cleared
+            done = true;
           }
         }
       }
 
       return newAttempt;
     });
-  };
+  }, [setCurrentAttempt]);
 
-  const handleEnter = () => {
+  const handleEnter = useCallback(() => {
     setCurrentAttempt(Array(6).fill(Array(5).fill("")));
-  };
+  }, [setCurrentAttempt]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      const { key } = event;
+      if (key === "Enter") {
+        handleEnter();
+      } else if (key === "Backspace") {
+        handleBackspace();
+      } else {
+        const validKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        if (validKeys.includes(key.toUpperCase())) {
+          handleLetterInput(key.toUpperCase());
+        }
+      }
+    },
+    [handleEnter, handleBackspace, handleLetterInput]
+  ); // Updated dependencies
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]); // No change here
 
   const firstRow = "QWERTYUIOP".split("");
   const secondRow = "ASDFGHJKL".split("");
