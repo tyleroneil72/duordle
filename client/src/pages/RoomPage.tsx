@@ -108,7 +108,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-            <GameBoard board={board} word={word} />
+            <GameBoard board={board} word={word} currentRow={currentRow} />
             <Keyboard
               socket={socket}
               roomCode={roomCode}
