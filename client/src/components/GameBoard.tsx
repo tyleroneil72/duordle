@@ -6,7 +6,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ attempt }) => {
   return (
     <div
       className='grid grid-cols-5 gap-1 w-full max-w-md mx-auto'
-      style={{ width: "100%" }}
+      style={{ width: "70%" }}
     >
       {attempt.map((row, rowIndex) =>
         row.map((letter, cellIndex) => (
