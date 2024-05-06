@@ -116,7 +116,8 @@ const RoomPage: React.FC<RoomPageProps> = () => {
               setCurrentAttempt={setCurrentAttempt}
               currentRow={currentRow} // Ensure this is defined and passed
               setCurrentRow={setCurrentRow}
-              board={board} // Pass board if needed for any reason
+              board={board}
+              disabled={gameOver}
             />
             {gameOver && <GameOver win={gameStatus} />}
 
