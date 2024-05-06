@@ -85,7 +85,6 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   if (!roomCode) {
     return <div>Room code is required!</div>;
-    navigate("/not-found");
   }
 
   return (

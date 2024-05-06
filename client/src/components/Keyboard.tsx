@@ -21,7 +21,6 @@ const Keyboard: React.FC<KeyboardProps> = ({
   setCurrentAttempt,
   board,
 }) => {
-  // TODO: Only allow for 5 letters to be inputted per turn
   const handleLetterInput = useCallback(
     (letter: string) => {
       setCurrentAttempt((prevAttempt) => {
@@ -35,7 +34,6 @@ const Keyboard: React.FC<KeyboardProps> = ({
     },
     [setCurrentAttempt]
   );
-  // Dependencies list, only needs setCurrentAttempt
 
   const handleBackspace = useCallback(() => {
     setCurrentAttempt((prevAttempt) => {
@@ -49,8 +47,6 @@ const Keyboard: React.FC<KeyboardProps> = ({
       return newAttempt;
     });
   }, [setCurrentAttempt]);
-
-  // Dependencies list, only needs setCurrentAttempt
 
   const handleEnter = useCallback(() => {
     if (currentAttempt.every((letter) => letter !== "")) {
@@ -76,9 +72,6 @@ const Keyboard: React.FC<KeyboardProps> = ({
     board.length,
   ]);
 
-  // Include roomCode in dependencies
-  // Remove roomCode
-
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       const { key } = event;
@@ -93,7 +86,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         }
       }
     },
-    [handleEnter, handleBackspace, handleLetterInput] // `roomCode` is not needed here directly
+    [handleEnter, handleBackspace, handleLetterInput]
   );
 
   useEffect(() => {
