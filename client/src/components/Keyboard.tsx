@@ -10,6 +10,7 @@ interface KeyboardProps {
   currentRow: number;
   setCurrentRow: React.Dispatch<React.SetStateAction<number>>;
   board: string[][];
+  disabled: boolean;
 }
 
 const Keyboard: React.FC<KeyboardProps> = ({
@@ -20,9 +21,11 @@ const Keyboard: React.FC<KeyboardProps> = ({
   setCurrentRow,
   setCurrentAttempt,
   board,
+  disabled,
 }) => {
   const handleLetterInput = useCallback(
     (letter: string) => {
+      if (disabled) return;
       setCurrentAttempt((prevAttempt) => {
         const newAttempt = [...prevAttempt]; // Create a copy of the current attempt
         const emptyIndex = newAttempt.indexOf(""); // Find the first empty slot
@@ -32,7 +35,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         return newAttempt;
       });
     },
-    [setCurrentAttempt]
+    [setCurrentAttempt, disabled]
   );
 
   const handleBackspace = useCallback(() => {
@@ -58,9 +61,11 @@ const Keyboard: React.FC<KeyboardProps> = ({
       });
 
       setCurrentAttempt(Array(5).fill(""));
-      setCurrentRow((prevRow) =>
-        prevRow + 1 < board.length ? prevRow + 1 : prevRow
-      );
+      socket.on("valid_word", () => {
+        setCurrentRow((prevRow) =>
+          prevRow + 1 < board.length ? prevRow + 1 : prevRow
+        );
+      });
     }
   }, [
     currentAttempt,
@@ -75,6 +80,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       const { key } = event;
+      if (disabled) return;
       if (key === "Enter") {
         handleEnter();
       } else if (key === "Backspace") {
@@ -86,7 +92,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         }
       }
     },
-    [handleEnter, handleBackspace, handleLetterInput]
+    [handleEnter, handleBackspace, handleLetterInput, disabled]
   );
 
   useEffect(() => {

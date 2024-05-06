@@ -1,6 +1,7 @@
 import { Server as HttpServer } from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import Room from "../models/RoomModel";
+import Word from "../models/WordModel";
 
 export const initSocketServer = (httpServer: HttpServer) => {
   const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
@@ -44,6 +45,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           ],
         });
         socket.join(roomCode);
+        socket.data.player = 1;
         socket.emit("room_created");
         console.log(`Room created and joined: ${roomCode}`);
       } catch (error) {
@@ -73,6 +75,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           room.members.push(socket.id);
           await room.save();
           socket.join(roomCode);
+          socket.data.player = 2;
           io.to(roomCode).emit("player_joined");
           console.log(`Joined room: ${roomCode}`);
         } else if (room.members.includes(socket.id)) {
@@ -128,17 +131,45 @@ export const initSocketServer = (httpServer: HttpServer) => {
     socket.on("submit_guess", async ({ roomCode, guess, currentRow }) => {
       try {
         const room = await Room.findOne({ roomCode });
-        if (room) {
-          if (currentRow < room.board.length) {
-            room.board[currentRow] = guess.split("");
-            await room.save(); // Save the updated room
+        const validWord = await Word.findOne({
+          word: { $regex: new RegExp(`^${guess}$`, "i") },
+        });
 
-            // Broadcast the updated board to all clients in the room
-            io.to(roomCode).emit("update_board", room.board);
+        console.log(`Received guess: ${guess}`);
+
+        if (!room) {
+          console.error("Room not found");
+          return;
+        }
+        if (socket.data.player !== room.currentPlayer) {
+          console.error("Not this player's turn");
+          socket.emit("not_your_turn");
+          return;
+        } else {
+          room.currentPlayer = room.currentPlayer === 1 ? 2 : 1;
+        }
+
+        if (currentRow < room.board.length) {
+          if (!validWord) {
+            console.log("Invalid word submitted:", guess);
+            socket.emit("invalid_word"); // Notify the client that the word is invalid
+            return;
           } else {
-            // Handle error: row index out of bounds
-            console.error("Row index out of bounds");
+            socket.emit("valid_word");
           }
+
+          room.board[currentRow] = guess.split("");
+          room.currentRow = currentRow + 1;
+          await room.save(); // Save the updated room
+          io.to(roomCode).emit("update_board", room.board, room.currentRow);
+
+          let gameWon = guess.toLowerCase() === room.word.toLowerCase();
+          if (gameWon || currentRow + 1 >= 6) {
+            io.to(roomCode).emit("game_over", gameWon);
+            console.log("Game Over");
+          }
+        } else {
+          console.error("Row index out of bounds");
         }
       } catch (error) {
         console.error("Error handling guess submission:", error);

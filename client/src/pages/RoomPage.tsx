@@ -4,6 +4,7 @@ import { socket } from "../services/socket";
 import GameBoard from "../components/GameBoard";
 import Keyboard from "../components/Keyboard";
 import Waiting from "../components/Waiting";
+import GameOver from "../components/GameOver";
 
 interface RoomPageProps {}
 
@@ -22,6 +23,8 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [gameStatus, setGameStatus] = useState<boolean>(false);
 
   useEffect(() => {
     if (roomCode) {
@@ -37,6 +40,19 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         setConnectionStatus("connected");
       });
 
+      socket.on("invalid_word", () => {
+        // Reset the current attempt, but do not advance the row
+        setCurrentAttempt(Array(5).fill(""));
+        alert("Invalid word! Please try another word.");
+      });
+
+      socket.on("not_your_turn", () => {
+        setCurrentAttempt(Array(5).fill(""));
+        alert(
+          "It's not your turn! Please wait for the other player to finish."
+        );
+      });
+
       socket.on("player_left", () => {
         socket.emit("leave_room", roomCode);
         navigate("/player-left");
@@ -50,8 +66,17 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         navigate("/not-found");
       });
 
-      socket.on("update_board", (newBoard) => {
-        setBoard(newBoard);
+      socket.on(
+        "update_board",
+        (newBoard: string[][], newCurrentRow: number): void => {
+          setBoard(newBoard);
+          setCurrentRow(newCurrentRow);
+        }
+      );
+
+      socket.on("game_over", (gameStatus) => {
+        setGameOver(true);
+        setGameStatus(gameStatus);
       });
 
       // Adding window unload event to handle tab or window close
@@ -62,6 +87,11 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       window.addEventListener("beforeunload", handleUnload);
 
       return () => {
+        socket.off("room_joined");
+        socket.off("player_joined");
+        socket.off("invalid_word");
+        socket.off("not_your_turn");
+        socket.off("game_over");
         socket.off("room_full");
         socket.off("room_not_found");
         window.removeEventListener("beforeunload", handleUnload);
@@ -95,7 +125,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         ) : (
           <>
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
-            <GameBoard board={board} />
+            <GameBoard board={board} word={word} currentRow={currentRow} />
             <Keyboard
               socket={socket}
               roomCode={roomCode}
@@ -103,11 +133,12 @@ const RoomPage: React.FC<RoomPageProps> = () => {
               setCurrentAttempt={setCurrentAttempt}
               currentRow={currentRow} // Ensure this is defined and passed
               setCurrentRow={setCurrentRow}
-              board={board} // Pass board if needed for any reason
+              board={board}
+              disabled={gameOver}
             />
+            {gameOver && <GameOver win={gameStatus} />}
 
             <p className='mb-4 hidden'>Word: {word}</p>
-            <p className='hidden'>Status: {connectionStatus}</p>
           </>
         )}
       </div>
