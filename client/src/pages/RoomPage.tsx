@@ -11,6 +11,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
   const [word, setWord] = useState<string>("");
+  // TODO: Make this work with the Room Model Version
   const [currentAttempt, setCurrentAttempt] = useState<string[][]>(
     Array(6).fill(Array(5).fill(""))
   );

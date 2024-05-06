@@ -10,6 +10,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
   currentAttempt,
   setCurrentAttempt,
 }) => {
+  // TODO: Only allow for 5 letters to be inputted per turn
   const handleLetterInput = useCallback(
     (letter: string) => {
       const newAttempt = currentAttempt.map((row) => [...row]);
