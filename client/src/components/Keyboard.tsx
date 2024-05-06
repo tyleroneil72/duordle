@@ -1,58 +1,82 @@
 import { FaDeleteLeft } from "react-icons/fa6";
 import { useEffect, useCallback } from "react";
+import { Socket } from "socket.io-client";
 
 interface KeyboardProps {
-  currentAttempt: string[][];
-  setCurrentAttempt: React.Dispatch<React.SetStateAction<string[][]>>;
+  socket: Socket;
+  roomCode: string;
+  currentAttempt: string[];
+  setCurrentAttempt: React.Dispatch<React.SetStateAction<string[]>>;
+  currentRow: number;
+  setCurrentRow: React.Dispatch<React.SetStateAction<number>>;
+  board: string[][];
 }
 
 const Keyboard: React.FC<KeyboardProps> = ({
+  socket,
+  roomCode,
   currentAttempt,
+  currentRow,
+  setCurrentRow,
   setCurrentAttempt,
+  board,
 }) => {
   // TODO: Only allow for 5 letters to be inputted per turn
   const handleLetterInput = useCallback(
     (letter: string) => {
-      const newAttempt = currentAttempt.map((row, rowIndex) => {
-        if (rowIndex === 0) {
-          // Only modify the first row
-          const newRow = [...row];
-          const emptyIndex = newRow.indexOf("");
-          if (emptyIndex >= 0 && emptyIndex < 5) {
-            // Check if there's space for a new letter
-            newRow[emptyIndex] = letter;
-          }
-          return newRow;
-        } else {
-          return row;
+      setCurrentAttempt((prevAttempt) => {
+        const newAttempt = [...prevAttempt]; // Create a copy of the current attempt
+        const emptyIndex = newAttempt.indexOf(""); // Find the first empty slot
+        if (emptyIndex !== -1) {
+          newAttempt[emptyIndex] = letter; // Update the first empty slot with the new letter
         }
+        return newAttempt;
       });
-      setCurrentAttempt(newAttempt);
     },
-    [currentAttempt, setCurrentAttempt]
+    [setCurrentAttempt]
   );
+  // Dependencies list, only needs setCurrentAttempt
 
   const handleBackspace = useCallback(() => {
     setCurrentAttempt((prevAttempt) => {
-      const newAttempt = prevAttempt.map((row) => [...row]);
-      let done = false;
-
-      for (let i = newAttempt.length - 1; i >= 0 && !done; i--) {
-        for (let j = newAttempt[i].length - 1; j >= 0 && !done; j--) {
-          if (newAttempt[i][j] !== "") {
-            newAttempt[i][j] = "";
-            done = true;
-          }
-        }
+      const newAttempt = [...prevAttempt];
+      const lastFilledIndex = newAttempt.lastIndexOf(""); // Find the last filled index
+      if (lastFilledIndex !== -1) {
+        newAttempt[lastFilledIndex - 1] = ""; // Clear the last filled character
+      } else if (newAttempt.length > 0) {
+        newAttempt[newAttempt.length - 1] = ""; // If no empty slots, clear the last character
       }
-
       return newAttempt;
     });
   }, [setCurrentAttempt]);
+  // Dependencies list, only needs setCurrentAttempt
 
   const handleEnter = useCallback(() => {
-    setCurrentAttempt(Array(6).fill(Array(5).fill("")));
-  }, [setCurrentAttempt]);
+    if (currentAttempt.every((letter) => letter !== "")) {
+      // Emit the guess to the server
+      socket.emit("submit_guess", {
+        roomCode,
+        guess: currentAttempt.join(""),
+        currentRow,
+      });
+
+      setCurrentAttempt(Array(5).fill(""));
+      setCurrentRow((prevRow) =>
+        prevRow + 1 < board.length ? prevRow + 1 : prevRow
+      );
+    }
+  }, [
+    currentAttempt,
+    setCurrentAttempt,
+    socket,
+    roomCode,
+    currentRow,
+    setCurrentRow,
+    board.length,
+  ]);
+
+  // Include roomCode in dependencies
+  // Remove roomCode
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -68,16 +92,15 @@ const Keyboard: React.FC<KeyboardProps> = ({
         }
       }
     },
-    [handleEnter, handleBackspace, handleLetterInput]
-  ); // Updated dependencies
+    [handleEnter, handleBackspace, handleLetterInput] // `roomCode` is not needed here directly
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleKeyDown]); // No change here
+  }, [handleKeyDown]);
 
   const firstRow = "QWERTYUIOP".split("");
   const secondRow = "ASDFGHJKL".split("");

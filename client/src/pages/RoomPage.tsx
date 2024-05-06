@@ -11,11 +11,13 @@ const RoomPage: React.FC<RoomPageProps> = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
   const [word, setWord] = useState<string>("");
-  // TODO: Make this work with the Room Model Version
-  const [currentAttempt, setCurrentAttempt] = useState<string[][]>(
+  const [currentAttempt, setCurrentAttempt] = useState<string[]>(
+    Array(5).fill("")
+  );
+  const [board, setBoard] = useState<string[][]>(
     Array(6).fill(Array(5).fill(""))
   );
-  const [board, setBoard] = useState<string[][]>([[]]);
+  const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
 
   useEffect(() => {
@@ -25,7 +27,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       socket.on("room_joined", (word: string, board: string[][]) => {
         setWord(word);
         setBoard(board);
-        setCurrentAttempt(Array(6).fill(Array(5).fill(""))); // Reset the attempt when a new word is set
+        setCurrentAttempt(Array(5).fill(""));
       });
 
       socket.on("player_joined", () => {
@@ -34,7 +36,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
       socket.on("player_left", () => {
         socket.emit("leave_room", roomCode);
-        navigate("/player-left"); // Navigate to player left error page if the other player leaves
+        navigate("/player-left");
       });
 
       socket.on("room_full", () => {
@@ -60,10 +62,24 @@ const RoomPage: React.FC<RoomPageProps> = () => {
     }
   }, [roomCode, navigate]);
 
+  // Update board with current attempt
+  useEffect(() => {
+    setBoard((prevBoard) => {
+      const newBoard = [...prevBoard];
+      newBoard[currentRow] = [...currentAttempt]; // Update the current row with the current attempt
+      return newBoard;
+    });
+  }, [currentAttempt, currentRow]);
+
   const handleLeaveRoom = () => {
     socket.emit("leave_room", roomCode);
     navigate("/"); // Navigate back to the home page after leaving the room
   };
+
+  if (!roomCode) {
+    return <div>Room code is required!</div>;
+    navigate("/not-found");
+  }
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
@@ -75,9 +91,15 @@ const RoomPage: React.FC<RoomPageProps> = () => {
             <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
             <GameBoard board={board} />
             <Keyboard
+              socket={socket}
+              roomCode={roomCode}
               currentAttempt={currentAttempt}
               setCurrentAttempt={setCurrentAttempt}
+              currentRow={currentRow} // Ensure this is defined and passed
+              setCurrentRow={setCurrentRow}
+              board={board} // Pass board if needed for any reason
             />
+
             <p className='mb-4 hidden'>Word: {word}</p>
             <p className='hidden'>Status: {connectionStatus}</p>
           </>
