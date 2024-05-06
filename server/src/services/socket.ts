@@ -138,8 +138,9 @@ export const initSocketServer = (httpServer: HttpServer) => {
             // Broadcast the updated board to all clients in the room
             io.to(roomCode).emit("update_board", room.board, room.currentRow);
             console.log(room.currentRow);
-            if (currentRow + 1 >= 6) {
-              let gameWon = false; // Need to set dynamically based on if game has won.
+            let gameWon = guess.toLowerCase() === room.word;
+
+            if (gameWon || currentRow + 1 >= 6) {
               io.to(roomCode).emit("game_over", gameWon);
               console.log("Game Over");
             }
