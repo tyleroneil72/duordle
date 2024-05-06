@@ -139,7 +139,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
             io.to(roomCode).emit("update_board", room.board, room.currentRow);
             console.log(room.currentRow);
             if (currentRow + 1 >= 6) {
-              let gameWon = false;
+              let gameWon = false; // Need to set dynamically based on if game has won.
               io.to(roomCode).emit("game_over", gameWon);
               console.log("Game Over");
             }
