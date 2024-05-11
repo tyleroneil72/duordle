@@ -18,15 +18,13 @@ function HomePage() {
 
   const handleJoinRoom = () => {
     const joinRoomCode = prompt("Enter room code:");
-    if (!joinRoomCode) return; // Ensure there is a code to join
+    if (!joinRoomCode) return;
 
     setupRoomEventListeners(joinRoomCode, "join");
     socket.emit("join_room", joinRoomCode);
   };
 
-  // Setup socket event listeners based on the action
   const setupRoomEventListeners = (roomCode: string, action: string) => {
-    // Remove any potentially conflicting listeners
     socket
       .off("room_created")
       .off("room_already_exists")
@@ -63,8 +61,9 @@ function HomePage() {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
-      <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+      <h1 className='text-4xl font-bold text-purple-600 mb-6'>Duordle</h1>
+      <div className='w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden p-6'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
     </div>
