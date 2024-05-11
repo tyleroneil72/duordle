@@ -5,7 +5,7 @@ function SettingsPage() {
   const navigate = useNavigate();
 
   const toggleDarkMode = () => {
-    document.body.classList.toggle("dark");
+    alert("Dark mode is not yet implemented.");
   };
 
   return (
@@ -23,7 +23,7 @@ function SettingsPage() {
                 id='dark-mode-toggle'
                 type='checkbox'
                 className='sr-only'
-                onChange={toggleDarkMode}
+                onClick={toggleDarkMode}
               />
               <div className='block bg-gray-600 w-14 h-8 rounded-full'></div>
               <div className='dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition'></div>
