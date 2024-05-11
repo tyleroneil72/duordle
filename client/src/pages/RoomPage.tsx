@@ -157,7 +157,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         )}
       </div>
       <button
-        className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+        className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
         onClick={handleLeaveRoom}
       >
         Leave Room
