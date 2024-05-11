@@ -38,6 +38,13 @@ function SettingsPage() {
             Tyler O'Neil - Developer and creator of Duordle. Passionate about
             building interactive and efficient web solutions.
           </p>
+          <p className='text-gray-700 mt-2'>
+            Tech Stack Used: MERN Stack (MongoDB, Express, React, Node.js),
+            enhanced with Socket.io for real-time interactions, TypeScript for
+            robust server and client-side scripting, and Tailwind CSS for
+            stylish, responsive design. Hosted on AWS for reliable and scalable
+            cloud infrastructure.
+          </p>
           <div className='flex justify-center space-x-4 mt-4'>
             <a
               href='https://github.com/tyleroneil72'
