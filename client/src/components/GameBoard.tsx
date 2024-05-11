@@ -52,18 +52,19 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
   };
 
   return (
-    <div className='grid grid-cols-5 gap-1 w-full max-w-md mx-auto'>
+    <div className='grid grid-cols-5 gap-2 w-full max-w-xs mx-auto'>
       {board.slice(0, 6).map((row, rowIndex) =>
         row.map((letter, cellIndex) => (
           <div
             key={`${rowIndex}-${cellIndex}`}
-            className={`border-2 border-gray-300 flex items-center justify-center text-xl font-bold text-gray-800 shadow-sm rounded ${getCellColor(
+            className={`relative aspect-square w-full border-2 border-gray-300 rounded ${getCellColor(
               rowIndex,
               cellIndex
-            )}`}
-            style={{ aspectRatio: "1 / 1", height: "60px" }}
+            )} flex items-center justify-center text-xl font-bold text-gray-800 shadow`}
           >
-            {letter.toUpperCase()}
+            <span className='absolute inset-0 flex items-center justify-center text-lg'>
+              {letter.toUpperCase()}
+            </span>
           </div>
         ))
       )}
