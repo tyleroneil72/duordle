@@ -62,7 +62,7 @@ function HomePage() {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-      <h1 className='text-4xl font-bold text-purple-600 mb-6'>Duordle</h1>
+      <h1 className='text-4xl font-bold text-indigo-600 mb-6'>Duordle</h1>
       <div className='w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden p-6'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
