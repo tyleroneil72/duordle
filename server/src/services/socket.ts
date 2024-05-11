@@ -5,9 +5,11 @@ import Word from "../models/WordModel";
 
 export const initSocketServer = (httpServer: HttpServer) => {
   const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
+  const CLIENT_URL =
+    process.env.CLIENT_URL || `http://localhost:${CLIENT_PORT}`;
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: `http://localhost:${CLIENT_PORT}`,
+      origin: CLIENT_URL,
       methods: ["GET", "POST"],
     },
   });

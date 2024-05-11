@@ -1,4 +1,5 @@
-const SERVERURL: string = "http://localhost:3000";
+const SERVERURL: string =
+  import.meta.env.VITE_SERVERURL || "http://localhost:3000";
 
 const fetchRandomWord = async () => {
   try {
