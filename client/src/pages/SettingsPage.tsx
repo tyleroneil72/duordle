@@ -42,18 +42,24 @@ function SettingsPage() {
             <a
               href='https://github.com/tyleroneil72'
               className='text-gray-900 hover:text-indigo-500'
+              target='_blank'
+              title='GitHub Profile'
             >
               <FaGithub size={24} />
             </a>
             <a
               href='https://linkedin.com/in/tyler-oneil-dev'
               className='text-gray-900 hover:text-indigo-500'
+              target='_blank'
+              title='LinkedIn Profile'
             >
               <FaLinkedin size={24} />
             </a>
             <a
               href='https://tyleroneil.dev'
               className='text-gray-900 hover:text-indigo-500'
+              target='_blank'
+              title='Personal Website'
             >
               <FaUserCircle size={24} />
             </a>
