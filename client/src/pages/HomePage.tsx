@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { socket } from "../services/socket";
 import RoomButtons from "../components/RoomButtons";
+import Modal from "../components/Modal";
 import fetchRandomWord from "../utils/fetchRandomWord";
 import generateUniqueRoomCode from "../utils/generateUniqueRoomCode";
 
@@ -62,6 +63,7 @@ function HomePage() {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+      <Modal />
       <h1 className='text-4xl font-bold text-indigo-600 mb-6'>Duordle</h1>
       <div className='w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden p-6'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
