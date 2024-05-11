@@ -9,13 +9,15 @@ function RoomButtons({
     <div className='flex justify-center my-4'>
       <button
         onClick={onCreate}
-        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+        className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-1'
+        title='Create a new room'
       >
         Create Room
       </button>
       <button
         onClick={onJoin}
-        className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+        className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-1'
+        title='Join an existing room'
       >
         Join Room
       </button>

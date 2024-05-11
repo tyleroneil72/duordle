@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { FaCog } from "react-icons/fa";
 import { socket } from "../services/socket";
 import RoomButtons from "../components/RoomButtons";
+import Modal from "../components/Modal";
 import fetchRandomWord from "../utils/fetchRandomWord";
 import generateUniqueRoomCode from "../utils/generateUniqueRoomCode";
 
@@ -18,15 +20,13 @@ function HomePage() {
 
   const handleJoinRoom = () => {
     const joinRoomCode = prompt("Enter room code:");
-    if (!joinRoomCode) return; // Ensure there is a code to join
+    if (!joinRoomCode) return;
 
     setupRoomEventListeners(joinRoomCode, "join");
     socket.emit("join_room", joinRoomCode);
   };
 
-  // Setup socket event listeners based on the action
   const setupRoomEventListeners = (roomCode: string, action: string) => {
-    // Remove any potentially conflicting listeners
     socket
       .off("room_created")
       .off("room_already_exists")
@@ -63,10 +63,19 @@ function HomePage() {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
-      <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+      <Modal />
+      <h1 className='text-4xl font-bold text-indigo-600 mb-6'>Duordle</h1>
+      <div className='w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden p-6'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
+      <button
+        onClick={() => navigate("/settings")}
+        className='absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
+        title='Settings'
+      >
+        <FaCog size={24} />
+      </button>
     </div>
   );
 }

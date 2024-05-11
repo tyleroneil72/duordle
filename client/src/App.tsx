@@ -6,6 +6,7 @@ import Loading from "./components/Loading";
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const RoomPage = lazy(() => import("./pages/RoomPage"));
+const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const Error = lazy(() => import("./pages/Error"));
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='room/:roomCode' element={<RoomPage />} />
+          <Route path='/settings' element={<SettingsPage />} />
           <Route path='full' element={<Error type='full' />} />
           <Route path='player-left' element={<Error type='player-left' />} />
           <Route path='*' element={<Error type='404' />} />

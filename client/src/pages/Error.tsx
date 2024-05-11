@@ -4,13 +4,13 @@ const ErrorPage = ({ type }: { type: string }) => {
   const navigate = useNavigate();
   let title: string, message: string;
 
-  if (type == "404") {
+  if (type === "404") {
     title = "Page Not Found";
     message = "The page you are looking for does not exist.";
-  } else if (type == "full") {
+  } else if (type === "full") {
     title = "Room Full";
     message = "This room is already full. Please try a different one.";
-  } else if (type == "player-left") {
+  } else if (type === "player-left") {
     title = "Player Left";
     message = "The other player has left the room.";
   } else {
@@ -19,15 +19,17 @@ const ErrorPage = ({ type }: { type: string }) => {
   }
 
   return (
-    <div className='text-center p-10'>
-      <h1 className='text-3xl text-red-500'>{title}</h1>
-      <p>{message}</p>
-      <button
-        onClick={() => navigate("/")}
-        className='mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-      >
-        Go Home
-      </button>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+      <div className='bg-white p-8 rounded-lg shadow-lg text-center max-w-md'>
+        <h1 className='text-3xl font-bold text-red-600 mb-4'>{title}</h1>
+        <p className='text-gray-800 text-lg mb-6'>{message}</p>
+        <button
+          onClick={() => navigate("/")}
+          className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300 ease-in-out focus:outline-none'
+        >
+          Go Home
+        </button>
+      </div>
     </div>
   );
 };

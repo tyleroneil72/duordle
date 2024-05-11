@@ -125,7 +125,7 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
-      <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+      <div className='bg-gray-50 shadow-md rounded px-8 pt-6 pb-8 mb-4'>
         {roomCode && connectionStatus === "waiting" ? (
           <Waiting code={roomCode} />
         ) : (
@@ -157,8 +157,9 @@ const RoomPage: React.FC<RoomPageProps> = () => {
         )}
       </div>
       <button
-        className='bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+        className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
         onClick={handleLeaveRoom}
+        title='Leave Room'
       >
         Leave Room
       </button>
