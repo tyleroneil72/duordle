@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { FaCog } from "react-icons/fa";
 import { socket } from "../services/socket";
 import RoomButtons from "../components/RoomButtons";
 import Modal from "../components/Modal";
@@ -68,6 +69,13 @@ function HomePage() {
       <div className='w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden p-6'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
+      <button
+        onClick={() => navigate("/settings")}
+        className='absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
+        title='Settings'
+      >
+        <FaCog size={24} />
+      </button>
     </div>
   );
 }
