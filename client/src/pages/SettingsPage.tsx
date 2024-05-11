@@ -39,7 +39,7 @@ function SettingsPage() {
             building interactive and efficient web solutions.
           </p>
           <p className='text-gray-700 mt-2'>
-            Tech Stack Used: MERN Stack (MongoDB, Express, React, Node.js),
+            Technology Stack: MERN Stack (MongoDB, Express, React, Node.js),
             enhanced with Socket.io for real-time interactions, TypeScript for
             robust server and client-side scripting, and Tailwind CSS for
             stylish, responsive design. Hosted on AWS for reliable and scalable
