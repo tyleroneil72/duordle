@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-const ErrorPage = ({ type }: { type: string }) => {
+interface ErrorPageProps {
+  type: string;
+}
+
+const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
   const navigate = useNavigate();
   let title: string, message: string;
 
