@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaUserCircle, FaHome } from "react-icons/fa";
 
-function SettingsPage() {
+interface SettingsPageProps {}
+
+const SettingsPage: React.FC<SettingsPageProps> = () => {
   const navigate = useNavigate();
 
   const toggleDarkMode = () => {
@@ -82,6 +84,6 @@ function SettingsPage() {
       </button>
     </div>
   );
-}
+};
 
 export default SettingsPage;
