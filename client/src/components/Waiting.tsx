@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { FaClipboard } from "react-icons/fa"; // Import clipboard icon from react-icons
 
-const Waiting = ({ code }: { code: string }) => {
+interface WaitingProps {
+  code: string;
+}
+const Waiting: React.FC<WaitingProps> = ({ code }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
