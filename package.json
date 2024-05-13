@@ -6,7 +6,7 @@
   "scripts": {
     "test": "./test.sh",
     "setup-production-app": "cd client && npm i && npm run build && cd ../server && npm i && npm run build",
-    "start": "cd server && node dist/index.js"
+    "start": "node server/dist/index.js"
   },
   "author": "Tyler O'Neil",
   "license": "MIT"
