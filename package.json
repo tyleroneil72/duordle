@@ -1,0 +1,12 @@
+{
+  "name": "duordle",
+  "version": "1.0.0",
+  "description": "duordle app",
+  "main": "server/dist/index.js",
+  "scripts": {
+    "test": "./test.sh",
+    "setup-production-app": "cd client && npm i && npm run build && cd ../server && npm i && npm run build"
+  },
+  "author": "Tyler O'Neil",
+  "license": "MIT"
+}
