@@ -8,13 +8,14 @@ import wordRouter from "./routes/wordRouter";
 import { errorHandler } from "./middleware/errorHandler";
 import limiter from "./middleware/rateLimitMiddleware";
 import cors from "cors";
+import path from "path";
 
 dotenvConfig();
 
 const app: Express = express();
 const httpServer = createServer(app);
 const PORT: number = parseInt(process.env.PORT || "3000", 10);
-const CLIENT_URL: string = process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL: string = process.env.CLIENT_URL || "http://localhost:3000";
 const MONGO_URI: string = process.env.MONGO_URI || "";
 
 app.use(express.json());
@@ -23,10 +24,17 @@ app.use(
     origin: CLIENT_URL,
   })
 );
-app.use("/room", limiter);
-app.use("/word", limiter);
-app.use("/room", roomRouter);
-app.use("/word", wordRouter);
+app.use("/api/room", limiter);
+app.use("/api/word", limiter);
+app.use("/api/room", roomRouter);
+app.use("/api/word", wordRouter);
+
+app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
+});
+
 initSocketServer(httpServer);
 app.use(errorHandler);
 
