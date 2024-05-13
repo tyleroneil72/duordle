@@ -125,13 +125,11 @@ const RoomPage: React.FC<RoomPageProps> = () => {
 
   return (
     <div className='flex flex-col h-screen bg-gray-100 overflow-hidden'>
-      {/* Content Container */}
       <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
         <div className='relative bg-gray-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
           {roomCode && connectionStatus === "waiting" ? (
             <>
               <Waiting code={roomCode} />
-              {/* Leave Room Button centered below Waiting when waiting */}
               <button
                 className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 mx-auto block'
                 onClick={handleLeaveRoom}
@@ -169,7 +167,6 @@ const RoomPage: React.FC<RoomPageProps> = () => {
           )}
         </div>
       </div>
-      {/* Leave Room Button always in the top right when not waiting */}
       {connectionStatus !== "waiting" && (
         <button
           className='absolute top-2 right-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
