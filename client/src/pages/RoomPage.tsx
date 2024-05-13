@@ -6,9 +6,7 @@ import Keyboard from "../components/Keyboard";
 import Waiting from "../components/Waiting";
 import GameOver from "../components/GameOver";
 
-interface RoomPageProps {}
-
-const RoomPage: React.FC<RoomPageProps> = () => {
+const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
   const [word, setWord] = useState<string>("");
@@ -20,12 +18,12 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       .fill(null)
       .map(() => Array(5).fill(""))
   );
-
-  const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
+  const [currentRow, setCurrentRow] = useState<number>(0);
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
+  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState<boolean>(true);
 
   useEffect(() => {
     if (roomCode) {
@@ -42,7 +40,6 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       });
 
       socket.on("invalid_word", () => {
-        // Reset the current attempt, but do not advance the row
         setCurrentAttempt(Array(5).fill(""));
         alert("Invalid word! Please try another word.");
       });
@@ -82,9 +79,9 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       socket.on("game_over", (gameStatus) => {
         setGameOver(true);
         setGameStatus(gameStatus);
+        setIsGameOverModalOpen(true);
       });
 
-      // Adding window unload event to handle tab or window close
       const handleUnload = (event: BeforeUnloadEvent) => {
         event.preventDefault();
         socket.emit("leave_room", roomCode);
@@ -105,18 +102,17 @@ const RoomPage: React.FC<RoomPageProps> = () => {
     }
   }, [roomCode, navigate]);
 
-  // Update board with current attempt
   useEffect(() => {
     setBoard((prevBoard) => {
       const newBoard = [...prevBoard];
-      newBoard[currentRow] = [...currentAttempt]; // Update the current row with the current attempt
+      newBoard[currentRow] = [...currentAttempt];
       return newBoard;
     });
   }, [currentAttempt, currentRow]);
 
   const handleLeaveRoom = () => {
     socket.emit("leave_room", roomCode);
-    navigate("/"); // Navigate back to the home page after leaving the room
+    navigate("/");
   };
 
   if (!roomCode) {
@@ -161,22 +157,37 @@ const RoomPage: React.FC<RoomPageProps> = () => {
                 disabled={gameOver}
                 word={word}
               />
-              {gameOver && <GameOver win={gameStatus} />}
-              {gameOver && <p className='mb-4'>Word: {word}</p>}
+              {gameOver && (
+                <GameOver
+                  win={gameStatus}
+                  board={board}
+                  word={word}
+                  onClose={() => setIsGameOverModalOpen(false)}
+                  isOpen={isGameOverModalOpen}
+                />
+              )}
             </>
           )}
         </div>
       </div>
-      {connectionStatus !== "waiting" && (
+      <div className='fixed top-2 right-2 flex flex-row-reverse sm:flex-col sm:items-end space-x-2 sm:space-x-0 sm:space-y-2'>
         <button
-          className='absolute top-2 right-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+          className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
           onClick={handleLeaveRoom}
           title='Leave Room'
-          style={{ zIndex: 1000 }}
         >
           Leave Room
         </button>
-      )}
+        {gameOver && (
+          <button
+            className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            onClick={() => setIsGameOverModalOpen(true)}
+            title='Open Game Over Modal'
+          >
+            Show Game Over Modal
+          </button>
+        )}
+      </div>
     </div>
   );
 };
