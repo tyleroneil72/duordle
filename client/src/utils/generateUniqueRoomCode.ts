@@ -1,4 +1,4 @@
-const generateUniqueRoomCode = async () => {
+const generateUniqueRoomCode = async (): Promise<string> => {
   let roomCode = generateRoomCode();
   while (await checkRoomCodeExists(roomCode)) {
     roomCode = generateRoomCode();
@@ -6,7 +6,7 @@ const generateUniqueRoomCode = async () => {
   return roomCode;
 };
 
-const generateRoomCode = () => {
+const generateRoomCode = (): string => {
   let result = "";
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const charactersLength = characters.length;
@@ -16,7 +16,7 @@ const generateRoomCode = () => {
   return result;
 };
 
-const checkRoomCodeExists = async (roomCode: string) => {
+const checkRoomCodeExists = async (roomCode: string): Promise<boolean> => {
   try {
     const response = await fetch(`/api/room/exists/${roomCode}`);
     if (!response.ok) {
