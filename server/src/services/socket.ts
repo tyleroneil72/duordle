@@ -4,9 +4,8 @@ import Room from "../models/RoomModel";
 import Word from "../models/WordModel";
 
 export const initSocketServer = (httpServer: HttpServer) => {
-  const CLIENT_PORT = process.env.CLIENT_PORT || 5173;
-  const CLIENT_URL =
-    process.env.CLIENT_URL || `http://localhost:${CLIENT_PORT}`;
+  const PORT = process.env.PORT || "3000"; // Default to 3000 if not specified
+  const CLIENT_URL = process.env.CLIENT_URL || `http://localhost:${PORT}`;
   const io = new SocketIOServer(httpServer, {
     cors: {
       origin: CLIENT_URL,

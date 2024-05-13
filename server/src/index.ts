@@ -15,7 +15,7 @@ dotenvConfig();
 const app: Express = express();
 const httpServer = createServer(app);
 const PORT: number = parseInt(process.env.PORT || "3000", 10);
-const CLIENT_URL: string = process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL: string = process.env.CLIENT_URL || "http://localhost:3000";
 const MONGO_URI: string = process.env.MONGO_URI || "";
 
 app.use(express.json());
