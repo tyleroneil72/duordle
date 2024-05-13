@@ -5,7 +5,7 @@
   "main": "server/dist/index.js",
   "scripts": {
     "test": "./test.sh",
-    "setup-production-app": "cd client && npm i && npm run build && cd ../server && npm i && npm run build",
+    "build": "cd client && npm i && npm run build && cd ../server && npm i && npm run build",
     "start": "node server/dist/index.js"
   },
   "author": "Tyler O'Neil",
