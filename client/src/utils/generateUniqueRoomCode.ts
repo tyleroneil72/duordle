@@ -1,6 +1,3 @@
-const SERVERURL: string =
-  import.meta.env.VITE_SERVERURL || "http://localhost:3000";
-
 const generateUniqueRoomCode = async () => {
   let roomCode = generateRoomCode();
   while (await checkRoomCodeExists(roomCode)) {
@@ -21,7 +18,7 @@ const generateRoomCode = () => {
 
 const checkRoomCodeExists = async (roomCode: string) => {
   try {
-    const response = await fetch(`${SERVERURL}/api/room/exists/${roomCode}`);
+    const response = await fetch(`/api/room/exists/${roomCode}`);
     if (!response.ok) {
       throw new Error("Failed to fetch from API");
     }

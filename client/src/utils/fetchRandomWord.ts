@@ -1,6 +1,3 @@
-// const SERVERURL: string =
-//   import.meta.env.VITE_SERVERURL || "http://localhost:3000";
-
 const fetchRandomWord = async () => {
   try {
     const response = await fetch(`/api/word/random`);
