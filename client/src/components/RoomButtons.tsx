@@ -1,10 +1,9 @@
-function RoomButtons({
-  onCreate,
-  onJoin,
-}: {
+interface RoomButtonsProps {
   onCreate: () => void;
   onJoin: () => void;
-}) {
+}
+
+const RoomButtons: React.FC<RoomButtonsProps> = ({ onCreate, onJoin }) => {
   return (
     <div className='flex justify-center my-4'>
       <button
@@ -23,6 +22,6 @@ function RoomButtons({
       </button>
     </div>
   );
-}
+};
 
 export default RoomButtons;
