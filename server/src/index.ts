@@ -8,6 +8,7 @@ import wordRouter from "./routes/wordRouter";
 import { errorHandler } from "./middleware/errorHandler";
 import limiter from "./middleware/rateLimitMiddleware";
 import cors from "cors";
+import path from "path";
 
 dotenvConfig();
 
@@ -23,10 +24,17 @@ app.use(
     origin: CLIENT_URL,
   })
 );
-app.use("/room", limiter);
-app.use("/word", limiter);
-app.use("/room", roomRouter);
-app.use("/word", wordRouter);
+app.use("/api/room", limiter);
+app.use("/api/word", limiter);
+app.use("/api/room", roomRouter);
+app.use("/api/word", wordRouter);
+
+app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../client/dist", "index.html"));
+});
+
 initSocketServer(httpServer);
 app.use(errorHandler);
 
