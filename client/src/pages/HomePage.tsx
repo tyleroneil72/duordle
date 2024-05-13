@@ -6,7 +6,9 @@ import Modal from "../components/Modal";
 import fetchRandomWord from "../utils/fetchRandomWord";
 import generateUniqueRoomCode from "../utils/generateUniqueRoomCode";
 
-function HomePage() {
+interface HomePageProps {}
+
+const HomePage: React.FC<HomePageProps> = () => {
   const navigate = useNavigate();
 
   const handleCreateRoom = async () => {
@@ -78,6 +80,6 @@ function HomePage() {
       </button>
     </div>
   );
-}
+};
 
 export default HomePage;
