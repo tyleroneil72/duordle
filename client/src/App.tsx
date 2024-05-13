@@ -9,7 +9,9 @@ const RoomPage = lazy(() => import("./pages/RoomPage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const Error = lazy(() => import("./pages/Error"));
 
-const App = () => {
+interface AppProps {}
+
+const App: React.FC<AppProps> = () => {
   return (
     <Router>
       {/* <Header /> */}
