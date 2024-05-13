@@ -71,7 +71,7 @@ function HomePage() {
       </div>
       <button
         onClick={() => navigate("/settings")}
-        className='absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
+        className='fixed bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
         title='Settings'
       >
         <FaCog size={24} />
