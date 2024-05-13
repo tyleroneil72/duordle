@@ -5,6 +5,7 @@ import GameBoard from "../components/GameBoard";
 import Keyboard from "../components/Keyboard";
 import Waiting from "../components/Waiting";
 import GameOver from "../components/GameOver";
+import { IoMdMenu } from "react-icons/io";
 
 const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -23,7 +24,8 @@ const RoomPage: React.FC = () => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
-  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState<boolean>(true);
+  const [isGameOverModalOpen, setIsGameOverModalOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (roomCode) {
@@ -115,6 +117,10 @@ const RoomPage: React.FC = () => {
     navigate("/");
   };
 
+  const toggleGameOverModal = () => {
+    setIsGameOverModalOpen((prev) => !prev);
+  };
+
   if (!roomCode) {
     return <div>Room code is required!</div>;
   }
@@ -170,24 +176,26 @@ const RoomPage: React.FC = () => {
           )}
         </div>
       </div>
-      <div className='fixed top-2 right-2 flex flex-row-reverse sm:flex-col sm:items-end space-x-2 sm:space-x-0 sm:space-y-2'>
-        <button
-          className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-          onClick={handleLeaveRoom}
-          title='Leave Room'
-        >
-          Leave Room
-        </button>
-        {gameOver && (
+      {connectionStatus === "connected" && (
+        <div className='fixed top-2 right-2 flex flex-row-reverse sm:flex-col sm:items-end space-x-2 sm:space-x-0 sm:space-y-2'>
           <button
             className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-            onClick={() => setIsGameOverModalOpen(true)}
-            title='Open Game Over Modal'
+            onClick={handleLeaveRoom}
+            title='Leave Room'
           >
-            Show Game Over Modal
+            Leave Room
           </button>
-        )}
-      </div>
+          {gameOver && (
+            <button
+              className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center'
+              onClick={toggleGameOverModal}
+              title='Toggle Game Over Modal'
+            >
+              <IoMdMenu size={24} />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
