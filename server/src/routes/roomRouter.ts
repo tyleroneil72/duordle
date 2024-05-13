@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { apiKeyMiddleware } from "../middleware/apiKeyMiddleware";
 const router = Router();
 
 import {
@@ -10,11 +11,11 @@ import {
   checkRoomCodeExists,
 } from "../controllers/roomController";
 
-router.get("/", getAllRooms);
-router.post("/", createRoom);
-router.get("/:id", getRoom);
-router.patch("/:id", updateRoom);
-router.delete("/:id", deleteRoom);
+router.get("/", apiKeyMiddleware, getAllRooms);
+router.post("/", apiKeyMiddleware, createRoom);
+router.get("/:id", apiKeyMiddleware, getRoom);
+router.patch("/:id", apiKeyMiddleware, updateRoom);
+router.delete("/:id", apiKeyMiddleware, deleteRoom);
 router.get("/exists/:roomCode", checkRoomCodeExists);
 
 export default router;

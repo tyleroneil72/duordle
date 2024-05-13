@@ -14,7 +14,7 @@ import {
 router.get("/", apiKeyMiddleware, getAllWords);
 router.post("/", apiKeyMiddleware, createWord);
 router.get("/random", getRandomWord);
-router.get("/:id", getWord);
+router.get("/:id", apiKeyMiddleware, getWord);
 router.patch("/:id", apiKeyMiddleware, updateWord);
 router.delete("/:id", apiKeyMiddleware, deleteWord);
 
