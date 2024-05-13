@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd client && npm run dev &
+cd client && npm run build &
 
 cd server && npm run dev &
 
