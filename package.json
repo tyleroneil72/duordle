@@ -4,7 +4,7 @@
   "description": "duordle app",
   "main": "server/dist/index.js",
   "scripts": {
-    "test": "./test.sh",
+    "dev": "./test.sh",
     "build": "cd client && npm i && npm run build && cd ../server && npm i && npm run build",
     "start": "node server/dist/index.js"
   },
