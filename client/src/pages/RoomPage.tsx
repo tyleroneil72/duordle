@@ -124,45 +124,62 @@ const RoomPage: React.FC<RoomPageProps> = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
-      <div className='bg-gray-50 shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-        {roomCode && connectionStatus === "waiting" ? (
-          <Waiting code={roomCode} />
-        ) : (
-          <>
-            <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
+    <div className='flex flex-col h-screen bg-gray-100 overflow-hidden'>
+      {/* Content Container */}
+      <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
+        <div className='relative bg-gray-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
+          {roomCode && connectionStatus === "waiting" ? (
+            <>
+              <Waiting code={roomCode} />
+              {/* Leave Room Button centered below Waiting when waiting */}
+              <button
+                className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 mx-auto block'
+                onClick={handleLeaveRoom}
+                title='Leave Room'
+              >
+                Leave Room
+              </button>
+            </>
+          ) : (
+            <>
+              <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
 
-            {!gameOver &&
-              (currentPlayer ? (
-                <p>It's your turn!</p>
-              ) : (
-                <p>Waiting for the other player...</p>
-              ))}
+              {!gameOver &&
+                (currentPlayer ? (
+                  <p>It's your turn!</p>
+                ) : (
+                  <p>Waiting for the other player...</p>
+                ))}
 
-            <GameBoard board={board} word={word} currentRow={currentRow} />
-            <Keyboard
-              socket={socket}
-              roomCode={roomCode}
-              currentAttempt={currentAttempt}
-              setCurrentAttempt={setCurrentAttempt}
-              currentRow={currentRow}
-              setCurrentRow={setCurrentRow}
-              board={board}
-              disabled={gameOver}
-              word={word}
-            />
-            {gameOver && <GameOver win={gameStatus} />}
-            {gameOver && <p className='mb-4'>Word: {word}</p>}
-          </>
-        )}
+              <GameBoard board={board} word={word} currentRow={currentRow} />
+              <Keyboard
+                socket={socket}
+                roomCode={roomCode}
+                currentAttempt={currentAttempt}
+                setCurrentAttempt={setCurrentAttempt}
+                currentRow={currentRow}
+                setCurrentRow={setCurrentRow}
+                board={board}
+                disabled={gameOver}
+                word={word}
+              />
+              {gameOver && <GameOver win={gameStatus} />}
+              {gameOver && <p className='mb-4'>Word: {word}</p>}
+            </>
+          )}
+        </div>
       </div>
-      <button
-        className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-        onClick={handleLeaveRoom}
-        title='Leave Room'
-      >
-        Leave Room
-      </button>
+      {/* Leave Room Button always in the top right when not waiting */}
+      {connectionStatus !== "waiting" && (
+        <button
+          className='absolute top-2 right-2 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+          onClick={handleLeaveRoom}
+          title='Leave Room'
+          style={{ zIndex: 1000 }}
+        >
+          Leave Room
+        </button>
+      )}
     </div>
   );
 };

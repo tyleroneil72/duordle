@@ -145,14 +145,14 @@ const Keyboard: React.FC<KeyboardProps> = ({
 
   return (
     <div className='p-1'>
+      {/* First Row */}
       <div className='flex justify-center mb-1'>
         {firstRow.map((letter, index) => (
           <button
             key={index}
             className={`${getKeyColor(
               letter
-            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded`}
-            style={{ width: "40px", height: "58px", margin: "0 3px" }}
+            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded w-10 h-14 m-0.5`}
             onClick={() => handleLetterInput(letter)}
             disabled={currentRow >= board.length}
           >
@@ -160,14 +160,14 @@ const Keyboard: React.FC<KeyboardProps> = ({
           </button>
         ))}
       </div>
+      {/* Second Row */}
       <div className='flex justify-center mb-1'>
         {secondRow.map((letter, index) => (
           <button
             key={index}
             className={`${getKeyColor(
               letter
-            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded`}
-            style={{ width: "40px", height: "58px", margin: "0 3px" }}
+            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded w-10 h-14 m-0.5`}
             onClick={() => handleLetterInput(letter)}
             disabled={currentRow >= board.length}
           >
@@ -175,10 +175,10 @@ const Keyboard: React.FC<KeyboardProps> = ({
           </button>
         ))}
       </div>
+      {/* Third Row (with Enter and Backspace) */}
       <div className='flex justify-center mb-1'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xs p-2 rounded'
-          style={{ width: "70px", height: "58px", margin: "0 3px" }}
+          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xs p-2 rounded w-16 h-14 m-0.5'
           onClick={handleEnter}
           disabled={currentRow >= board.length}
         >
@@ -189,8 +189,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
             key={index}
             className={`${getKeyColor(
               letter
-            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded`}
-            style={{ width: "40px", height: "58px", margin: "0 3px" }}
+            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded w-10 h-14 m-0.5`}
             onClick={() => handleLetterInput(letter)}
             disabled={currentRow >= board.length}
           >
@@ -198,8 +197,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
           </button>
         ))}
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded flex items-center justify-center'
-          style={{ width: "70px", height: "58px", margin: "0 3px" }}
+          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded flex items-center justify-center w-16 h-14 m-0.5'
           onClick={handleBackspace}
           disabled={currentRow >= board.length}
         >
