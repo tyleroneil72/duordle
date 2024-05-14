@@ -23,8 +23,8 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-indigo-300'>
-      <div className='bg-indigo-100 p-8 rounded-lg shadow-lg text-center max-w-md'>
+    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-16 sm:justify-center sm:pt-0'>
+      <div className='bg-indigo-50 p-8 rounded-lg shadow-lg text-center max-w-md'>
         <h1 className='text-3xl font-bold text-red-600 mb-4'>{title}</h1>
         <p className='text-gray-800 text-lg mb-6'>{message}</p>
         <button
