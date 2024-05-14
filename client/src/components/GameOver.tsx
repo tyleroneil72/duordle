@@ -57,6 +57,9 @@ const GameOver: React.FC<GameOverProps> = ({
           {win ? "You won!" : "You lost!"}
         </div>
         <div className='whitespace-pre mb-4 text-center'>{gameState}</div>
+        <div className='text-center mb-4'>
+          <strong>Word:</strong> {word}
+        </div>
         <div className='flex justify-center space-x-2'>
           <button
             className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
