@@ -33,10 +33,10 @@ const Keyboard: React.FC<KeyboardProps> = ({
       if (rowIndex <= currentRow) {
         row.forEach((letter, idx) => {
           if (letter.toLowerCase() === word[idx].toLowerCase()) {
-            newKeyState[letter.toLowerCase()] = "bg-green-500";
+            newKeyState[letter.toLowerCase()] = "bg-green-300";
           } else if (word.toLowerCase().includes(letter.toLowerCase())) {
-            if (newKeyState[letter.toLowerCase()] !== "bg-green-500") {
-              newKeyState[letter.toLowerCase()] = "bg-yellow-500";
+            if (newKeyState[letter.toLowerCase()] !== "bg-green-300") {
+              newKeyState[letter.toLowerCase()] = "bg-yellow-300";
             }
           } else {
             newKeyState[letter.toLowerCase()] = "bg-gray-400";
