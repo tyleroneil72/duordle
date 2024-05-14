@@ -40,7 +40,8 @@ const GameOver: React.FC<GameOverProps> = ({
   }, [board, word]);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(gameState).then(() => {
+    const textToCopy = `duordle.net\n${gameState}\nWord: ${word}`;
+    navigator.clipboard.writeText(textToCopy).then(() => {
       alert("Game state copied to clipboard!");
     });
   };
