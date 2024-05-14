@@ -20,10 +20,10 @@ const GameOver: React.FC<GameOverProps> = ({
   useEffect(() => {
     const createGameState = () => {
       return board
-        .filter((row) => row.some((letter) => letter !== "")) // Filter out empty rows
         .map((row) =>
           row
             .map((letter, index) => {
+              if (letter === "") return ""; // Ignore empty letters
               if (letter.toLowerCase() === word[index].toLowerCase()) {
                 return "🟩";
               } else if (word.toLowerCase().includes(letter.toLowerCase())) {
@@ -34,6 +34,7 @@ const GameOver: React.FC<GameOverProps> = ({
             })
             .join("")
         )
+        .filter((row) => row !== "") // Filter out any completely empty rows
         .join("\n");
     };
     setGameState(createGameState());
