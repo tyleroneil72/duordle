@@ -1,44 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaUserCircle, FaHome } from "react-icons/fa";
 
-function SettingsPage() {
+const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const toggleDarkMode = () => {
-    alert("Dark mode is not yet implemented.");
-  };
-
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4'>
-      <div className='w-full max-w-4xl bg-white shadow-lg rounded-lg p-6'>
-        <h1 className='text-3xl font-bold text-gray-900 mb-4'>Settings</h1>
-        <div>
-          <label
-            htmlFor='dark-mode-toggle'
-            className='flex items-center cursor-pointer'
-          >
-            <div className='mr-3 text-gray-900'>Dark Mode</div>
-            <div className='relative'>
-              <input
-                id='dark-mode-toggle'
-                type='checkbox'
-                className='sr-only'
-                onClick={toggleDarkMode}
-              />
-              <div className='block bg-gray-600 w-14 h-8 rounded-full'></div>
-              <div className='dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition'></div>
-            </div>
-          </label>
-        </div>
+    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-24 sm:justify-center sm:pt-0 p-4'>
+      <div className='w-full max-w-4xl bg-indigo-100 shadow-lg rounded-lg p-6'>
+        <h1 className='text-3xl font-bold text-indigo-900 mb-4'>Settings</h1>
+
         <div className='mt-8'>
-          <h2 className='text-xl font-semibold text-gray-900'>
+          <h2 className='text-xl font-semibold text-indigo-900'>
             About the Creator
           </h2>
-          <p className='text-gray-700 mt-2'>
+          <p className='text-indigo-900 mt-2'>
             Tyler O'Neil - Developer and creator of Duordle. Passionate about
             building interactive and efficient web solutions.
           </p>
-          <p className='text-gray-700 mt-2'>
+          <p className='text-indigo-900 mt-2'>
             Technology Stack: MERN Stack (MongoDB, Express, React, Node.js),
             enhanced with Socket.io for real-time interactions, TypeScript for
             robust server and client-side scripting, and Tailwind CSS for
@@ -48,7 +27,7 @@ function SettingsPage() {
           <div className='flex justify-center space-x-4 mt-4'>
             <a
               href='https://github.com/tyleroneil72'
-              className='text-gray-900 hover:text-indigo-500'
+              className='text-indigo-500 hover:text-indigo-700'
               target='_blank'
               title='GitHub Profile'
             >
@@ -56,7 +35,7 @@ function SettingsPage() {
             </a>
             <a
               href='https://linkedin.com/in/tyler-oneil-dev'
-              className='text-gray-900 hover:text-indigo-500'
+              className='text-indigo-500 hover:text-indigo-700'
               target='_blank'
               title='LinkedIn Profile'
             >
@@ -64,7 +43,7 @@ function SettingsPage() {
             </a>
             <a
               href='https://tyleroneil.dev'
-              className='text-gray-900 hover:text-indigo-500'
+              className='text-indigo-500 hover:text-indigo-700'
               target='_blank'
               title='Personal Website'
             >
@@ -82,6 +61,6 @@ function SettingsPage() {
       </button>
     </div>
   );
-}
+};
 
 export default SettingsPage;

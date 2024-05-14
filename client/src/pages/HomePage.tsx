@@ -6,7 +6,7 @@ import Modal from "../components/Modal";
 import fetchRandomWord from "../utils/fetchRandomWord";
 import generateUniqueRoomCode from "../utils/generateUniqueRoomCode";
 
-function HomePage() {
+const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleCreateRoom = async () => {
@@ -63,21 +63,23 @@ function HomePage() {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
+    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-36 sm:justify-center sm:pt-0'>
       <Modal />
-      <h1 className='text-4xl font-bold text-indigo-600 mb-6'>Duordle</h1>
-      <div className='w-full max-w-lg bg-white shadow-md rounded-lg overflow-hidden p-6'>
+      <h1 className='text-5xl font-extrabold text-indigo-50 mb-6 sm:mb-10'>
+        Duordle
+      </h1>
+      <div className='w-full max-w-md bg-indigo-100 shadow-lg rounded-lg p-6 mt-10 sm:mt-20'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
       <button
         onClick={() => navigate("/settings")}
-        className='absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
+        className='fixed bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
         title='Settings'
       >
         <FaCog size={24} />
       </button>
     </div>
   );
-}
+};
 
 export default HomePage;

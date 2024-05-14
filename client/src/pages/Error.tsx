@@ -1,6 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-const ErrorPage = ({ type }: { type: string }) => {
+interface ErrorPageProps {
+  type: string;
+}
+
+const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
   const navigate = useNavigate();
   let title: string, message: string;
 
@@ -19,8 +23,8 @@ const ErrorPage = ({ type }: { type: string }) => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-      <div className='bg-white p-8 rounded-lg shadow-lg text-center max-w-md'>
+    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-48 sm:justify-center sm:pt-0'>
+      <div className='bg-indigo-50 p-8 rounded-lg shadow-lg text-center max-w-md'>
         <h1 className='text-3xl font-bold text-red-600 mb-4'>{title}</h1>
         <p className='text-gray-800 text-lg mb-6'>{message}</p>
         <button

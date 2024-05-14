@@ -5,10 +5,9 @@ import GameBoard from "../components/GameBoard";
 import Keyboard from "../components/Keyboard";
 import Waiting from "../components/Waiting";
 import GameOver from "../components/GameOver";
+import { IoMdMenu } from "react-icons/io";
 
-interface RoomPageProps {}
-
-const RoomPage: React.FC<RoomPageProps> = () => {
+const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
   const [word, setWord] = useState<string>("");
@@ -20,12 +19,13 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       .fill(null)
       .map(() => Array(5).fill(""))
   );
-
-  const [currentRow, setCurrentRow] = useState<number>(0); // Track the current row for the guess
+  const [currentRow, setCurrentRow] = useState<number>(0);
   const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
+  const [isGameOverModalOpen, setIsGameOverModalOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (roomCode) {
@@ -42,7 +42,6 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       });
 
       socket.on("invalid_word", () => {
-        // Reset the current attempt, but do not advance the row
         setCurrentAttempt(Array(5).fill(""));
         alert("Invalid word! Please try another word.");
       });
@@ -82,9 +81,9 @@ const RoomPage: React.FC<RoomPageProps> = () => {
       socket.on("game_over", (gameStatus) => {
         setGameOver(true);
         setGameStatus(gameStatus);
+        setIsGameOverModalOpen(true);
       });
 
-      // Adding window unload event to handle tab or window close
       const handleUnload = (event: BeforeUnloadEvent) => {
         event.preventDefault();
         socket.emit("leave_room", roomCode);
@@ -105,18 +104,21 @@ const RoomPage: React.FC<RoomPageProps> = () => {
     }
   }, [roomCode, navigate]);
 
-  // Update board with current attempt
   useEffect(() => {
     setBoard((prevBoard) => {
       const newBoard = [...prevBoard];
-      newBoard[currentRow] = [...currentAttempt]; // Update the current row with the current attempt
+      newBoard[currentRow] = [...currentAttempt];
       return newBoard;
     });
   }, [currentAttempt, currentRow]);
 
   const handleLeaveRoom = () => {
     socket.emit("leave_room", roomCode);
-    navigate("/"); // Navigate back to the home page after leaving the room
+    navigate("/");
+  };
+
+  const toggleGameOverModal = () => {
+    setIsGameOverModalOpen((prev) => !prev);
   };
 
   if (!roomCode) {
@@ -124,45 +126,82 @@ const RoomPage: React.FC<RoomPageProps> = () => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6'>
-      <div className='bg-gray-50 shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-        {roomCode && connectionStatus === "waiting" ? (
-          <Waiting code={roomCode} />
-        ) : (
-          <>
-            <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
+    <div
+      className={`flex flex-col h-screen bg-indigo-300 overflow-hidden ${
+        connectionStatus === "waiting" ? "pb-48 sm:pb-0" : "pt-0"
+      }`}
+    >
+      <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
+        <div className='relative bg-indigo-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
+          {roomCode && connectionStatus === "waiting" ? (
+            <>
+              <Waiting code={roomCode} />
+              <button
+                className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 mx-auto block'
+                onClick={handleLeaveRoom}
+                title='Leave Room'
+              >
+                Leave Room
+              </button>
+            </>
+          ) : (
+            <>
+              <h2 className='text-lg font-bold mb-4 text-black'>
+                Room: {roomCode}
+              </h2>
 
-            {!gameOver &&
-              (currentPlayer ? (
-                <p>It's your turn!</p>
-              ) : (
-                <p>Waiting for the other player...</p>
-              ))}
+              {!gameOver &&
+                (currentPlayer ? (
+                  <p className='text-black'>It's your turn!</p>
+                ) : (
+                  <p className='text-black'>Waiting for the other player...</p>
+                ))}
 
-            <GameBoard board={board} word={word} currentRow={currentRow} />
-            <Keyboard
-              socket={socket}
-              roomCode={roomCode}
-              currentAttempt={currentAttempt}
-              setCurrentAttempt={setCurrentAttempt}
-              currentRow={currentRow}
-              setCurrentRow={setCurrentRow}
-              board={board}
-              disabled={gameOver}
-              word={word}
-            />
-            {gameOver && <GameOver win={gameStatus} />}
-            {gameOver && <p className='mb-4'>Word: {word}</p>}
-          </>
-        )}
+              <GameBoard board={board} word={word} currentRow={currentRow} />
+              <Keyboard
+                socket={socket}
+                roomCode={roomCode}
+                currentAttempt={currentAttempt}
+                setCurrentAttempt={setCurrentAttempt}
+                currentRow={currentRow}
+                setCurrentRow={setCurrentRow}
+                board={board}
+                disabled={gameOver}
+                word={word}
+              />
+              {gameOver && (
+                <GameOver
+                  win={gameStatus}
+                  board={board}
+                  word={word}
+                  onClose={() => setIsGameOverModalOpen(false)}
+                  isOpen={isGameOverModalOpen}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
-      <button
-        className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
-        onClick={handleLeaveRoom}
-        title='Leave Room'
-      >
-        Leave Room
-      </button>
+      {connectionStatus === "connected" && (
+        <div className='fixed top-2 right-2 flex flex-row-reverse sm:flex-col sm:items-end space-x-2 sm:space-x-0 sm:space-y-2'>
+          <button
+            className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            onClick={handleLeaveRoom}
+            title='Leave Room'
+          >
+            Leave Room
+          </button>
+          {gameOver && (
+            <button
+              className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center'
+              onClick={toggleGameOverModal}
+              title='Toggle Game Over Modal'
+            >
+              <IoMdMenu size={24} />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };

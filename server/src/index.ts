@@ -10,7 +10,7 @@ import limiter from "./middleware/rateLimitMiddleware";
 import cors from "cors";
 import path from "path";
 
-dotenvConfig();
+dotenvConfig({ path: path.join(__dirname, "../../.env") });
 
 const app: Express = express();
 const httpServer = createServer(app);
