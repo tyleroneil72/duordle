@@ -126,7 +126,11 @@ const RoomPage: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col h-screen bg-indigo-300 overflow-hidden'>
+    <div
+      className={`flex flex-col h-screen bg-indigo-300 overflow-hidden ${
+        connectionStatus === "waiting" ? "pb-48 sm:pb-0" : "pt-0"
+      }`}
+    >
       <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
         <div className='relative bg-indigo-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
           {roomCode && connectionStatus === "waiting" ? (
