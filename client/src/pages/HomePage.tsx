@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-16 sm:justify-center sm:pt-0'>
+    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-36 sm:justify-center sm:pt-0'>
       <Modal />
       <h1 className='text-5xl font-extrabold text-indigo-50 mb-6 sm:mb-10'>
         Duordle
