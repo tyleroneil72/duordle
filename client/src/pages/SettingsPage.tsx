@@ -6,7 +6,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-16 sm:justify-center sm:pt-0 p-4'>
-      <div className='w-full max-w-4xl bg-indigo-200 shadow-lg rounded-lg p-6'>
+      <div className='w-full max-w-4xl bg-indigo-100 shadow-lg rounded-lg p-6'>
         <h1 className='text-3xl font-bold text-indigo-900 mb-4'>Settings</h1>
 
         <div className='mt-8'>

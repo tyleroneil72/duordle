@@ -68,7 +68,7 @@ const HomePage: React.FC = () => {
       <h1 className='text-5xl font-extrabold text-indigo-50 mb-6 sm:mb-10'>
         Duordle
       </h1>
-      <div className='w-full max-w-md bg-indigo-200 shadow-lg rounded-lg p-6 mt-10 sm:mt-20'>
+      <div className='w-full max-w-md bg-indigo-100 shadow-lg rounded-lg p-6 mt-10 sm:mt-20'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
       <button

@@ -126,9 +126,9 @@ const RoomPage: React.FC = () => {
   }
 
   return (
-    <div className='flex flex-col h-screen bg-gray-100 overflow-hidden'>
+    <div className='flex flex-col h-screen bg-indigo-300 overflow-hidden'>
       <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
-        <div className='relative bg-gray-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
+        <div className='relative bg-indigo-100 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
           {roomCode && connectionStatus === "waiting" ? (
             <>
               <Waiting code={roomCode} />
@@ -142,13 +142,17 @@ const RoomPage: React.FC = () => {
             </>
           ) : (
             <>
-              <h2 className='text-lg font-bold mb-4'>Room: {roomCode}</h2>
+              <h2 className='text-lg font-bold mb-4 text-indigo-900'>
+                Room: {roomCode}
+              </h2>
 
               {!gameOver &&
                 (currentPlayer ? (
-                  <p>It's your turn!</p>
+                  <p className='text-indigo-900'>It's your turn!</p>
                 ) : (
-                  <p>Waiting for the other player...</p>
+                  <p className='text-indigo-900'>
+                    Waiting for the other player...
+                  </p>
                 ))}
 
               <GameBoard board={board} word={word} currentRow={currentRow} />
