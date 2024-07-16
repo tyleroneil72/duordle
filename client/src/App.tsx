@@ -14,7 +14,6 @@ interface AppProps {}
 const App: React.FC<AppProps> = () => {
   return (
     <Router>
-      {/* <Header /> */}
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path='/' element={<HomePage />} />
@@ -25,7 +24,6 @@ const App: React.FC<AppProps> = () => {
           <Route path='*' element={<Error type='404' />} />
         </Routes>
       </Suspense>
-      {/* <Footer /> */}
     </Router>
   );
 };
