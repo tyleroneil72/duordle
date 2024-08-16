@@ -1,9 +1,9 @@
-import { Response } from "express";
-import Word from "../models/WordModel";
-import { StatusCodes } from "http-status-codes";
-import { NotFoundError } from "../errors/customErrors";
-import { asyncWrapper } from "../utils/asyncWrapper";
-import mongoose from "mongoose";
+import { Response } from 'express';
+import Word from '../models/WordModel';
+import { StatusCodes } from 'http-status-codes';
+import { NotFoundError } from '../errors/customErrors';
+import { asyncWrapper } from '../utils/asyncWrapper';
+import mongoose from 'mongoose';
 
 export const getAllWords = asyncWrapper(async (req, res: Response) => {
   const words = await Word.find();
@@ -14,15 +14,11 @@ export const createWord = asyncWrapper(async (req, res: Response) => {
   const { word, difficulty } = req.body;
 
   // Validate input
-  if (!word || typeof word !== "string") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid word" });
+  if (!word || typeof word !== 'string') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid word' });
   }
-  if (!difficulty || typeof difficulty !== "string") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid difficulty" });
+  if (!difficulty || typeof difficulty !== 'string') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid difficulty' });
   }
   const newWord = await Word.create({ word, difficulty, length: word.length });
   res.status(StatusCodes.CREATED).json({ word: newWord });
@@ -31,9 +27,7 @@ export const createWord = asyncWrapper(async (req, res: Response) => {
 export const getWord = asyncWrapper(async (req, res: Response) => {
   const { id } = req.params;
   if (!mongoose.isValidObjectId(id)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid word ID format" });
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid word ID format' });
   }
 
   const word = await Word.findById(id);
@@ -48,21 +42,15 @@ export const updateWord = asyncWrapper(async (req, res: Response) => {
   const { word, difficulty } = req.body;
 
   if (!mongoose.isValidObjectId(id)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid word ID format" });
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid word ID format' });
   }
 
   // Validate input
-  if (!word || typeof word !== "string") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid word" });
+  if (!word || typeof word !== 'string') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid word' });
   }
-  if (!difficulty || typeof difficulty !== "string") {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid difficulty" });
+  if (!difficulty || typeof difficulty !== 'string') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid difficulty' });
   }
 
   const updateData = req.body;
@@ -72,7 +60,7 @@ export const updateWord = asyncWrapper(async (req, res: Response) => {
 
   const updatedWord = await Word.findByIdAndUpdate(id, updateData, {
     new: true,
-    runValidators: true,
+    runValidators: true
   });
 
   if (!updatedWord) {
@@ -85,30 +73,26 @@ export const updateWord = asyncWrapper(async (req, res: Response) => {
 export const deleteWord = asyncWrapper(async (req, res: Response) => {
   const { id } = req.params;
   if (!mongoose.isValidObjectId(id)) {
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Invalid word ID format" });
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid word ID format' });
   }
 
   const word = await Word.findByIdAndDelete(id);
   if (!word) {
     throw new NotFoundError(`No word with ID ${id}`);
   }
-  res.status(StatusCodes.OK).json({ message: "Word deleted successfully" });
+  res.status(StatusCodes.OK).json({ message: 'Word deleted successfully' });
 });
 
 export const getRandomWord = asyncWrapper(async (req, res: Response) => {
   try {
-    const count = await Word.countDocuments({ difficulty: "1" });
+    const count = await Word.countDocuments({ difficulty: '1' });
     const random = Math.floor(Math.random() * count);
-    const randomWord = await Word.findOne({ difficulty: "1" }).skip(random);
+    const randomWord = await Word.findOne({ difficulty: '1' }).skip(random);
     if (!randomWord) {
-      throw new NotFoundError("No words available with difficulty 1");
+      throw new NotFoundError('No words available with difficulty 1');
     }
     res.status(StatusCodes.OK).json({ word: randomWord });
   } catch (error) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal server error" });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal server error' });
   }
 });

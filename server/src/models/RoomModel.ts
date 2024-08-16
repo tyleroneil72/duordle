@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 interface IRoom extends Document {
   members: string[];
@@ -15,33 +15,33 @@ const RoomSchema: Schema = new Schema(
   {
     members: {
       type: [String],
-      required: true,
+      required: true
     },
     roomCode: {
       type: String,
-      required: true,
+      required: true
     },
     word: {
       type: String,
-      required: true,
+      required: true
     },
     board: {
       type: [[String]],
-      required: true,
+      required: true
     },
     currentRow: {
       type: Number,
-      default: 0,
+      default: 0
     },
     currentPlayer: {
       type: Number,
-      default: 1,
+      default: 1
     },
     createdAt: {
       type: Date,
       default: Date.now,
-      index: { expires: "3600s" }, // Rooms Total Time To Live: 1 hour
-    },
+      index: { expires: '3600s' } // Rooms Total Time To Live: 1 hour
+    }
   },
   { timestamps: true }
 );
@@ -53,4 +53,4 @@ RoomSchema.methods.checkAndDeleteIfEmpty = async function () {
   }
 };
 
-export default mongoose.model<IRoom>("Room", RoomSchema);
+export default mongoose.model<IRoom>('Room', RoomSchema);
