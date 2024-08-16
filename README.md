@@ -13,7 +13,7 @@
 
 ## Description
 
-Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Typescript, Tailwind CSS, Socket.io, and AWS for hosting. Check out the live version at [duordle.net](https://duordle.net) and the demo version [here](https://duordle-deploy.onrender.com).
+Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Typescript, Tailwind CSS, Socket.io, and AWS for hosting. Check out the live version at [duordle.net](https://duordle.net)
 
 ## Note
 
