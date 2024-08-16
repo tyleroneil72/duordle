@@ -7,9 +7,7 @@ const RoomPage = lazy(() => import("./pages/RoomPage"));
 const SettingsPage = lazy(() => import("./pages/SettingsPage"));
 const Error = lazy(() => import("./pages/Error"));
 
-interface AppProps {}
-
-const App: React.FC<AppProps> = () => {
+const App: React.FC = () => {
   return (
     <Router>
       <Suspense fallback={<Loading />}>
