@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
-import Loading from "./components/Loading";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import Loading from './components/Loading';
 
-const HomePage = lazy(() => import("./pages/HomePage"));
-const RoomPage = lazy(() => import("./pages/RoomPage"));
-const SettingsPage = lazy(() => import("./pages/SettingsPage"));
-const Error = lazy(() => import("./pages/Error"));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const RoomPage = lazy(() => import('./pages/RoomPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const Error = lazy(() => import('./pages/Error'));
 
 const App: React.FC = () => {
   return (

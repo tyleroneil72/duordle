@@ -1,23 +1,16 @@
-import {
-  Button,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Transition,
-  TransitionChild,
-} from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { Button, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
+import { useEffect, useState } from 'react';
 
 export default function Modal() {
   const [isOpen, setIsOpen] = useState(false);
 
   function close() {
     setIsOpen(false);
-    localStorage.setItem("modalShown", "true"); // Set flag in local storage
+    localStorage.setItem('modalShown', 'true'); // Set flag in local storage
   }
 
   useEffect(() => {
-    const modalShown = localStorage.getItem("modalShown");
+    const modalShown = localStorage.getItem('modalShown');
     if (!modalShown) {
       setIsOpen(true); // Only show modal if it hasn't been shown before
     }
@@ -40,16 +33,12 @@ export default function Modal() {
                   leaveTo='opacity-0 scale-95'
                 >
                   <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                    <DialogTitle
-                      as='h3'
-                      className='text-lg font-medium leading-6 text-gray-900'
-                    >
+                    <DialogTitle as='h3' className='text-lg font-medium leading-6 text-gray-900'>
                       Notice
                     </DialogTitle>
                     <div className='mt-2'>
                       <p className='text-sm text-gray-500'>
-                        This website is currently under active development. Some
-                        features may not work as expected.
+                        This website is currently under active development. Some features may not work as expected.
                       </p>
                     </div>
                     <div className='mt-4'>

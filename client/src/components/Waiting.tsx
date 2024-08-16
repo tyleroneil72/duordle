@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { FaClipboard } from "react-icons/fa"; // Import clipboard icon from react-icons
+import { useState } from 'react';
+import { FaClipboard } from 'react-icons/fa'; // Import clipboard icon from react-icons
 
 interface WaitingProps {
   code: string;
@@ -14,15 +14,13 @@ const Waiting: React.FC<WaitingProps> = ({ code }) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
     } catch (err) {
-      console.error("Failed to copy!", err);
+      console.error('Failed to copy!', err);
     }
   };
 
   return (
     <div className='border-2 border-indigo-200 rounded-lg shadow-lg p-6 mx-4 my-2 bg-indigo-50'>
-      <div className='text-center text-lg font-medium text-indigo-900 mb-4'>
-        Waiting for player to connect
-      </div>
+      <div className='text-center text-lg font-medium text-indigo-900 mb-4'>Waiting for player to connect</div>
       <div className='text-center text-indigo-800'>
         Share this room code:
         <button

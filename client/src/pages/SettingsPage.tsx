@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
-import { FaGithub, FaLinkedin, FaUserCircle, FaHome } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { FaGithub, FaLinkedin, FaUserCircle, FaHome } from 'react-icons/fa';
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,19 +10,15 @@ const SettingsPage: React.FC = () => {
         <h1 className='text-3xl font-bold text-indigo-900 mb-4'>Settings</h1>
 
         <div className='mt-8'>
-          <h2 className='text-xl font-semibold text-indigo-900'>
-            About the Creator
-          </h2>
+          <h2 className='text-xl font-semibold text-indigo-900'>About the Creator</h2>
           <p className='text-indigo-900 mt-2'>
-            Tyler O'Neil - Developer and creator of Duordle. Passionate about
-            building interactive and efficient web solutions.
+            Tyler O'Neil - Developer and creator of Duordle. Passionate about building interactive and efficient web
+            solutions.
           </p>
           <p className='text-indigo-900 mt-2'>
-            Technology Stack: MERN Stack (MongoDB, Express, React, Node.js),
-            enhanced with Socket.io for real-time interactions, TypeScript for
-            robust server and client-side scripting, and Tailwind CSS for
-            stylish, responsive design. Hosted on AWS for reliable and scalable
-            cloud infrastructure.
+            Technology Stack: MERN Stack (MongoDB, Express, React, Node.js), enhanced with Socket.io for real-time
+            interactions, TypeScript for robust server and client-side scripting, and Tailwind CSS for stylish,
+            responsive design. Hosted on AWS for reliable and scalable cloud infrastructure.
           </p>
           <div className='flex justify-center space-x-4 mt-4'>
             <a
@@ -53,7 +49,7 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate('/')}
         className='fixed bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
         title='Go Home'
       >
