@@ -9,11 +9,11 @@
 ![Express](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
 ![MongoDb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![eslint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
-![AWS](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Render](https://img.shields.io/badge/Render-404D59?style=for-the-badge)
 
 ## Description
 
-Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Typescript, Tailwind CSS, Socket.io, and AWS for hosting. Check out the live version at [duordle.net](https://duordle.net)
+Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Typescript, Tailwind CSS, Socket.io, and Render for hosting. Check out the live version at [duordle.net](https://duordle.net) (Will spin down when inactive which can delay requests by 50 seconds or more)
 
 ## Note
 
