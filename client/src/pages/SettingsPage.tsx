@@ -18,7 +18,7 @@ const SettingsPage: React.FC = () => {
           <p className='text-indigo-900 mt-2'>
             Technology Stack: MERN Stack (MongoDB, Express, React, Node.js), enhanced with Socket.io for real-time
             interactions, TypeScript for robust server and client-side scripting, and Tailwind CSS for stylish,
-            responsive design. Hosted on AWS for reliable and scalable cloud infrastructure.
+            responsive design. Hosted on Render for reliable and scalable cloud infrastructure.
           </p>
           <div className='flex justify-center space-x-4 mt-4'>
             <a
