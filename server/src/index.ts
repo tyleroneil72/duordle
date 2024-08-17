@@ -18,6 +18,8 @@ const PORT: number = parseInt(process.env.PORT || '3000', 10);
 const CLIENT_URL: string = process.env.CLIENT_URL || 'http://localhost:3000';
 const MONGO_URI: string = process.env.MONGO_URI || '';
 
+app.set('trust proxy', true);
+
 app.use(express.json());
 app.use(
   cors({
