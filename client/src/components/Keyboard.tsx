@@ -32,14 +32,14 @@ const Keyboard: React.FC<KeyboardProps> = ({
     board.forEach((row, rowIndex) => {
       if (rowIndex <= currentRow) {
         row.forEach((letter, idx) => {
-          if (letter.toLowerCase() === word[idx].toLowerCase()) {
-            newKeyState[letter.toLowerCase()] = 'bg-green-300';
-          } else if (word.toLowerCase().includes(letter.toLowerCase())) {
-            if (newKeyState[letter.toLowerCase()] !== 'bg-green-300') {
-              newKeyState[letter.toLowerCase()] = 'bg-yellow-300';
+          if (letter.toLowerCase() === word[idx]?.toLowerCase()) {
+            newKeyState[letter?.toLowerCase()] = 'bg-green-300';
+          } else if (word?.toLowerCase().includes(letter?.toLowerCase())) {
+            if (newKeyState[letter?.toLowerCase()] !== 'bg-green-300') {
+              newKeyState[letter?.toLowerCase()] = 'bg-yellow-300';
             }
           } else {
-            newKeyState[letter.toLowerCase()] = 'bg-gray-400';
+            newKeyState[letter?.toLowerCase()] = 'bg-gray-400';
           }
         });
       }
@@ -138,7 +138,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
   const secondRow = 'ASDFGHJKL'.split('');
   const thirdRow = 'ZXCVBNM'.split('');
 
-  const getKeyColor = (letter: string) => keyState[letter.toLowerCase()] || 'bg-gray-300';
+  const getKeyColor = (letter: string) => keyState[letter?.toLowerCase()] || 'bg-gray-300';
 
   return (
     <div className='p-1'>

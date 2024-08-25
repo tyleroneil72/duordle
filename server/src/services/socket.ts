@@ -161,7 +161,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
           io.to(roomCode).emit('update_board', room.board, room.currentRow);
           io.to(roomCode).emit('update_keyboard');
 
-          let gameWon = guess.toLowerCase() === room.word.toLowerCase();
+          let gameWon = guess?.toLowerCase() === room.word?.toLowerCase();
           if (gameWon || currentRow + 1 >= 6) {
             io.to(roomCode).emit('game_over', gameWon);
             console.log('Game Over');

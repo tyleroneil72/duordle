@@ -8,7 +8,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
   const getLetterCounts = (word: string) => {
     const letterCounts: { [key: string]: number } = {};
     for (const letter of word) {
-      const char = letter.toLowerCase();
+      const char = letter?.toLowerCase();
       letterCounts[char] = (letterCounts[char] || 0) + 1;
     }
     return letterCounts;
@@ -16,7 +16,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
 
   const getCellColor = (rowIndex: number, cellIndex: number): string => {
     if (rowIndex !== currentRow) {
-      const wordLower = word.toLowerCase();
+      const wordLower = word?.toLowerCase();
 
       // Calculate letter counts for the correct word
       const letterCounts = getLetterCounts(wordLower);
@@ -24,7 +24,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
 
       // First pass: identify correct placements and adjust counts
       for (let i = 0; i < board[rowIndex].length; i++) {
-        const currentLetter = board[rowIndex][i].toLowerCase();
+        const currentLetter = board[rowIndex][i]?.toLowerCase();
         if (currentLetter === wordLower[i]) {
           colors[i] = 'bg-green-300'; // Correctly placed
           letterCounts[currentLetter]--;
@@ -33,7 +33,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
 
       // Second pass: identify misplaced but correct letters
       for (let i = 0; i < board[rowIndex].length; i++) {
-        const currentLetter = board[rowIndex][i].toLowerCase();
+        const currentLetter = board[rowIndex][i]?.toLowerCase();
         if (colors[i] === 'bg-white' && letterCounts[currentLetter] > 0) {
           if (currentLetter === wordLower[i]) {
             // If this position was supposed to be green but was missed in first pass

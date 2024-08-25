@@ -18,9 +18,9 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen }
           row
             .map((letter, index) => {
               if (letter === '') return ''; // Ignore empty letters
-              if (letter.toLowerCase() === word[index].toLowerCase()) {
+              if (letter.toLowerCase() === word[index]?.toLowerCase()) {
                 return '🟩';
-              } else if (word.toLowerCase().includes(letter.toLowerCase())) {
+              } else if (word.toLowerCase().includes(letter?.toLowerCase())) {
                 return '🟨';
               } else {
                 return '⬜';
