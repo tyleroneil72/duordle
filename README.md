@@ -17,7 +17,8 @@ Duordle is an online game inspired by Wordle, designed to be a cooperative word-
 
 ## High Level Architecture
 
-<img width="597" src="https://github.com/user-attachments/assets/b38afbe3-6688-4621-b01c-bffef43c2ae7">
+<img width="589" alt="Architecture Image" src="https://github.com/user-attachments/assets/14c14098-70e6-45d4-bf2c-22418d2bf2e6">
+
 
 
 ## Note
