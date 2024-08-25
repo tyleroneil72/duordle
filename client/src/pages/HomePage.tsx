@@ -93,7 +93,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-36 sm:justify-center sm:pt-0'>
+    <div className='flex flex-col items-center justify-center min-h-screen bg-indigo-300 py-8 sm:py-12 lg:py-24'>
       <PopupModal
         isOpen={isNoticeModalOpen}
         onClose={handleNoticeModalClose}
@@ -112,8 +112,10 @@ const HomePage: React.FC = () => {
         title='Room is Full'
         message='The room you are trying to join is already full. Please try a different room.'
       />
-      <h1 className='text-5xl font-extrabold text-indigo-50 mb-6 sm:mb-10'>Duordle</h1>
-      <div className='w-full max-w-md bg-indigo-100 shadow-lg rounded-lg p-6 mt-10 sm:mt-20'>
+      <h1 className='text-4xl sm:text-5xl lg:text-6xl font-extrabold text-indigo-50 mb-6 sm:mb-10 lg:mb-12 text-center'>
+        Duordle
+      </h1>
+      <div className='w-11/12 max-w-sm sm:max-w-md lg:max-w-lg bg-indigo-100 shadow-lg rounded-lg p-4 sm:p-6 mt-8 sm:mt-12'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
       <button

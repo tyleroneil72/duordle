@@ -33,7 +33,7 @@ const RoomPage: React.FC = () => {
         setBoard(board);
         setCurrentAttempt(Array(5).fill(''));
       });
-
+      // This is the problem on mobile the server lags and doesnt get the player_joined event
       socket.on('player_joined', () => {
         setConnectionStatus('connected');
       });

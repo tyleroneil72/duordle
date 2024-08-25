@@ -70,8 +70,11 @@ export const initSocketServer = (httpServer: HttpServer) => {
           socket.join(roomCode);
           socket.data.player = 2;
           io.to(room.members[0]).emit('your_turn', true);
-          io.to(roomCode).emit('player_joined');
-          console.log(`Joined room: ${roomCode}`);
+          // Wait two seconds for the second player to join before emitting player_joined (Hack fix)
+          setTimeout(() => {
+            io.to(roomCode).emit('player_joined');
+            console.log(`Player joined room: ${roomCode}`);
+          }, 2000);
         } else if (room.members.includes(socket.id)) {
           console.log(`Already in room: ${roomCode}`);
         } else {
