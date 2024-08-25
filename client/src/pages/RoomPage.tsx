@@ -40,12 +40,10 @@ const RoomPage: React.FC = () => {
 
       socket.on('invalid_word', () => {
         setCurrentAttempt(Array(5).fill(''));
-        alert('Invalid word! Please try another word.');
       });
 
       socket.on('not_your_turn', () => {
         setCurrentAttempt(Array(5).fill(''));
-        alert("It's not your turn! Please wait for the other player to finish.");
       });
 
       socket.on('your_turn', (isYourTurn) => {

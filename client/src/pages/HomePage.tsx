@@ -1,13 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import { FaCog } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
 import { socket } from '../services/socket';
 import RoomButtons from '../components/RoomButtons';
-import Modal from '../components/Modal';
+import PopupModal from '../components/PopupModal';
+import RoomCodeModal from '../components/RoomCodeModal';
 import fetchRandomWord from '../utils/fetchRandomWord';
 import generateUniqueRoomCode from '../utils/generateUniqueRoomCode';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
+  const [isRoomCodeModalOpen, setIsRoomCodeModalOpen] = useState<boolean>(false);
+  const [isNoticeModalOpen, setIsNoticeModalOpen] = useState<boolean>(false);
+  const [isRoomNotFoundModalOpen, setIsRoomNotFoundModalOpen] = useState<boolean>(false);
+  const [isRoomFullModalOpen, setIsRoomFullModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const modalShown = localStorage.getItem('modalShown');
+    if (!modalShown) {
+      setIsNoticeModalOpen(true); // Show the notice modal if it hasn't been shown before
+    }
+  }, []);
 
   const handleCreateRoom = async () => {
     const randomWord = await fetchRandomWord();
@@ -19,11 +32,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleJoinRoom = () => {
-    const joinRoomCode = prompt('Enter room code:')?.toUpperCase();
-    if (!joinRoomCode) return;
-
-    setupRoomEventListeners(joinRoomCode, 'join');
-    socket.emit('join_room', joinRoomCode);
+    setIsRoomCodeModalOpen(true);
   };
 
   const setupRoomEventListeners = (roomCode: string, action: string) => {
@@ -41,7 +50,7 @@ const HomePage: React.FC = () => {
       });
 
       socket.on('room_already_exists', () => {
-        alert('A room with this code already exists.');
+        setIsRoomNotFoundModalOpen(true);
       });
 
       socket.on('error_creating_room', (error) => {
@@ -53,18 +62,56 @@ const HomePage: React.FC = () => {
       });
 
       socket.on('room_not_found', () => {
-        alert('Room not found');
+        setIsRoomNotFoundModalOpen(true);
       });
 
       socket.on('room_full', () => {
-        alert('Room is full');
+        setIsRoomFullModalOpen(true);
       });
     }
   };
 
+  const handleRoomCodeSubmit = (code: string | null) => {
+    setIsRoomCodeModalOpen(false);
+    if (code) {
+      setupRoomEventListeners(code, 'join');
+      socket.emit('join_room', code);
+    }
+  };
+
+  const handleNoticeModalClose = () => {
+    setIsNoticeModalOpen(false);
+    localStorage.setItem('modalShown', 'true'); // Set the flag in local storage
+  };
+
+  const handleRoomNotFoundModalClose = () => {
+    setIsRoomNotFoundModalOpen(false);
+  };
+
+  const handleRoomFullModalClose = () => {
+    setIsRoomFullModalOpen(false);
+  };
+
   return (
     <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-36 sm:justify-center sm:pt-0'>
-      <Modal />
+      <PopupModal
+        isOpen={isNoticeModalOpen}
+        onClose={handleNoticeModalClose}
+        title='Notice'
+        message='This website is currently under active development. Some features may not work as expected.'
+      />
+      <PopupModal
+        isOpen={isRoomNotFoundModalOpen}
+        onClose={handleRoomNotFoundModalClose}
+        title='Room Not Found'
+        message='The room you are trying to join does not exist. Please check the room code and try again.'
+      />
+      <PopupModal
+        isOpen={isRoomFullModalOpen}
+        onClose={handleRoomFullModalClose}
+        title='Room is Full'
+        message='The room you are trying to join is already full. Please try a different room.'
+      />
       <h1 className='text-5xl font-extrabold text-indigo-50 mb-6 sm:mb-10'>Duordle</h1>
       <div className='w-full max-w-md bg-indigo-100 shadow-lg rounded-lg p-6 mt-10 sm:mt-20'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
@@ -76,6 +123,8 @@ const HomePage: React.FC = () => {
       >
         <FaCog size={24} />
       </button>
+
+      <RoomCodeModal isOpen={isRoomCodeModalOpen} onClose={handleRoomCodeSubmit} />
     </div>
   );
 };
