@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleJoinRoom = () => {
-    const joinRoomCode = prompt('Enter room code:');
+    const joinRoomCode = prompt('Enter room code:')?.toUpperCase();
     if (!joinRoomCode) return;
 
     setupRoomEventListeners(joinRoomCode, 'join');
