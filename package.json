@@ -4,9 +4,10 @@
   "description": "duordle app",
   "main": "server/dist/index.js",
   "scripts": {
-    "dev": "./test.sh",
     "build": "cd client && npm i && npm run build && cd ../server && npm i && npm run build",
-    "start": "node server/dist/index.js"
+    "start": "node server/dist/index.js",
+    "format": "cd client && npm run format && cd ../server && npm run format",
+    "lint": "cd client && npm run lint:prettier && cd ../server && npm run lint:prettier"
   },
   "author": "Tyler O'Neil",
   "license": "MIT"

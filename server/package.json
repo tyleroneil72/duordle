@@ -6,7 +6,9 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts --exec ts-node"
+    "dev": "nodemon src/index.ts --exec ts-node",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "lint:prettier": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\""
   },
   "author": "Tyler O'Neil",
   "license": "ISC",
@@ -15,6 +17,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.8",
     "nodemon": "^3.1.0",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   },

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 interface ErrorPageProps {
   type: string;
@@ -8,18 +8,18 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
   const navigate = useNavigate();
   let title: string, message: string;
 
-  if (type === "404") {
-    title = "Page Not Found";
-    message = "The page you are looking for does not exist.";
-  } else if (type === "full") {
-    title = "Room Full";
-    message = "This room is already full. Please try a different one.";
-  } else if (type === "player-left") {
-    title = "Player Left";
-    message = "The other player has left the room.";
+  if (type === '404') {
+    title = 'Page Not Found';
+    message = 'The page you are looking for does not exist.';
+  } else if (type === 'full') {
+    title = 'Room Full';
+    message = 'This room is already full. Please try a different one.';
+  } else if (type === 'player-left') {
+    title = 'Player Left';
+    message = 'The other player has left the room.';
   } else {
-    title = "Error";
-    message = "Sorry, there was a problem loading the page.";
+    title = 'Error';
+    message = 'Sorry, there was a problem loading the page.';
   }
 
   return (
@@ -28,7 +28,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
         <h1 className='text-3xl font-bold text-red-600 mb-4'>{title}</h1>
         <p className='text-gray-800 text-lg mb-6'>{message}</p>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate('/')}
           className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300 ease-in-out focus:outline-none'
         >
           Go Home

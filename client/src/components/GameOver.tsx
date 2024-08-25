@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface GameOverProps {
   win: boolean;
@@ -8,14 +8,8 @@ interface GameOverProps {
   isOpen: boolean;
 }
 
-const GameOver: React.FC<GameOverProps> = ({
-  win,
-  board,
-  word,
-  onClose,
-  isOpen,
-}) => {
-  const [gameState, setGameState] = useState<string>("");
+const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen }) => {
+  const [gameState, setGameState] = useState<string>('');
 
   useEffect(() => {
     const createGameState = () => {
@@ -23,19 +17,19 @@ const GameOver: React.FC<GameOverProps> = ({
         .map((row) =>
           row
             .map((letter, index) => {
-              if (letter === "") return ""; // Ignore empty letters
-              if (letter.toLowerCase() === word[index].toLowerCase()) {
-                return "🟩";
-              } else if (word.toLowerCase().includes(letter.toLowerCase())) {
-                return "🟨";
+              if (letter === '') return ''; // Ignore empty letters
+              if (letter.toLowerCase() === word[index]?.toLowerCase()) {
+                return '🟩';
+              } else if (word.toLowerCase().includes(letter?.toLowerCase())) {
+                return '🟨';
               } else {
-                return "⬜";
+                return '⬜';
               }
             })
-            .join("")
+            .join('')
         )
-        .filter((row) => row !== "") // Filter out any completely empty rows
-        .join("\n");
+        .filter((row) => row !== '') // Filter out any completely empty rows
+        .join('\n');
     };
     setGameState(createGameState());
   }, [board, word]);
@@ -43,7 +37,7 @@ const GameOver: React.FC<GameOverProps> = ({
   const copyToClipboard = () => {
     const textToCopy = `duordle.net\n${gameState}\nWord: ${word}`;
     navigator.clipboard.writeText(textToCopy).then(() => {
-      alert("Game state copied to clipboard!");
+      alert('Game state copied to clipboard!');
     });
   };
 
@@ -53,9 +47,7 @@ const GameOver: React.FC<GameOverProps> = ({
     <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center'>
       <div className='bg-white p-4 rounded shadow-lg max-w-md w-full'>
         <h2 className='text-lg font-bold mb-4 text-center'>Game Over</h2>
-        <div className='text-center text-lg font-bold mb-4'>
-          {win ? "You won!" : "You lost!"}
-        </div>
+        <div className='text-center text-lg font-bold mb-4'>{win ? 'You won!' : 'You lost!'}</div>
         <div className='whitespace-pre mb-4 text-center'>{gameState}</div>
         <div className='text-center mb-4'>
           <strong>Word:</strong> {word}

@@ -1,21 +1,14 @@
-import { Router } from "express";
-import { apiKeyMiddleware } from "../middleware/apiKeyMiddleware";
+import { Router } from 'express';
+import { apiKeyMiddleware } from '../middleware/apiKeyMiddleware';
 const router = Router();
 
-import {
-  getAllWords,
-  createWord,
-  getWord,
-  deleteWord,
-  updateWord,
-  getRandomWord,
-} from "../controllers/wordController";
+import { getAllWords, createWord, getWord, deleteWord, updateWord, getRandomWord } from '../controllers/wordController';
 
-router.get("/", apiKeyMiddleware, getAllWords);
-router.post("/", apiKeyMiddleware, createWord);
-router.get("/random", getRandomWord);
-router.get("/:id", apiKeyMiddleware, getWord);
-router.patch("/:id", apiKeyMiddleware, updateWord);
-router.delete("/:id", apiKeyMiddleware, deleteWord);
+router.get('/', apiKeyMiddleware, getAllWords);
+router.post('/', apiKeyMiddleware, createWord);
+router.get('/random', getRandomWord);
+router.get('/:id', apiKeyMiddleware, getWord);
+router.patch('/:id', apiKeyMiddleware, updateWord);
+router.delete('/:id', apiKeyMiddleware, deleteWord);
 
 export default router;

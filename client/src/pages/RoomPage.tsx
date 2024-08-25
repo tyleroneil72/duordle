@@ -1,84 +1,74 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { socket } from "../services/socket";
-import GameBoard from "../components/GameBoard";
-import Keyboard from "../components/Keyboard";
-import Waiting from "../components/Waiting";
-import GameOver from "../components/GameOver";
-import { IoMdMenu } from "react-icons/io";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { socket } from '../services/socket';
+import GameBoard from '../components/GameBoard';
+import Keyboard from '../components/Keyboard';
+import Waiting from '../components/Waiting';
+import GameOver from '../components/GameOver';
+import { IoMdMenu } from 'react-icons/io';
 
 const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
   const navigate = useNavigate();
-  const [word, setWord] = useState<string>("");
-  const [currentAttempt, setCurrentAttempt] = useState<string[]>(
-    Array(5).fill("")
-  );
+  const [word, setWord] = useState<string>('');
+  const [currentAttempt, setCurrentAttempt] = useState<string[]>(Array(5).fill(''));
   const [board, setBoard] = useState<string[][]>(
     Array(6)
       .fill(null)
-      .map(() => Array(5).fill(""))
+      .map(() => Array(5).fill(''))
   );
   const [currentRow, setCurrentRow] = useState<number>(0);
-  const [connectionStatus, setConnectionStatus] = useState<string>("waiting");
+  const [connectionStatus, setConnectionStatus] = useState<string>('waiting');
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
-  const [isGameOverModalOpen, setIsGameOverModalOpen] =
-    useState<boolean>(false);
+  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (roomCode) {
-      socket.emit("join_room", roomCode);
+      socket.emit('join_room', roomCode);
 
-      socket.on("room_joined", (word: string, board: string[][]) => {
+      socket.on('room_joined', (word: string, board: string[][]) => {
         setWord(word);
         setBoard(board);
-        setCurrentAttempt(Array(5).fill(""));
+        setCurrentAttempt(Array(5).fill(''));
       });
 
-      socket.on("player_joined", () => {
-        setConnectionStatus("connected");
+      socket.on('player_joined', () => {
+        setConnectionStatus('connected');
       });
 
-      socket.on("invalid_word", () => {
-        setCurrentAttempt(Array(5).fill(""));
-        alert("Invalid word! Please try another word.");
+      socket.on('invalid_word', () => {
+        setCurrentAttempt(Array(5).fill(''));
       });
 
-      socket.on("not_your_turn", () => {
-        setCurrentAttempt(Array(5).fill(""));
-        alert(
-          "It's not your turn! Please wait for the other player to finish."
-        );
+      socket.on('not_your_turn', () => {
+        setCurrentAttempt(Array(5).fill(''));
       });
 
-      socket.on("your_turn", (isYourTurn) => {
+      socket.on('your_turn', (isYourTurn) => {
         setCurrentPlayer(isYourTurn);
       });
 
-      socket.on("player_left", () => {
-        socket.emit("leave_room", roomCode);
-        navigate("/player-left");
+      socket.on('player_left', () => {
+        socket.emit('leave_room', roomCode);
+        navigate('/player-left');
       });
 
-      socket.on("room_full", () => {
-        navigate("/full");
+      socket.on('room_full', () => {
+        navigate('/full');
       });
 
-      socket.on("room_not_found", () => {
-        navigate("/not-found");
+      socket.on('room_not_found', () => {
+        navigate('/not-found');
       });
 
-      socket.on(
-        "update_board",
-        (newBoard: string[][], newCurrentRow: number): void => {
-          setBoard(newBoard);
-          setCurrentRow(newCurrentRow);
-        }
-      );
+      socket.on('update_board', (newBoard: string[][], newCurrentRow: number): void => {
+        setBoard(newBoard);
+        setCurrentRow(newCurrentRow);
+      });
 
-      socket.on("game_over", (gameStatus) => {
+      socket.on('game_over', (gameStatus) => {
         setGameOver(true);
         setGameStatus(gameStatus);
         setIsGameOverModalOpen(true);
@@ -86,20 +76,20 @@ const RoomPage: React.FC = () => {
 
       const handleUnload = (event: BeforeUnloadEvent) => {
         event.preventDefault();
-        socket.emit("leave_room", roomCode);
+        socket.emit('leave_room', roomCode);
       };
-      window.addEventListener("beforeunload", handleUnload);
+      window.addEventListener('beforeunload', handleUnload);
 
       return () => {
-        socket.off("room_joined");
-        socket.off("player_joined");
-        socket.off("invalid_word");
-        socket.off("not_your_turn");
-        socket.off("your_turn");
-        socket.off("game_over");
-        socket.off("room_full");
-        socket.off("room_not_found");
-        window.removeEventListener("beforeunload", handleUnload);
+        socket.off('room_joined');
+        socket.off('player_joined');
+        socket.off('invalid_word');
+        socket.off('not_your_turn');
+        socket.off('your_turn');
+        socket.off('game_over');
+        socket.off('room_full');
+        socket.off('room_not_found');
+        window.removeEventListener('beforeunload', handleUnload);
       };
     }
   }, [roomCode, navigate]);
@@ -113,8 +103,8 @@ const RoomPage: React.FC = () => {
   }, [currentAttempt, currentRow]);
 
   const handleLeaveRoom = () => {
-    socket.emit("leave_room", roomCode);
-    navigate("/");
+    socket.emit('leave_room', roomCode);
+    navigate('/');
   };
 
   const toggleGameOverModal = () => {
@@ -128,12 +118,12 @@ const RoomPage: React.FC = () => {
   return (
     <div
       className={`flex flex-col h-screen bg-indigo-300 overflow-hidden ${
-        connectionStatus === "waiting" ? "pb-48 sm:pb-0" : "pt-0"
+        connectionStatus === 'waiting' ? 'pb-48 sm:pb-0' : 'pt-0'
       }`}
     >
       <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
         <div className='relative bg-indigo-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
-          {roomCode && connectionStatus === "waiting" ? (
+          {roomCode && connectionStatus === 'waiting' ? (
             <>
               <Waiting code={roomCode} />
               <button
@@ -146,9 +136,7 @@ const RoomPage: React.FC = () => {
             </>
           ) : (
             <>
-              <h2 className='text-lg font-bold mb-4 text-black'>
-                Room: {roomCode}
-              </h2>
+              <h2 className='text-lg font-bold mb-4 text-black'>Room: {roomCode}</h2>
 
               {!gameOver &&
                 (currentPlayer ? (
@@ -182,7 +170,7 @@ const RoomPage: React.FC = () => {
           )}
         </div>
       </div>
-      {connectionStatus === "connected" && (
+      {connectionStatus === 'connected' && (
         <div className='fixed top-2 right-2 flex flex-row-reverse sm:flex-col sm:items-end space-x-2 sm:space-x-0 sm:space-y-2'>
           <button
             className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'

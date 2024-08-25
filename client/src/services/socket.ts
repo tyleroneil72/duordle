@@ -1,4 +1,4 @@
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
-const URL: string = "/";
+const URL: string = '/';
 export const socket = io(URL);

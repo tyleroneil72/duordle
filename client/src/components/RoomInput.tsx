@@ -1,10 +1,9 @@
-function RoomInput({
-  room,
-  setRoom,
-}: {
+interface RoomInputProps {
   room: string;
   setRoom: (value: string) => void;
-}) {
+}
+
+const RoomInput: React.FC<RoomInputProps> = ({ room, setRoom }) => {
   return (
     <input
       type='text'
@@ -14,6 +13,6 @@ function RoomInput({
       className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
     />
   );
-}
+};
 
 export default RoomInput;

@@ -1,6 +1,7 @@
-import { useEffect, useCallback, useState } from "react";
-import { FaDeleteLeft } from "react-icons/fa6";
-import { Socket } from "socket.io-client";
+import { useEffect, useCallback, useState } from 'react';
+import { FaDeleteLeft } from 'react-icons/fa6';
+import { Socket } from 'socket.io-client';
+import PopupModal from './PopupModal';
 
 interface KeyboardProps {
   socket: Socket;
@@ -23,23 +24,25 @@ const Keyboard: React.FC<KeyboardProps> = ({
   setCurrentAttempt,
   board,
   disabled,
-  word,
+  word
 }) => {
   const [keyState, setKeyState] = useState<{ [key: string]: string }>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const updateKeyColors = useCallback(() => {
     const newKeyState: { [key: string]: string } = {};
     board.forEach((row, rowIndex) => {
       if (rowIndex <= currentRow) {
         row.forEach((letter, idx) => {
-          if (letter.toLowerCase() === word[idx].toLowerCase()) {
-            newKeyState[letter.toLowerCase()] = "bg-green-300";
-          } else if (word.toLowerCase().includes(letter.toLowerCase())) {
-            if (newKeyState[letter.toLowerCase()] !== "bg-green-300") {
-              newKeyState[letter.toLowerCase()] = "bg-yellow-300";
+          if (letter.toLowerCase() === word[idx]?.toLowerCase()) {
+            newKeyState[letter?.toLowerCase()] = 'bg-green-300';
+          } else if (word?.toLowerCase().includes(letter?.toLowerCase())) {
+            if (newKeyState[letter?.toLowerCase()] !== 'bg-green-300') {
+              newKeyState[letter?.toLowerCase()] = 'bg-yellow-300';
             }
           } else {
-            newKeyState[letter.toLowerCase()] = "bg-gray-400";
+            newKeyState[letter?.toLowerCase()] = 'bg-gray-400';
           }
         });
       }
@@ -48,28 +51,32 @@ const Keyboard: React.FC<KeyboardProps> = ({
   }, [board, currentRow, word]);
 
   useEffect(() => {
-    socket.on("invalid_word", () => {
-      alert("Invalid word. Please try again.");
-      setCurrentAttempt(Array(5).fill(""));
-      // Do not update anything else, just show alert
+    socket.on('invalid_word', () => {
+      setModalMessage('Invalid word. Please try again.');
+      setIsModalOpen(true);
+      setCurrentAttempt(Array(5).fill(''));
     });
 
-    socket.on("valid_word", () => {
-      // Update the board and key colors when the word is valid
-      setCurrentAttempt(Array(5).fill(""));
-      setCurrentRow((prevRow) =>
-        prevRow + 1 < board.length ? prevRow + 1 : prevRow
-      );
+    socket.on('valid_word', () => {
+      setCurrentAttempt(Array(5).fill(''));
+      setCurrentRow((prevRow) => (prevRow + 1 < board.length ? prevRow + 1 : prevRow));
       updateKeyColors();
     });
 
-    socket.on("update_keyboard", () => {
+    socket.on('not_your_turn', () => {
+      setModalMessage("It's not your turn! Please wait for the other player to finish.");
+      setIsModalOpen(true);
+      setCurrentAttempt(Array(5).fill(''));
+    });
+
+    socket.on('update_keyboard', () => {
       updateKeyColors();
     });
 
     return () => {
-      socket.off("invalid_word");
-      socket.off("valid_word");
+      socket.off('invalid_word');
+      socket.off('valid_word');
+      socket.off('not_your_turn');
     };
   }, [socket, setCurrentAttempt, setCurrentRow, board.length, updateKeyColors]);
 
@@ -78,7 +85,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
       if (disabled) return;
       setCurrentAttempt((prevAttempt) => {
         const newAttempt = [...prevAttempt];
-        const emptyIndex = newAttempt.indexOf("");
+        const emptyIndex = newAttempt.indexOf('');
         if (emptyIndex !== -1) {
           newAttempt[emptyIndex] = letter;
         }
@@ -92,8 +99,8 @@ const Keyboard: React.FC<KeyboardProps> = ({
     setCurrentAttempt((prevAttempt) => {
       const newAttempt = [...prevAttempt];
       for (let i = newAttempt.length - 1; i >= 0; i--) {
-        if (newAttempt[i] !== "") {
-          newAttempt[i] = "";
+        if (newAttempt[i] !== '') {
+          newAttempt[i] = '';
           break;
         }
       }
@@ -102,11 +109,11 @@ const Keyboard: React.FC<KeyboardProps> = ({
   }, [setCurrentAttempt]);
 
   const handleEnter = useCallback(() => {
-    if (currentAttempt.every((letter) => letter !== "")) {
-      socket.emit("submit_guess", {
+    if (currentAttempt.every((letter) => letter !== '')) {
+      socket.emit('submit_guess', {
         roomCode,
-        guess: currentAttempt.join(""),
-        currentRow,
+        guess: currentAttempt.join(''),
+        currentRow
       });
     }
   }, [currentAttempt, socket, roomCode, currentRow]);
@@ -115,12 +122,12 @@ const Keyboard: React.FC<KeyboardProps> = ({
     (event: KeyboardEvent) => {
       const { key } = event;
       if (disabled) return;
-      if (key === "Enter") {
+      if (key === 'Enter') {
         handleEnter();
-      } else if (key === "Backspace") {
+      } else if (key === 'Backspace') {
         handleBackspace();
       } else {
-        const validKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        const validKeys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         if (validKeys.includes(key.toUpperCase())) {
           handleLetterInput(key.toUpperCase());
         }
@@ -130,21 +137,21 @@ const Keyboard: React.FC<KeyboardProps> = ({
   );
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleKeyDown]);
 
-  const firstRow = "QWERTYUIOP".split("");
-  const secondRow = "ASDFGHJKL".split("");
-  const thirdRow = "ZXCVBNM".split("");
+  const firstRow = 'QWERTYUIOP'.split('');
+  const secondRow = 'ASDFGHJKL'.split('');
+  const thirdRow = 'ZXCVBNM'.split('');
 
-  const getKeyColor = (letter: string) =>
-    keyState[letter.toLowerCase()] || "bg-gray-300";
+  const getKeyColor = (letter: string) => keyState[letter?.toLowerCase()] || 'bg-gray-300';
 
   return (
     <div className='p-1'>
+      <PopupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title='Notice' message={modalMessage} />
       {/* First Row */}
       <div className='flex justify-center mb-1'>
         {firstRow.map((letter, index) => (
