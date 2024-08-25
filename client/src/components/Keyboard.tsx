@@ -137,6 +137,10 @@ const Keyboard: React.FC<KeyboardProps> = ({
   );
 
   useEffect(() => {
+    updateKeyColors();
+  }, [board, currentRow, word, updateKeyColors]);
+
+  useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);

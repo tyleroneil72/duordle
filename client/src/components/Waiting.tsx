@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaClipboard } from 'react-icons/fa'; // Import clipboard icon from react-icons
+import { FaClipboard } from 'react-icons/fa';
 
 interface WaitingProps {
   code: string;
