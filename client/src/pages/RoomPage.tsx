@@ -33,7 +33,7 @@ const RoomPage: React.FC = () => {
         setBoard(board);
         setCurrentAttempt(Array(5).fill(''));
       });
-      // This is the problem on mobile the server lags and doesnt get the player_joined event
+
       socket.on('player_joined', () => {
         setConnectionStatus('connected');
       });
@@ -136,13 +136,11 @@ const RoomPage: React.FC = () => {
             </>
           ) : (
             <>
-              <h2 className='text-lg font-bold mb-4 text-black'>Room: {roomCode}</h2>
-
               {!gameOver &&
                 (currentPlayer ? (
-                  <p className='text-black'>It's your turn!</p>
+                  <p className='text-black text-center'>It's your turn!</p>
                 ) : (
-                  <p className='text-black'>Waiting for the other player...</p>
+                  <p className='text-black text-center'>Waiting for the other player...</p>
                 ))}
 
               <GameBoard board={board} word={word} currentRow={currentRow} />
