@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { socket } from '../services/socket';
 import GameBoard from '../components/GameBoard';
 import Keyboard from '../components/Keyboard';
 import Waiting from '../components/Waiting';
 import GameOver from '../components/GameOver';
-import { IoMdMenu } from 'react-icons/io';
 import GameStatusMessage from '../components/GameStatusMessage';
+import { IoMdMenu } from 'react-icons/io';
+import fetchRandomWord from '../utils/fetchRandomWord';
 
 const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -24,6 +25,25 @@ const RoomPage: React.FC = () => {
   const [gameStatus, setGameStatus] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
   const [isGameOverModalOpen, setIsGameOverModalOpen] = useState<boolean>(false);
+  const [playAgainPressed, setPlayAgainPressed] = useState<boolean>(false);
+  const [opponentReady, setOpponentReady] = useState<boolean>(false);
+
+  const startNewGame = useCallback(async () => {
+    setBoard(
+      Array(6)
+        .fill(null)
+        .map(() => Array(5).fill(''))
+    );
+    setCurrentAttempt(Array(5).fill(''));
+    setCurrentRow(0);
+    setGameOver(false);
+    setIsGameOverModalOpen(false);
+    const randomWord = await fetchRandomWord();
+    if (!randomWord) return;
+    socket.emit('start_new_game', roomCode, randomWord);
+    setPlayAgainPressed(false);
+    setOpponentReady(false);
+  }, [roomCode]);
 
   useEffect(() => {
     if (roomCode) {
@@ -64,7 +84,7 @@ const RoomPage: React.FC = () => {
         navigate('/not-found');
       });
 
-      socket.on('update_board', (newBoard: string[][], newCurrentRow: number): void => {
+      socket.on('update_board', (newBoard: string[][], newCurrentRow: number) => {
         setBoard(newBoard);
         setCurrentRow(newCurrentRow);
       });
@@ -73,6 +93,13 @@ const RoomPage: React.FC = () => {
         setGameOver(true);
         setGameStatus(gameStatus);
         setIsGameOverModalOpen(true);
+      });
+
+      socket.on('opponent_ready', () => {
+        setOpponentReady(true);
+        if (playAgainPressed) {
+          startNewGame();
+        }
       });
 
       const handleUnload = (event: BeforeUnloadEvent) => {
@@ -90,10 +117,11 @@ const RoomPage: React.FC = () => {
         socket.off('game_over');
         socket.off('room_full');
         socket.off('room_not_found');
+        socket.off('opponent_ready');
         window.removeEventListener('beforeunload', handleUnload);
       };
     }
-  }, [roomCode, navigate]);
+  }, [roomCode, navigate, playAgainPressed, startNewGame]);
 
   useEffect(() => {
     setBoard((prevBoard) => {
@@ -110,6 +138,14 @@ const RoomPage: React.FC = () => {
 
   const toggleGameOverModal = () => {
     setIsGameOverModalOpen((prev) => !prev);
+  };
+
+  const handlePlayAgain = () => {
+    setPlayAgainPressed(true);
+    socket.emit('player_ready_for_rematch', roomCode);
+    if (opponentReady) {
+      startNewGame();
+    }
   };
 
   if (!roomCode) {
@@ -157,6 +193,8 @@ const RoomPage: React.FC = () => {
                   word={word}
                   onClose={() => setIsGameOverModalOpen(false)}
                   isOpen={isGameOverModalOpen}
+                  onPlayAgain={handlePlayAgain}
+                  playAgainPressed={playAgainPressed}
                 />
               )}
             </>

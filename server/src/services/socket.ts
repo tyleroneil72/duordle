@@ -125,6 +125,39 @@ export const initSocketServer = (httpServer: HttpServer) => {
       }
     });
 
+    socket.on('player_ready_for_rematch', async (roomCode: string) => {
+      const room = await Room.findOne({ roomCode });
+      if (!room) return;
+
+      // Notify the other player that the opponent is ready
+      const opponentId = room.members.find((id) => id !== socket.id);
+      if (opponentId) {
+        io.to(opponentId).emit('opponent_ready');
+      }
+    });
+
+    socket.on('start_new_game', async (roomCode: string, word: string) => {
+      try {
+        const room = await Room.findOne({ roomCode });
+        if (room) {
+          room.word = word;
+          room.board = Array(6)
+            .fill(null)
+            .map(() => Array(5).fill(''));
+          room.currentRow = 0;
+          room.currentPlayer = 1;
+          await room.save();
+          io.to(roomCode).emit('update_board', room.board, room.currentRow);
+          io.to(roomCode).emit('update_keyboard');
+          io.to(room.members[0]).emit('your_turn', true);
+          io.to(room.members[1]).emit('your_turn', false);
+          console.log(`Started a new game in room: ${roomCode}`);
+        }
+      } catch (error) {
+        console.error('Error starting new game:', error);
+      }
+    });
+
     socket.on('submit_guess', async ({ roomCode, guess, currentRow }) => {
       try {
         const room = await Room.findOne({ roomCode });
