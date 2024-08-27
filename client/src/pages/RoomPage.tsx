@@ -6,6 +6,7 @@ import Keyboard from '../components/Keyboard';
 import Waiting from '../components/Waiting';
 import GameOver from '../components/GameOver';
 import { IoMdMenu } from 'react-icons/io';
+import GameStatusMessage from '../components/GameStatusMessage';
 
 const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -136,17 +137,7 @@ const RoomPage: React.FC = () => {
             </>
           ) : (
             <>
-              {!gameOver &&
-                (currentPlayer ? (
-                  <p className='text-black text-center font-bold text-xl bg-green-100 p-2 rounded-lg shadow-md mb-2'>
-                    It's your turn!
-                  </p>
-                ) : (
-                  <p className='text-black text-center font-bold text-xl bg-yellow-100 p-2 rounded-lg shadow-md mb-2'>
-                    Waiting for the other player...
-                  </p>
-                ))}
-
+              <GameStatusMessage gameOver={gameOver} currentPlayer={currentPlayer} gameStatus={gameStatus} />
               <GameBoard board={board} word={word} currentRow={currentRow} />
               <Keyboard
                 socket={socket}
