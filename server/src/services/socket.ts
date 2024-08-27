@@ -31,14 +31,9 @@ export const initSocketServer = (httpServer: HttpServer) => {
           members: [socket.id], // initial member
           roomCode,
           word,
-          board: [
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', '']
-          ]
+          board: Array(6)
+            .fill(null)
+            .map(() => Array(5).fill(''))
         });
         socket.join(roomCode);
         socket.data.player = 1;
@@ -88,21 +83,28 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
     socket.on('leave_room', async (roomCode: string) => {
       try {
-        const room = await Room.findOne({ roomCode });
-        if (room) {
-          // Remove the user from the room's members array
-          room.members = room.members.filter((member) => member !== socket.id);
-          await room.save();
+        const room = await Room.findOneAndUpdate(
+          { roomCode },
+          { $pull: { members: socket.id } }, // Remove the user from the members array
+          { new: true, useFindAndModify: false }
+        );
 
-          // Check if the room is now empty and should be deleted
-          await room.checkAndDeleteIfEmpty();
-          socket.leave(roomCode);
-          io.to(roomCode).emit('player_left');
-          console.log(`User ${socket.id} left room: ${roomCode}`);
-        } else {
+        if (!room) {
           console.log(`Room not found: ${roomCode}`);
           socket.emit('room_not_found');
+          return;
         }
+
+        // Check if the room is now empty and should be deleted
+        if (room.members.length === 0) {
+          await Room.deleteOne({ roomCode });
+          console.log(`Room ${roomCode} deleted because it became empty.`);
+        } else {
+          io.to(roomCode).emit('player_left');
+        }
+
+        socket.leave(roomCode);
+        console.log(`User ${socket.id} left room: ${roomCode}`);
       } catch (error) {
         console.error('Error leaving room:', error);
         socket.emit('error_leaving_room');
@@ -122,6 +124,57 @@ export const initSocketServer = (httpServer: HttpServer) => {
         }
       } catch (error) {
         console.error('Error disconnecting:', error);
+      }
+    });
+
+    socket.on('player_ready_for_rematch', async (roomCode: string) => {
+      const room = await Room.findOne({ roomCode });
+      if (!room) return;
+
+      // Notify the other player that the opponent is ready
+      const opponentId = room.members.find((id) => id !== socket.id);
+      if (opponentId) {
+        io.to(opponentId).emit('opponent_ready');
+      }
+    });
+
+    socket.on('start_new_game', async (roomCode) => {
+      try {
+        const room = await Room.findOne({ roomCode });
+        if (!room) {
+          console.log(`Room not found: ${roomCode}`);
+          return;
+        }
+
+        const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
+        const randomWord = randomWordDoc[0].word;
+        const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
+
+        const updatedRoom = await Room.findByIdAndUpdate(
+          room._id,
+          {
+            word: randomWord,
+            board: Array(6)
+              .fill(null)
+              .map(() => Array(5).fill('')),
+            currentRow: 0,
+            currentPlayer: nextStartingPlayer,
+            lastStartingPlayer: nextStartingPlayer
+          },
+          { new: true, useFindAndModify: false }
+        );
+
+        if (updatedRoom) {
+          const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
+          const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
+          io.to(roomCode).emit('new_game_started', updatedRoom.word);
+          io.to(roomCode).emit('update_keyboard');
+          io.to(room.members[currentPlayerIndex]).emit('your_turn', true);
+          io.to(room.members[nextPlayerIndex]).emit('your_turn', false);
+          console.log(`Started a new game in room: ${roomCode}`);
+        }
+      } catch (error) {
+        console.error('Error starting new game:', error);
       }
     });
 

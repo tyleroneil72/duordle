@@ -6,9 +6,11 @@ interface GameOverProps {
   word: string;
   onClose: () => void;
   isOpen: boolean;
+  onPlayAgain: () => void;
+  playAgainPressed: boolean;
 }
 
-const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen }) => {
+const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, onPlayAgain, playAgainPressed }) => {
   const [gameState, setGameState] = useState<string>('');
 
   useEffect(() => {
@@ -64,6 +66,15 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen }
             onClick={onClose}
           >
             Close
+          </button>
+        </div>
+        <div className='mt-4 flex justify-center'>
+          <button
+            className={`bg-indigo-800 ${playAgainPressed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-900'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            onClick={onPlayAgain}
+            disabled={playAgainPressed}
+          >
+            {playAgainPressed ? 'Waiting for opponent...' : 'Play Again'}
           </button>
         </div>
       </div>
