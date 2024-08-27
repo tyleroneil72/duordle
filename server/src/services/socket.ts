@@ -83,21 +83,28 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
     socket.on('leave_room', async (roomCode: string) => {
       try {
-        const room = await Room.findOne({ roomCode });
-        if (room) {
-          // Remove the user from the room's members array
-          room.members = room.members.filter((member) => member !== socket.id);
-          await room.save();
+        const room = await Room.findOneAndUpdate(
+          { roomCode },
+          { $pull: { members: socket.id } }, // Remove the user from the members array
+          { new: true, useFindAndModify: false }
+        );
 
-          // Check if the room is now empty and should be deleted
-          await room.checkAndDeleteIfEmpty();
-          socket.leave(roomCode);
-          io.to(roomCode).emit('player_left');
-          console.log(`User ${socket.id} left room: ${roomCode}`);
-        } else {
+        if (!room) {
           console.log(`Room not found: ${roomCode}`);
           socket.emit('room_not_found');
+          return;
         }
+
+        // Check if the room is now empty and should be deleted
+        if (room.members.length === 0) {
+          await Room.deleteOne({ roomCode });
+          console.log(`Room ${roomCode} deleted because it became empty.`);
+        } else {
+          io.to(roomCode).emit('player_left');
+        }
+
+        socket.leave(roomCode);
+        console.log(`User ${socket.id} left room: ${roomCode}`);
       } catch (error) {
         console.error('Error leaving room:', error);
         socket.emit('error_leaving_room');
