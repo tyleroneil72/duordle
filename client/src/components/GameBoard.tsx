@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 interface GameBoardProps {
   board: string[][];
   word: string;
@@ -51,21 +53,45 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
     return 'bg-white'; // Default for current row or other
   };
 
+  // Animation variants for the flip effect
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.2 // Stagger each child element
+      }
+    }
+  };
+
+  const flipVariants = {
+    hidden: { rotateX: 0, opacity: 1 }, // Regular state
+    visible: { rotateX: 360, opacity: 1, transition: { duration: 1 } } // Flip animation
+  };
+
   return (
-    <div className='grid grid-cols-5 gap-2 w-full max-w-xs mx-auto'>
-      {board.slice(0, 6).map((row, rowIndex) =>
-        row.map((letter, cellIndex) => (
-          <div
-            key={`${rowIndex}-${cellIndex}`}
-            className={`relative aspect-square w-full border-2 border-gray-300 rounded ${getCellColor(
-              rowIndex,
-              cellIndex
-            )} flex items-center justify-center text-xl font-bold text-gray-800 shadow`}
-          >
-            <span className='absolute inset-0 flex items-center justify-center text-lg'>{letter.toUpperCase()}</span>
-          </div>
-        ))
-      )}
+    <div className='w-full max-w-xs mx-auto'>
+      {board.slice(0, 6).map((row, rowIndex) => (
+        <motion.div
+          key={rowIndex}
+          className='grid grid-cols-5 gap-x-0.5 gap-y-6'
+          variants={containerVariants}
+          initial='hidden'
+          animate={rowIndex < currentRow ? 'visible' : 'hidden'}
+        >
+          {row.map((letter, cellIndex) => (
+            <motion.div
+              key={`${rowIndex}-${cellIndex}`}
+              className={`relative aspect-square w-full border-2 border-gray-300 rounded ${getCellColor(
+                rowIndex,
+                cellIndex
+              )} flex items-center justify-center text-xl font-bold text-gray-800 shadow`}
+              variants={flipVariants}
+            >
+              <span className='absolute inset-0 flex items-center justify-center text-lg'>{letter.toUpperCase()}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      ))}
     </div>
   );
 };

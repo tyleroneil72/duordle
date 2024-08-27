@@ -136,13 +136,15 @@ const RoomPage: React.FC = () => {
             </>
           ) : (
             <>
-              <h2 className='text-lg font-bold mb-4 text-black'>Room: {roomCode}</h2>
-
               {!gameOver &&
                 (currentPlayer ? (
-                  <p className='text-black'>It's your turn!</p>
+                  <p className='text-black text-center font-bold text-xl bg-green-100 p-2 rounded-lg shadow-md mb-2'>
+                    It's your turn!
+                  </p>
                 ) : (
-                  <p className='text-black'>Waiting for the other player...</p>
+                  <p className='text-black text-center font-bold text-xl bg-yellow-100 p-2 rounded-lg shadow-md mb-2'>
+                    Waiting for the other player...
+                  </p>
                 ))}
 
               <GameBoard board={board} word={word} currentRow={currentRow} />
