@@ -7,6 +7,7 @@ import PopupModal from '../components/PopupModal';
 import RoomCodeModal from '../components/RoomCodeModal';
 import fetchRandomWord from '../utils/fetchRandomWord';
 import generateUniqueRoomCode from '../utils/generateUniqueRoomCode';
+import logo from '../assets/images/logo.png';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -112,7 +113,7 @@ const HomePage: React.FC = () => {
         title='Room is Full'
         message='The room you are trying to join is already full. Please try a different room.'
       />
-      <h1 className='text-6xl font-extrabold text-indigo-50 mb-6 sm:mb-10 lg:mb-12 text-center'>Duordle</h1>
+      <img src={logo} height='200px' width='300px' alt='Duordle Image' title='Duordle Image' loading='lazy' />
       <div className='w-11/12 max-w-sm sm:max-w-md lg:max-w-lg bg-indigo-100 shadow-lg rounded-lg p-4 sm:p-6 mt-8 sm:mt-12'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
