@@ -7,7 +7,6 @@ import Waiting from '../components/Waiting';
 import GameOver from '../components/GameOver';
 import GameStatusMessage from '../components/GameStatusMessage';
 import { IoMdMenu } from 'react-icons/io';
-import fetchRandomWord from '../utils/fetchRandomWord';
 
 const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -28,7 +27,7 @@ const RoomPage: React.FC = () => {
   const [playAgainPressed, setPlayAgainPressed] = useState<boolean>(false);
   const [opponentReady, setOpponentReady] = useState<boolean>(false);
 
-  const startNewGame = useCallback(async () => {
+  const startNewGame = useCallback((newWord: string) => {
     setBoard(
       Array(6)
         .fill(null)
@@ -38,12 +37,10 @@ const RoomPage: React.FC = () => {
     setCurrentRow(0);
     setGameOver(false);
     setIsGameOverModalOpen(false);
-    const randomWord = await fetchRandomWord();
-    if (!randomWord) return;
-    socket.emit('start_new_game', roomCode, randomWord);
+    setWord(newWord);
     setPlayAgainPressed(false);
     setOpponentReady(false);
-  }, [roomCode]);
+  }, []);
 
   useEffect(() => {
     if (roomCode) {
@@ -98,8 +95,12 @@ const RoomPage: React.FC = () => {
       socket.on('opponent_ready', () => {
         setOpponentReady(true);
         if (playAgainPressed) {
-          startNewGame();
+          socket.emit('start_new_game', roomCode);
         }
+      });
+
+      socket.on('new_game_started', (newWord: string) => {
+        startNewGame(newWord);
       });
 
       const handleUnload = (event: BeforeUnloadEvent) => {
@@ -118,6 +119,7 @@ const RoomPage: React.FC = () => {
         socket.off('room_full');
         socket.off('room_not_found');
         socket.off('opponent_ready');
+        socket.off('new_game_started');
         window.removeEventListener('beforeunload', handleUnload);
       };
     }
@@ -144,7 +146,7 @@ const RoomPage: React.FC = () => {
     setPlayAgainPressed(true);
     socket.emit('player_ready_for_rematch', roomCode);
     if (opponentReady) {
-      startNewGame();
+      socket.emit('start_new_game', roomCode); // Emit to start a new game only if both are ready
     }
   };
 
