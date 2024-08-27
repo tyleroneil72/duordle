@@ -122,7 +122,7 @@ const RoomPage: React.FC = () => {
       }`}
     >
       <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
-        <div className='relative bg-indigo-50 shadow-md rounded px-4 py-3 mb-4 w-full max-w-md'>
+        <div className='relative bg-indigo-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
           {roomCode && connectionStatus === 'waiting' ? (
             <>
               <Waiting code={roomCode} />
