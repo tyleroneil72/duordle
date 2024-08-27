@@ -133,25 +133,37 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
     socket.on('start_new_game', async (roomCode) => {
       try {
+        const room = await Room.findOne({ roomCode });
+        if (!room) {
+          console.log(`Room not found: ${roomCode}`);
+          return;
+        }
+
         const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
         const randomWord = randomWordDoc[0].word;
+        const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
 
-        const room = await Room.findOneAndUpdate(
-          { roomCode },
+        const updatedRoom = await Room.findByIdAndUpdate(
+          room._id,
           {
             word: randomWord,
             board: Array(6)
               .fill(null)
               .map(() => Array(5).fill('')),
             currentRow: 0,
-            currentPlayer: 1
+            currentPlayer: nextStartingPlayer,
+            lastStartingPlayer: nextStartingPlayer
           },
           { new: true, useFindAndModify: false }
         );
 
-        if (room) {
-          io.to(roomCode).emit('new_game_started', room.word);
+        if (updatedRoom) {
+          const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
+          const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
+          io.to(roomCode).emit('new_game_started', updatedRoom.word);
           io.to(roomCode).emit('update_keyboard');
+          io.to(room.members[currentPlayerIndex]).emit('your_turn', true);
+          io.to(room.members[nextPlayerIndex]).emit('your_turn', false);
           console.log(`Started a new game in room: ${roomCode}`);
         }
       } catch (error) {

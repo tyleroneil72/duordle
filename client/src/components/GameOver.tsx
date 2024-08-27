@@ -70,7 +70,7 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
         </div>
         <div className='mt-4 flex justify-center'>
           <button
-            className={`bg-green-500 ${playAgainPressed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            className={`bg-indigo-800 ${playAgainPressed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-900'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
             onClick={onPlayAgain}
             disabled={playAgainPressed}
           >
