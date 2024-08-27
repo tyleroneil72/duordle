@@ -31,14 +31,9 @@ export const initSocketServer = (httpServer: HttpServer) => {
           members: [socket.id], // initial member
           roomCode,
           word,
-          board: [
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', ''],
-            ['', '', '', '', '']
-          ]
+          board: Array(6)
+            .fill(null)
+            .map(() => Array(5).fill(''))
         });
         socket.join(roomCode);
         socket.data.player = 1;
