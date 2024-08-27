@@ -103,12 +103,6 @@ const RoomPage: React.FC = () => {
         startNewGame(newWord);
       });
 
-      const handleUnload = (event: BeforeUnloadEvent) => {
-        event.preventDefault();
-        socket.emit('leave_room', roomCode);
-      };
-      window.addEventListener('beforeunload', handleUnload);
-
       return () => {
         socket.off('room_joined');
         socket.off('player_joined');
@@ -120,7 +114,6 @@ const RoomPage: React.FC = () => {
         socket.off('room_not_found');
         socket.off('opponent_ready');
         socket.off('new_game_started');
-        window.removeEventListener('beforeunload', handleUnload);
       };
     }
   }, [roomCode, navigate, playAgainPressed, startNewGame]);
