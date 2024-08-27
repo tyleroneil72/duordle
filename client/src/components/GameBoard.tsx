@@ -58,7 +58,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.1 // Stagger each child element
+        staggerChildren: 0.2 // Stagger each child element
       }
     }
   };
