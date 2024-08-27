@@ -100,7 +100,8 @@ export const initSocketServer = (httpServer: HttpServer) => {
           await Room.deleteOne({ roomCode });
           console.log(`Room ${roomCode} deleted because it became empty.`);
         } else {
-          io.to(roomCode).emit('player_left');
+          const remainingPlayerId = room.members[0];
+          io.to(remainingPlayerId).emit('player_left');
         }
 
         socket.leave(roomCode);
@@ -110,7 +111,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
         socket.emit('error_leaving_room');
       }
     });
-    // Disconnect event has VersionError (Fix?)
+
     socket.on('disconnect', async () => {
       try {
         console.log(`User ${socket.id} disconnected.`);
