@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { FaCog } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { socket } from '../services/socket';
 import RoomButtons from '../components/RoomButtons';
 import PopupModal from '../components/PopupModal';
@@ -12,16 +12,8 @@ import logo from '../assets/images/logo.png';
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [isRoomCodeModalOpen, setIsRoomCodeModalOpen] = useState<boolean>(false);
-  const [isNoticeModalOpen, setIsNoticeModalOpen] = useState<boolean>(false);
   const [isRoomNotFoundModalOpen, setIsRoomNotFoundModalOpen] = useState<boolean>(false);
   const [isRoomFullModalOpen, setIsRoomFullModalOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const modalShown = localStorage.getItem('modalShown');
-    if (!modalShown) {
-      setIsNoticeModalOpen(true); // Show the notice modal if it hasn't been shown before
-    }
-  }, []);
 
   const handleCreateRoom = async () => {
     const randomWord = await fetchRandomWord();
@@ -80,11 +72,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const handleNoticeModalClose = () => {
-    setIsNoticeModalOpen(false);
-    localStorage.setItem('modalShown', 'true'); // Set the flag in local storage
-  };
-
   const handleRoomNotFoundModalClose = () => {
     setIsRoomNotFoundModalOpen(false);
   };
@@ -95,12 +82,6 @@ const HomePage: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen bg-indigo-300 py-8 sm:py-12 lg:py-24'>
-      <PopupModal
-        isOpen={isNoticeModalOpen}
-        onClose={handleNoticeModalClose}
-        title='Notice'
-        message='This website is currently under active development. Some features may not work as expected.'
-      />
       <PopupModal
         isOpen={isRoomNotFoundModalOpen}
         onClose={handleRoomNotFoundModalClose}
