@@ -7,7 +7,7 @@ const InfoPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-24 sm:justify-center sm:pt-0 p-4'>
+    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 sm:justify-center p-4'>
       <div className='w-full max-w-4xl bg-indigo-100 shadow-lg rounded-lg p-6'>
         <h1 className='text-3xl font-bold text-indigo-900 mb-4'>Game Info</h1>
         <HowToPlay />
