@@ -39,15 +39,18 @@ app.get('*', (req, res) => {
 
 initSocketServer(httpServer);
 app.use(errorHandler);
+if (process.env.NODE_ENV !== 'test') {
+  (async () => {
+    try {
+      await mongoose.connect(MONGO_URI);
+      httpServer.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    } catch (error) {
+      console.error('Failed to connect to MongoDB:', error);
+      process.exit(1);
+    }
+  })();
+}
 
-(async () => {
-  try {
-    await mongoose.connect(MONGO_URI);
-    httpServer.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    process.exit(1);
-  }
-})();
+export default app;
