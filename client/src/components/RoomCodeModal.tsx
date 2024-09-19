@@ -1,5 +1,5 @@
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 
 interface RoomCodeModalProps {
   isOpen: boolean;
@@ -9,13 +9,21 @@ interface RoomCodeModalProps {
 const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
   const [roomCode, setRoomCode] = useState<string>('');
   const [isJoinDisabled, setIsJoinDisabled] = useState<boolean>(true);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setIsJoinDisabled(roomCode.trim().length !== 4);
   }, [roomCode]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      // Ensure focus happens after the modal transition finishes
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    } else {
       setRoomCode(''); // Clear the input when the modal is closed
     }
   }, [isOpen]);
@@ -70,7 +78,8 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     placeholder='Room Code'
                     className='w-full p-2 border rounded mt-2'
-                    maxLength={4} // Enforce maximum length of 4 characters
+                    maxLength={4}
+                    ref={inputRef} // Assign the ref to the input element
                   />
                 </div>
                 <div className='mt-4 flex justify-end space-x-2'>
