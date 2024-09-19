@@ -39,6 +39,7 @@ app.get('*', (req, res) => {
 
 initSocketServer(httpServer);
 app.use(errorHandler);
+
 if (process.env.NODE_ENV !== 'test') {
   (async () => {
     try {

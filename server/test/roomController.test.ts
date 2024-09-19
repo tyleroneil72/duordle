@@ -22,7 +22,6 @@ describe('Room Controller Tests', () => {
 
   it('should get a room by id', async () => {
     const newRoom = await request(app).post('/api/room').set('x-api-key', process.env.API_KEY!).send(mockRoom);
-
     const response = await request(app).get(`/api/room/${newRoom.body.room._id}`).set('x-api-key', process.env.API_KEY);
 
     expect(response.status).toBe(200);
