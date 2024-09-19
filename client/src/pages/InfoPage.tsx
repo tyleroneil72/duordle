@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import AboutMe from '../components/AboutMe';
 import HowToPlay from '../components/HowToPlay';
 

@@ -1,13 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-import { FaCog } from 'react-icons/fa';
 import { useState } from 'react';
-import { socket } from '../services/socket';
-import RoomButtons from '../components/RoomButtons';
+import { FaCog } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import logo from '../assets/images/logo.png';
 import PopupModal from '../components/PopupModal';
+import RoomButtons from '../components/RoomButtons';
 import RoomCodeModal from '../components/RoomCodeModal';
+import { socket } from '../services/socket';
 import fetchRandomWord from '../utils/fetchRandomWord';
 import generateUniqueRoomCode from '../utils/generateUniqueRoomCode';
-import logo from '../assets/images/logo.png';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
