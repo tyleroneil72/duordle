@@ -1,14 +1,14 @@
+import cors from 'cors';
+import { config as dotenvConfig } from 'dotenv';
 import express, { Express } from 'express';
 import { createServer } from 'http';
-import { config as dotenvConfig } from 'dotenv';
 import mongoose from 'mongoose';
-import { initSocketServer } from './services/socket';
-import roomRouter from './routes/roomRouter';
-import wordRouter from './routes/wordRouter';
+import path from 'path';
 import { errorHandler } from './middleware/errorHandler';
 import limiter from './middleware/rateLimitMiddleware';
-import cors from 'cors';
-import path from 'path';
+import roomRouter from './routes/roomRouter';
+import wordRouter from './routes/wordRouter';
+import { initSocketServer } from './services/socket';
 
 dotenvConfig({ path: path.join(__dirname, '../../.env') });
 

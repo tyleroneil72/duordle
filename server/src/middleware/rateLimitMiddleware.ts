@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute

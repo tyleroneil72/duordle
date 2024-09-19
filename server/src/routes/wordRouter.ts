@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { apiKeyMiddleware } from '../middleware/apiKeyMiddleware';
 const router = Router();
 
-import { getAllWords, createWord, getWord, deleteWord, updateWord, getRandomWord } from '../controllers/wordController';
+import { createWord, deleteWord, getAllWords, getRandomWord, getWord, updateWord } from '../controllers/wordController';
 
 router.get('/', apiKeyMiddleware, getAllWords);
 router.post('/', apiKeyMiddleware, createWord);
