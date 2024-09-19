@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { FaGithub, FaLinkedin, FaUserCircle, FaHome } from 'react-icons/fa';
 
-const SettingsPage: React.FC = () => {
+const InfoPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-24 sm:justify-center sm:pt-0 p-4'>
       <div className='w-full max-w-4xl bg-indigo-100 shadow-lg rounded-lg p-6'>
-        <h1 className='text-3xl font-bold text-indigo-900 mb-4'>Settings</h1>
+        <h1 className='text-3xl font-bold text-indigo-900 mb-4'>Game Info</h1>
 
         <div className='mt-8'>
           <h2 className='text-xl font-semibold text-indigo-900'>About the Creator</h2>
@@ -59,4 +59,4 @@ const SettingsPage: React.FC = () => {
   );
 };
 
-export default SettingsPage;
+export default InfoPage;

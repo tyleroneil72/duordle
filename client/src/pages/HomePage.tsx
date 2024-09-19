@@ -99,9 +99,9 @@ const HomePage: React.FC = () => {
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
       <button
-        onClick={() => navigate('/settings')}
+        onClick={() => navigate('/info')}
         className='fixed bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
-        title='Settings'
+        title='Info'
       >
         <FaCog size={24} />
       </button>
