@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { socket } from '../services/socket';
+import { useCallback, useEffect, useState } from 'react';
+import { IoMdMenu } from 'react-icons/io';
+import { useNavigate, useParams } from 'react-router-dom';
 import GameBoard from '../components/GameBoard';
-import Keyboard from '../components/Keyboard';
-import Waiting from '../components/Waiting';
 import GameOver from '../components/GameOver';
 import GameStatusMessage from '../components/GameStatusMessage';
-import { IoMdMenu } from 'react-icons/io';
+import Keyboard from '../components/Keyboard';
+import Waiting from '../components/Waiting';
+import { socket } from '../services/socket';
 
 const RoomPage: React.FC = () => {
   const { roomCode } = useParams<{ roomCode: string }>();
@@ -149,17 +149,17 @@ const RoomPage: React.FC = () => {
 
   return (
     <div
-      className={`flex flex-col h-screen bg-indigo-300 overflow-hidden ${
+      className={`flex h-screen flex-col overflow-hidden bg-indigo-300 ${
         connectionStatus === 'waiting' ? 'pb-48 sm:pb-0' : 'pt-0'
       }`}
     >
-      <div className='flex-grow flex flex-col items-center justify-center p-4 sm:p-6'>
-        <div className='relative bg-indigo-50 shadow-md rounded px-4 py-6 mb-4 w-full max-w-md'>
+      <div className='flex flex-grow flex-col items-center justify-center p-4 sm:p-6'>
+        <div className='relative mb-4 w-full max-w-md rounded bg-indigo-50 px-4 py-6 shadow-md'>
           {roomCode && connectionStatus === 'waiting' ? (
             <>
               <Waiting code={roomCode} />
               <button
-                className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 mx-auto block'
+                className='focus:shadow-outline mx-auto mt-4 block rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
                 onClick={handleLeaveRoom}
                 title='Leave Room'
               >
@@ -197,9 +197,9 @@ const RoomPage: React.FC = () => {
         </div>
       </div>
       {connectionStatus === 'connected' && (
-        <div className='fixed top-2 right-2 flex flex-row-reverse sm:flex-col sm:items-end space-x-2 sm:space-x-0 sm:space-y-2'>
+        <div className='fixed right-2 top-2 flex flex-row-reverse space-x-2 sm:flex-col sm:items-end sm:space-x-0 sm:space-y-2'>
           <button
-            className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            className='focus:shadow-outline rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
             onClick={handleLeaveRoom}
             title='Leave Room'
           >
@@ -207,7 +207,7 @@ const RoomPage: React.FC = () => {
           </button>
           {gameOver && (
             <button
-              className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center justify-center'
+              className='focus:shadow-outline flex items-center justify-center rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
               onClick={toggleGameOverModal}
               title='Toggle Game Over Modal'
             >

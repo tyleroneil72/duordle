@@ -5,17 +5,17 @@ interface RoomButtonsProps {
 
 const RoomButtons: React.FC<RoomButtonsProps> = ({ onCreate, onJoin }) => {
   return (
-    <div className='flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center my-4'>
+    <div className='my-4 flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0'>
       <button
         onClick={onCreate}
-        className='bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline'
+        className='focus:shadow-outline rounded bg-indigo-600 px-6 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
         title='Create a new room'
       >
         Create Room
       </button>
       <button
         onClick={onJoin}
-        className='bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline'
+        className='focus:shadow-outline rounded bg-indigo-600 px-6 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
         title='Join an existing room'
       >
         Join Room

@@ -1,9 +1,9 @@
 import { Response } from 'express';
-import Word from '../models/WordModel';
 import { StatusCodes } from 'http-status-codes';
-import { NotFoundError } from '../errors/customErrors';
-import { asyncWrapper } from '../utils/asyncWrapper';
 import mongoose from 'mongoose';
+import { NotFoundError } from '../errors/customErrors';
+import Word from '../models/WordModel';
+import { asyncWrapper } from '../utils/asyncWrapper';
 
 export const getAllWords = asyncWrapper(async (req, res: Response) => {
   const words = await Word.find();

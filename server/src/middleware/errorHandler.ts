@@ -1,6 +1,6 @@
+import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Request, Response, NextFunction } from 'express';
-import { NotFoundError, BadRequestError, UnauthenticatedError, UnauthorizedError } from '../errors/customErrors';
+import { BadRequestError, NotFoundError, UnauthenticatedError, UnauthorizedError } from '../errors/customErrors';
 
 export const errorHandler = (
   err: Error | NotFoundError | BadRequestError | UnauthenticatedError | UnauthorizedError,

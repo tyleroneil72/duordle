@@ -1,9 +1,9 @@
 import { Response } from 'express';
-import Room from '../models/RoomModel';
 import { StatusCodes } from 'http-status-codes';
-import { NotFoundError } from '../errors/customErrors';
-import { asyncWrapper } from '../utils/asyncWrapper';
 import mongoose from 'mongoose';
+import { NotFoundError } from '../errors/customErrors';
+import Room from '../models/RoomModel';
+import { asyncWrapper } from '../utils/asyncWrapper';
 
 export const getAllRooms = asyncWrapper(async (req, res: Response) => {
   const rooms = await Room.find();

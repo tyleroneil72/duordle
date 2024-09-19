@@ -1,7 +1,7 @@
 const Loading: React.FC = () => {
   return (
-    <div className='fixed inset-0 bg-indigo-300 bg-opacity-50 flex justify-center items-center'>
-      <div className='animate-spin rounded-full h-12 w-12 border-4 border-t-transparent border-indigo-600'></div>
+    <div className='fixed inset-0 flex items-center justify-center bg-indigo-300 bg-opacity-50'>
+      <div className='h-12 w-12 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent'></div>
     </div>
   );
 };

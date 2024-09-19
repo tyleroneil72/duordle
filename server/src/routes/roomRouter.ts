@@ -3,12 +3,12 @@ import { apiKeyMiddleware } from '../middleware/apiKeyMiddleware';
 const router = Router();
 
 import {
-  getAllRooms,
+  checkRoomCodeExists,
   createRoom,
-  getRoom,
   deleteRoom,
-  updateRoom,
-  checkRoomCodeExists
+  getAllRooms,
+  getRoom,
+  updateRoom
 } from '../controllers/roomController';
 
 router.get('/', apiKeyMiddleware, getAllRooms);

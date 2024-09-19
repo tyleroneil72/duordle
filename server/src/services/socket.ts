@@ -1,5 +1,5 @@
 import { Server as HttpServer } from 'http';
-import { Server as SocketIOServer, Socket } from 'socket.io';
+import { Socket, Server as SocketIOServer } from 'socket.io';
 import Room from '../models/RoomModel';
 import Word from '../models/WordModel';
 
