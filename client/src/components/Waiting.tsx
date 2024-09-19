@@ -19,18 +19,18 @@ const Waiting: React.FC<WaitingProps> = ({ code }) => {
   };
 
   return (
-    <div className='border-2 border-indigo-200 rounded-lg shadow-lg p-6 mx-4 my-2 bg-indigo-50'>
-      <div className='text-center text-lg font-medium text-indigo-900 mb-4'>Waiting for player to connect</div>
+    <div className='mx-4 my-2 rounded-lg border-2 border-indigo-200 bg-indigo-50 p-6 shadow-lg'>
+      <div className='mb-4 text-center text-lg font-medium text-indigo-900'>Waiting for player to connect</div>
       <div className='text-center text-indigo-800'>
         Share this room code:
         <button
           onClick={handleCopy}
-          className='ml-2 inline-flex items-center bg-indigo-100 hover:bg-indigo-200 rounded px-3 py-1 font-semibold text-indigo-500 cursor-pointer'
+          className='ml-2 inline-flex cursor-pointer items-center rounded bg-indigo-100 px-3 py-1 font-semibold text-indigo-500 hover:bg-indigo-200'
           title='Click to copy'
         >
           {code} <FaClipboard className='ml-2' />
         </button>
-        {copied && <span className='text-sm text-green-600 ml-2'>Copied!</span>}
+        {copied && <span className='ml-2 text-sm text-green-600'>Copied!</span>}
       </div>
     </div>
   );

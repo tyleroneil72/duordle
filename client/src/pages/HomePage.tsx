@@ -81,7 +81,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-indigo-300 py-8 sm:py-12 lg:py-24'>
+    <div className='flex min-h-screen flex-col items-center justify-center bg-indigo-300 py-8 sm:py-12 lg:py-24'>
       <PopupModal
         isOpen={isRoomNotFoundModalOpen}
         onClose={handleRoomNotFoundModalClose}
@@ -95,12 +95,12 @@ const HomePage: React.FC = () => {
         message='The room you are trying to join is already full. Please try a different room.'
       />
       <img src={logo} height='200px' width='300px' alt='Duordle Image' title='Duordle Image' loading='lazy' />
-      <div className='w-11/12 max-w-sm sm:max-w-md lg:max-w-lg bg-indigo-100 shadow-lg rounded-lg p-4 sm:p-6 mt-8 sm:mt-12'>
+      <div className='mt-8 w-11/12 max-w-sm rounded-lg bg-indigo-100 p-4 shadow-lg sm:mt-12 sm:max-w-md sm:p-6 lg:max-w-lg'>
         <RoomButtons onCreate={handleCreateRoom} onJoin={handleJoinRoom} />
       </div>
       <button
         onClick={() => navigate('/info')}
-        className='fixed bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center'
+        className='fixed bottom-4 right-4 flex items-center justify-center rounded-full bg-indigo-600 p-3 text-white shadow-lg hover:bg-indigo-700'
         title='Info'
       >
         <FaCog size={24} />

@@ -10,7 +10,7 @@ const RoomInput: React.FC<RoomInputProps> = ({ room, setRoom }) => {
       value={room}
       onChange={(e) => setRoom(e.target.value)}
       placeholder='Room Code'
-      className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+      className='focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none'
     />
   );
 };

@@ -77,7 +77,7 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                     value={roomCode}
                     onChange={handleInputChange}
                     placeholder='Room Code'
-                    className='w-full p-2 border rounded mt-2'
+                    className='mt-2 w-full rounded border p-2'
                     maxLength={4}
                     ref={inputRef} // Assign the ref to the input element
                   />
@@ -93,7 +93,7 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                   <button
                     type='button'
                     className={`inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white focus:outline-none ${
-                      isJoinDisabled ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+                      isJoinDisabled ? 'cursor-not-allowed bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
                     }`}
                     onClick={handleJoin}
                     disabled={isJoinDisabled}

@@ -46,23 +46,23 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center'>
-      <div className='bg-white p-4 rounded shadow-lg max-w-md w-full'>
-        <h2 className='text-lg font-bold mb-4 text-center'>Game Over</h2>
-        <div className='text-center text-lg font-bold mb-4'>{win ? 'You won!' : 'You lost!'}</div>
-        <div className='whitespace-pre mb-4 text-center'>{gameState}</div>
-        <div className='text-center mb-4'>
+    <div className='fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50'>
+      <div className='w-full max-w-md rounded bg-white p-4 shadow-lg'>
+        <h2 className='mb-4 text-center text-lg font-bold'>Game Over</h2>
+        <div className='mb-4 text-center text-lg font-bold'>{win ? 'You won!' : 'You lost!'}</div>
+        <div className='mb-4 whitespace-pre text-center'>{gameState}</div>
+        <div className='mb-4 text-center'>
           <strong>Word:</strong> {word}
         </div>
         <div className='flex justify-center space-x-2'>
           <button
-            className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            className='focus:shadow-outline rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
             onClick={copyToClipboard}
           >
             Copy to Clipboard
           </button>
           <button
-            className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+            className='focus:shadow-outline rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700 focus:outline-none'
             onClick={onClose}
           >
             Close
@@ -70,7 +70,7 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
         </div>
         <div className='mt-4 flex justify-center'>
           <button
-            className={`bg-indigo-800 ${playAgainPressed ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-900'} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
+            className={`bg-indigo-800 ${playAgainPressed ? 'cursor-not-allowed opacity-50' : 'hover:bg-indigo-900'} focus:shadow-outline rounded px-4 py-2 font-bold text-white focus:outline-none`}
             onClick={onPlayAgain}
             disabled={playAgainPressed}
           >

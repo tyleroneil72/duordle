@@ -153,13 +153,13 @@ const Keyboard: React.FC<KeyboardProps> = ({
     <div className='p-1'>
       <PopupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title='Notice' message={modalMessage} />
       {/* First Row */}
-      <div className='flex justify-center mb-1'>
+      <div className='mb-1 flex justify-center'>
         {firstRow.map((letter, index) => (
           <button
             key={index}
             className={`${getKeyColor(
               letter
-            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded w-10 h-14 m-0.5`}
+            )} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black hover:bg-opacity-80`}
             onClick={() => handleLetterInput(letter)}
             disabled={currentRow >= board.length}
           >
@@ -168,13 +168,13 @@ const Keyboard: React.FC<KeyboardProps> = ({
         ))}
       </div>
       {/* Second Row */}
-      <div className='flex justify-center mb-1'>
+      <div className='mb-1 flex justify-center'>
         {secondRow.map((letter, index) => (
           <button
             key={index}
             className={`${getKeyColor(
               letter
-            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded w-10 h-14 m-0.5`}
+            )} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black hover:bg-opacity-80`}
             onClick={() => handleLetterInput(letter)}
             disabled={currentRow >= board.length}
           >
@@ -183,9 +183,9 @@ const Keyboard: React.FC<KeyboardProps> = ({
         ))}
       </div>
       {/* Third Row (with Enter and Backspace) */}
-      <div className='flex justify-center mb-1'>
+      <div className='mb-1 flex justify-center'>
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-xs p-2 rounded w-16 h-14 m-0.5'
+          className='m-0.5 h-14 w-16 rounded bg-gray-300 p-2 text-xs font-bold uppercase text-black hover:bg-gray-400'
           onClick={handleEnter}
           disabled={currentRow >= board.length}
         >
@@ -196,7 +196,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
             key={index}
             className={`${getKeyColor(
               letter
-            )} hover:bg-opacity-80 text-black font-bold uppercase text-xl p-2 rounded w-10 h-14 m-0.5`}
+            )} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black hover:bg-opacity-80`}
             onClick={() => handleLetterInput(letter)}
             disabled={currentRow >= board.length}
           >
@@ -204,7 +204,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
           </button>
         ))}
         <button
-          className='bg-gray-300 hover:bg-gray-400 text-black font-bold uppercase text-md p-2 rounded flex items-center justify-center w-16 h-14 m-0.5'
+          className='text-md m-0.5 flex h-14 w-16 items-center justify-center rounded bg-gray-300 p-2 font-bold uppercase text-black hover:bg-gray-400'
           onClick={handleBackspace}
           disabled={currentRow >= board.length}
         >

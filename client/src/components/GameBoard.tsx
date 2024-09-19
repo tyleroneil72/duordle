@@ -69,7 +69,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
   };
 
   return (
-    <div className='w-full max-w-xs mx-auto'>
+    <div className='mx-auto w-full max-w-xs'>
       {board.slice(0, 6).map((row, rowIndex) => (
         <motion.div
           key={rowIndex}
@@ -81,7 +81,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
           {row.map((letter, cellIndex) => (
             <motion.div
               key={`${rowIndex}-${cellIndex}`}
-              className={`relative aspect-square w-full border-2 border-gray-300 rounded ${getCellColor(
+              className={`relative aspect-square w-full rounded border-2 border-gray-300 ${getCellColor(
                 rowIndex,
                 cellIndex
               )} flex items-center justify-center text-xl font-bold text-gray-800 shadow`}

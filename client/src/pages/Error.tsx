@@ -23,13 +23,13 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
   }
 
   return (
-    <div className='flex flex-col items-center justify-start min-h-screen bg-indigo-300 pt-48 sm:justify-center sm:pt-0'>
-      <div className='bg-indigo-50 p-8 rounded-lg shadow-lg text-center max-w-md'>
-        <h1 className='text-3xl font-bold text-red-600 mb-4'>{title}</h1>
-        <p className='text-gray-800 text-lg mb-6'>{message}</p>
+    <div className='flex min-h-screen flex-col items-center justify-start bg-indigo-300 pt-48 sm:justify-center sm:pt-0'>
+      <div className='max-w-md rounded-lg bg-indigo-50 p-8 text-center shadow-lg'>
+        <h1 className='mb-4 text-3xl font-bold text-red-600'>{title}</h1>
+        <p className='mb-6 text-lg text-gray-800'>{message}</p>
         <button
           onClick={() => navigate('/')}
-          className='bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300 ease-in-out focus:outline-none'
+          className='rounded-lg bg-indigo-500 px-6 py-2 font-bold text-white transition-colors duration-300 ease-in-out hover:bg-indigo-700 focus:outline-none'
         >
           Go Home
         </button>
