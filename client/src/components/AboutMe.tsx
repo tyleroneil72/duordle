@@ -2,8 +2,8 @@ import { FaGithub, FaLinkedin, FaUserCircle } from 'react-icons/fa';
 
 const AboutMe = () => {
   return (
-    <div className='mt-8'>
-      <h2 className='text-xl font-semibold text-indigo-900'>About the Creator</h2>
+    <div className='mt-4 bg-indigo-50 p-6 rounded-lg shadow-md'>
+      <h2 className='text-xl font-semibold text-indigo-900'>About The Creator</h2>
       <p className='text-indigo-900 mt-2'>
         Tyler O'Neil - Developer and creator of Duordle. Passionate about building interactive and efficient web
         solutions.
