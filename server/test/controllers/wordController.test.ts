@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
-import app from '../src/index';
-import { mockWord } from './mockData';
-import { connectInMemoryDb, disconnectInMemoryDb } from './mongodb';
+import app from '../../src/index';
+import { mockWord } from '../data/mockData';
+import { connectInMemoryDb, disconnectInMemoryDb } from '../data/mongodb';
 
 describe('Word Controller - Valid Operations', () => {
   let createdWordId: string;
@@ -29,6 +29,13 @@ describe('Word Controller - Valid Operations', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.word).toHaveProperty('word', mockWord.word);
+  });
+
+  it('should get a random word', async () => {
+    const response = await request(app).get('/api/word/random');
+
+    expect(response.status).toBe(200);
+    expect(response.body.word.word).toBe('hello');
   });
 
   it('should update a word to a different word', async () => {

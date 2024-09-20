@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
-import app from '../src/index';
-import { mockRoom } from './mockData';
-import { connectInMemoryDb, disconnectInMemoryDb } from './mongodb';
+import app from '../../src/index';
+import { mockRoom } from '../data/mockData';
+import { connectInMemoryDb, disconnectInMemoryDb } from '../data/mongodb';
 
 describe('Room Controller - Valid Operations', () => {
   let createdRoomId: string;
