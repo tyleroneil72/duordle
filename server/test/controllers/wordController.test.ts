@@ -31,7 +31,7 @@ describe('Word Controller - Valid Operations', () => {
     expect(response.body.word).toHaveProperty('word', mockWord.word);
   });
 
-  it('should get a random word', async () => {
+  it('should get a valid random word', async () => {
     const response = await request(app).get('/api/word/random');
 
     expect(response.status).toBe(200);
