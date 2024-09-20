@@ -10,7 +10,7 @@ import roomRouter from './routes/roomRouter';
 import wordRouter from './routes/wordRouter';
 import { initSocketServer } from './services/socket';
 
-dotenvConfig({ path: path.join(__dirname, '../../.env') });
+dotenvConfig({ path: path.join(__dirname, '../../../.env') });
 
 const app: Express = express();
 const httpServer = createServer(app);
@@ -31,10 +31,10 @@ app.use('/api/word', limiter);
 app.use('/api/room', roomRouter);
 app.use('/api/word', wordRouter);
 
-app.use(express.static(path.join(__dirname, '../../client/dist')));
+app.use(express.static(path.join(__dirname, '../../../client/dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../../client/dist', 'index.html'));
 });
 
 initSocketServer(httpServer);

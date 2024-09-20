@@ -4,7 +4,7 @@
   "description": "Duordle Server",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && rm -rf dist/test",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts --exec ts-node",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
