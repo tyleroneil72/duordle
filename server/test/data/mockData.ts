@@ -15,3 +15,5 @@ export const mockWord = {
   difficulty: '1',
   length: 5
 };
+
+export const mockInvalidApiKey = 'INVALID_API_KEY';
