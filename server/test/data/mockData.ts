@@ -1,4 +1,7 @@
-export const mockRoom = {
+import { Room } from '../../src/types/Room';
+import { Word } from '../../src/types/Word';
+
+export const mockRoom: Room = {
   members: ['player1', 'player2'],
   roomCode: 'ABCD',
   word: 'hello',
@@ -10,10 +13,12 @@ export const mockRoom = {
   lastStartingPlayer: 1
 };
 
-export const mockWord = {
+export const mockWord: Word = {
   word: 'hello',
   difficulty: '1',
   length: 5
 };
 
-export const mockInvalidApiKey = 'INVALID_API_KEY';
+export const mockInvalidApiKey: string = 'INVALID_API_KEY';
+
+export const maxTests: number = 10;
