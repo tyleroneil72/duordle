@@ -10,7 +10,11 @@ import roomRouter from './routes/roomRouter';
 import wordRouter from './routes/wordRouter';
 import { initSocketServer } from './services/socket';
 
-dotenvConfig({ path: path.join(__dirname, '../../../.env') });
+if (process.env.NODE_ENV !== 'test') {
+  dotenvConfig({ path: path.join(__dirname, '../../../.env') });
+} else {
+  dotenvConfig({ path: path.join(__dirname, '../../.env') });
+}
 
 const app: Express = express();
 const httpServer = createServer(app);
