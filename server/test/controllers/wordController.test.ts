@@ -35,7 +35,7 @@ describe('Word Controller - Valid Operations', () => {
     const response = await request(app).get('/api/word/random');
 
     expect(response.status).toBe(200);
-    expect(response.body.word.word).toBe('hello');
+    expect(response.body.word).toHaveProperty('word', mockWord.word);
   });
 
   it('should update a word to a different word', async () => {
