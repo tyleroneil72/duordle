@@ -13,6 +13,17 @@ export const mockRoom: Room = {
   lastStartingPlayer: 1
 };
 
+export const mockInvalidRoom = {
+  members: ['player1', 'player2'],
+  roomCode: 'ABCD',
+  board: Array(6)
+    .fill(null)
+    .map(() => Array(5).fill('')),
+  currentRow: 0,
+  currentPlayer: 1,
+  lastStartingPlayer: 1
+};
+
 export const mockWord: Word = {
   word: 'hello',
   difficulty: '1',
