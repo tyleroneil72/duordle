@@ -9,7 +9,7 @@
     "dev": "nodemon src/index.ts --exec ts-node",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "lint:prettier": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
-    "test": "jest"
+    "test": "jest --silent"
   },
   "author": "Tyler O'Neil",
   "license": "ISC",
