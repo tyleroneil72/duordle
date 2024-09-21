@@ -30,6 +30,11 @@ export const mockWord: Word = {
   length: 5
 };
 
+export const mockInvalidWord = {
+  word: 'hello',
+  length: 5
+};
+
 export const mockInvalidApiKey: string = 'INVALID_API_KEY';
 
 export const maxTests: number = 10;
