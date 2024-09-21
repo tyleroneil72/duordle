@@ -4,12 +4,13 @@ import Client, { Socket } from 'socket.io-client';
 import request from 'supertest';
 import app from '../../src';
 import { initSocketServer } from '../../src/services/socket';
-import { mockIncorrectWord, mockRoom, mockWord } from '../data/mockData';
+import { mockIncorrectWord, mockInvalidWordGuess, mockRoom, mockWord } from '../data/mockData';
 import { connectInMemoryDb, disconnectInMemoryDb } from '../data/mongodb';
 
 let io: SocketIOServer, clientSocketOne: Socket, clientSocketTwo: Socket;
+jest.setTimeout(10000);
 
-describe('Socket.io Server - Valid Operations', () => {
+describe('Socket.io Server - Test Cases', () => {
   let httpServer: Server;
 
   beforeAll(async () => {
@@ -47,6 +48,15 @@ describe('Socket.io Server - Valid Operations', () => {
     });
   });
 
+  it('should not create a room with an existing room code', (done) => {
+    clientSocketTwo.emit('create_room', mockRoom.roomCode, mockWord.word);
+
+    clientSocketTwo.on('room_already_exists', () => {
+      expect('room_already_exists').toBe('room_already_exists');
+      done();
+    });
+  });
+
   it('should join a room', (done) => {
     clientSocketTwo.emit('join_room', mockRoom.roomCode);
 
@@ -74,11 +84,35 @@ describe('Socket.io Server - Valid Operations', () => {
     });
   });
 
+  it('should guess an invalid word', (done) => {
+    clientSocketTwo.emit('submit_guess', {
+      roomCode: mockRoom.roomCode,
+      guess: mockInvalidWordGuess.word,
+      currentRow: 1
+    });
+    clientSocketTwo.on('invalid_word', () => {
+      expect('invalid_word').toBe('invalid_word');
+      done();
+    });
+  });
+
+  it('should not guess a word when it is not your turn', (done) => {
+    clientSocketOne.emit('submit_guess', {
+      roomCode: mockRoom.roomCode,
+      guess: mockWord.word,
+      currentRow: 1
+    });
+    clientSocketOne.on('not_your_turn', () => {
+      expect('not_your_turn').toBe('not_your_turn');
+      done();
+    });
+  });
+
   it('should guess the correct word and win', (done) => {
     clientSocketTwo.emit('submit_guess', {
       roomCode: mockRoom.roomCode,
       guess: mockWord.word,
-      currentRow: 0
+      currentRow: 1
     });
     clientSocketOne.on('game_over', (gameWon: Boolean) => {
       expect(gameWon).toBe(true);
@@ -106,36 +140,9 @@ describe('Socket.io Server - Valid Operations', () => {
       if (room && clientSocketOne.id) {
         const socketInRoom = room.has(clientSocketOne.id);
         expect(socketInRoom).toBe(false);
+        clientSocketTwo.emit('leave_room', mockRoom.roomCode);
         done();
       }
     });
   });
 });
-
-// describe('Socket.io Server - Invalid Operations', () => {
-//   let httpServer: Server;
-
-//   beforeAll(async () => {
-//     httpServer = createServer();
-//     await connectInMemoryDb();
-//     io = initSocketServer(httpServer);
-//     await request(app).post('/api/word').set('x-api-key', process.env.API_KEY!).send(mockWord);
-//     await request(app).post('/api/word').set('x-api-key', process.env.API_KEY!).send(mockIncorrectWord);
-
-//     await new Promise<void>((resolve) => {
-//       httpServer.listen(process.env.PORT || 3000, () => {
-//         clientSocketOne = Client(process.env.CLIENT_URL || 'http://localhost:3000');
-//         clientSocketTwo = Client(process.env.CLIENT_URL || 'http://localhost:3000');
-//         resolve();
-//       });
-//     });
-//   });
-
-//   afterAll(async () => {
-//     clientSocketOne.close();
-//     clientSocketTwo.close();
-//     await disconnectInMemoryDb();
-//     io.close();
-//     httpServer.close();
-//   });
-// });

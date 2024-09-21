@@ -13,6 +13,18 @@ export const mockRoom: Room = {
   lastStartingPlayer: 1
 };
 
+export const mockRoomTwo: Room = {
+  members: ['player1', 'player2'],
+  roomCode: 'EFGH',
+  word: 'world',
+  board: Array(6)
+    .fill(null)
+    .map(() => Array(5).fill('')),
+  currentRow: 0,
+  currentPlayer: 1,
+  lastStartingPlayer: 1
+};
+
 export const mockInvalidRoom = {
   members: ['player1', 'player2'],
   roomCode: 'ABCD',
@@ -39,6 +51,12 @@ export const mockIncorrectWord: Word = {
 export const mockInvalidWord = {
   word: 'hello',
   length: 5
+};
+
+export const mockInvalidWordGuess = {
+  word: 'NOT_A_WORD',
+  difficulty: '1',
+  length: 10
 };
 
 export const mockInvalidApiKey: string = 'INVALID_API_KEY';
