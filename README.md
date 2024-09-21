@@ -10,11 +10,12 @@
 ![MongoDb](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![eslint](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
+![Jest](https://img.shields.io/badge/Jest-323330?style=for-the-badge&logo=Jest&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-404D59?style=for-the-badge)
 
 ## Description
 
-Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. Leveraging the MERN stack (MongoDB, Express.js, React, and Node.js), Typescript, Tailwind CSS, Socket.io, and Render for hosting. Check out the live version at [duordle.net](https://duordle.net)
+Duordle is an online game inspired by Wordle, designed to be a cooperative word-guessing game. The project utilizes the MERN stack (MongoDB, Express.js, React, and Node.js), along with TypeScript, Tailwind CSS, Socket.io, and is hosted on Render. Prettier and ESLint were used for code formatting and linting, while Jest was employed for unit testing. Check out the live version at [duordle.net](https://duordle.net)
 
 ## High Level Architecture
 

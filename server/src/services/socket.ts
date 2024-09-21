@@ -1,4 +1,5 @@
 import { Server as HttpServer } from 'http';
+import mongoose from 'mongoose';
 import { Socket, Server as SocketIOServer } from 'socket.io';
 import Room from '../models/RoomModel';
 import Word from '../models/WordModel';
@@ -114,6 +115,10 @@ export const initSocketServer = (httpServer: HttpServer) => {
 
     socket.on('disconnect', async () => {
       try {
+        if (mongoose.connection.readyState !== 1) {
+          console.log('MongoDB is already disconnected, skipping DB operations.');
+          return;
+        }
         console.log(`User ${socket.id} disconnected.`);
         // Try to remove the user from all rooms they were part of
         const rooms = await Room.find({ members: socket.id });
@@ -231,4 +236,5 @@ export const initSocketServer = (httpServer: HttpServer) => {
       }
     });
   });
+  return io;
 };
