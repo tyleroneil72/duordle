@@ -42,7 +42,7 @@ export const mockWord: Word = {
   length: 5
 };
 
-export const mockIncorrectWord: Word = {
+export const mockWordTwo: Word = {
   word: 'world',
   difficulty: '1',
   length: 5
