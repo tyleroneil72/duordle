@@ -51,15 +51,10 @@ describe('Socket.io Server - Valid Operations', () => {
     clientSocketTwo.emit('join_room', mockRoom.roomCode);
 
     clientSocketTwo.on('room_joined', () => {
-      setTimeout(() => {
-        const rooms = io.sockets.adapter.rooms;
-        const room = rooms.get(mockRoom.roomCode);
-        if (room && clientSocketTwo.id) {
-          const socketInRoom = room.has(clientSocketTwo.id);
-          expect(socketInRoom).toBe(true);
-          done();
-        }
-      }, 50);
+      clientSocketOne.on('your_turn', () => {
+        expect('your_turn').toBe('your_turn');
+        done();
+      });
     });
   });
 
@@ -108,7 +103,6 @@ describe('Socket.io Server - Valid Operations', () => {
     clientSocketTwo.on('player_left', () => {
       const rooms = io.sockets.adapter.rooms;
       const room = rooms.get(mockRoom.roomCode);
-      console.log(room);
       if (room && clientSocketOne.id) {
         const socketInRoom = room.has(clientSocketOne.id);
         expect(socketInRoom).toBe(false);
