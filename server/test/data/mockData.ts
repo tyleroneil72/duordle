@@ -30,6 +30,12 @@ export const mockWord: Word = {
   length: 5
 };
 
+export const mockIncorrectWord: Word = {
+  word: 'world',
+  difficulty: '1',
+  length: 5
+};
+
 export const mockInvalidWord = {
   word: 'hello',
   length: 5
