@@ -1,5 +1,5 @@
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 
 interface PopupModalProps {
   isOpen: boolean;
@@ -9,6 +9,18 @@ interface PopupModalProps {
 }
 
 const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, title, message }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        buttonRef.current?.focus();
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={onClose}>
@@ -44,6 +56,7 @@ const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, title, message
                 </div>
                 <div className='mt-4'>
                   <button
+                    ref={buttonRef}
                     type='button'
                     className='inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none'
                     onClick={onClose}
