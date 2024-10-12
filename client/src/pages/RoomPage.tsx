@@ -25,7 +25,6 @@ const RoomPage: React.FC = () => {
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
   const [isGameOverModalOpen, setIsGameOverModalOpen] = useState<boolean>(false);
   const [playAgainPressed, setPlayAgainPressed] = useState<boolean>(false);
-  const [opponentReady, setOpponentReady] = useState<boolean>(false);
 
   const startNewGame = useCallback((newWord: string) => {
     setBoard(
@@ -39,7 +38,6 @@ const RoomPage: React.FC = () => {
     setIsGameOverModalOpen(false);
     setWord(newWord);
     setPlayAgainPressed(false);
-    setOpponentReady(false);
   }, []);
 
   useEffect(() => {
@@ -92,13 +90,6 @@ const RoomPage: React.FC = () => {
         setIsGameOverModalOpen(true);
       });
 
-      socket.on('opponent_ready', () => {
-        setOpponentReady(true);
-        if (playAgainPressed) {
-          socket.emit('start_new_game', roomCode);
-        }
-      });
-
       socket.on('new_game_started', (newWord: string) => {
         startNewGame(newWord);
       });
@@ -138,9 +129,6 @@ const RoomPage: React.FC = () => {
   const handlePlayAgain = () => {
     setPlayAgainPressed(true);
     socket.emit('player_ready_for_rematch', roomCode);
-    if (opponentReady) {
-      socket.emit('start_new_game', roomCode); // Emit to start a new game only if both are ready
-    }
   };
 
   if (!roomCode) {

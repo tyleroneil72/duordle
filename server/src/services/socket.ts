@@ -134,17 +134,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
     });
 
     socket.on('player_ready_for_rematch', async (roomCode: string) => {
-      const room = await Room.findOne({ roomCode });
-      if (!room) return;
-
-      // Notify the other player that the opponent is ready
-      const opponentId = room.members.find((id) => id !== socket.id);
-      if (opponentId) {
-        io.to(opponentId).emit('opponent_ready');
-      }
-    });
-
-    socket.on('start_new_game', async (roomCode) => {
       try {
         const room = await Room.findOne({ roomCode });
         if (!room) {
@@ -152,35 +141,53 @@ export const initSocketServer = (httpServer: HttpServer) => {
           return;
         }
 
-        const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
-        const randomWord = randomWordDoc[0].word;
-        const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
+        // Determine which player is ready based on their socket id
+        if (room.members[0] === socket.id) {
+          room.playerOneReady = true;
+        } else if (room.members[1] === socket.id) {
+          room.playerTwoReady = true;
+        }
 
-        const updatedRoom = await Room.findByIdAndUpdate(
-          room._id,
-          {
-            word: randomWord,
-            board: Array(6)
-              .fill(null)
-              .map(() => Array(5).fill('')),
-            currentRow: 0,
-            currentPlayer: nextStartingPlayer,
-            lastStartingPlayer: nextStartingPlayer
-          },
-          { new: true, useFindAndModify: false }
-        );
+        await room.save();
 
-        if (updatedRoom) {
-          const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
-          const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
-          io.to(roomCode).emit('new_game_started', updatedRoom.word);
-          io.to(roomCode).emit('update_keyboard');
-          io.to(room.members[currentPlayerIndex]).emit('your_turn', true);
-          io.to(room.members[nextPlayerIndex]).emit('your_turn', false);
-          console.log(`Started a new game in room: ${roomCode}`);
+        // Check if both players are ready for the new game
+        if (room.playerOneReady && room.playerTwoReady) {
+          room.playerOneReady = false;
+          room.playerTwoReady = false;
+
+          const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
+
+          const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
+          const randomWord = randomWordDoc[0].word;
+
+          const updatedRoom = await Room.findByIdAndUpdate(
+            room._id,
+            {
+              word: randomWord,
+              board: Array(6)
+                .fill(null)
+                .map(() => Array(5).fill('')),
+              currentRow: 0,
+              currentPlayer: nextStartingPlayer,
+              lastStartingPlayer: nextStartingPlayer,
+              playerOneReady: false,
+              playerTwoReady: false
+            },
+            { new: true, useFindAndModify: false }
+          );
+
+          if (updatedRoom) {
+            const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
+            const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
+            io.to(room.roomCode).emit('new_game_started', updatedRoom.word);
+            io.to(room.roomCode).emit('update_keyboard');
+            io.to(updatedRoom.members[currentPlayerIndex]).emit('your_turn', true);
+            io.to(updatedRoom.members[nextPlayerIndex]).emit('your_turn', false);
+            console.log(`Started a new game in room: ${roomCode}`);
+          }
         }
       } catch (error) {
-        console.error('Error starting new game:', error);
+        console.error('Error in rematch readiness:', error);
       }
     });
 
