@@ -116,7 +116,11 @@ describe('Socket.io Server - Valid Operations', () => {
       clientSocketTwo.emit('join_room', mockRoom.roomCode);
     });
     clientSocketTwo.on('room_joined', () => {
-      clientSocketOne.emit('start_new_game', mockRoom.roomCode);
+      clientSocketOne.emit('player_ready_for_rematch', mockRoom.roomCode);
+      setTimeout(() => {
+        clientSocketTwo.emit('player_ready_for_rematch', mockRoom.roomCode);
+      }, 50);
+
       clientSocketOne.on('new_game_started', (newWord: string) => {
         expect('new_game_started').toBe('new_game_started');
         done();
