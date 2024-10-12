@@ -154,54 +154,40 @@ export const initSocketServer = (httpServer: HttpServer) => {
         if (room.playerOneReady && room.playerTwoReady) {
           room.playerOneReady = false;
           room.playerTwoReady = false;
-          await room.save();
 
-          socket.emit('start_new_game', roomCode);
-          io.to(roomCode).emit('opponent_ready');
+          const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
+
+          const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
+          const randomWord = randomWordDoc[0].word;
+
+          const updatedRoom = await Room.findByIdAndUpdate(
+            room._id,
+            {
+              word: randomWord,
+              board: Array(6)
+                .fill(null)
+                .map(() => Array(5).fill('')),
+              currentRow: 0,
+              currentPlayer: nextStartingPlayer,
+              lastStartingPlayer: nextStartingPlayer,
+              playerOneReady: false,
+              playerTwoReady: false
+            },
+            { new: true, useFindAndModify: false }
+          );
+
+          if (updatedRoom) {
+            const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
+            const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
+            io.to(room.roomCode).emit('new_game_started', updatedRoom.word);
+            io.to(room.roomCode).emit('update_keyboard');
+            io.to(updatedRoom.members[currentPlayerIndex]).emit('your_turn', true);
+            io.to(updatedRoom.members[nextPlayerIndex]).emit('your_turn', false);
+            console.log(`Started a new game in room: ${roomCode}`);
+          }
         }
       } catch (error) {
         console.error('Error in rematch readiness:', error);
-      }
-    });
-
-    socket.on('start_new_game', async (roomCode: string) => {
-      try {
-        const room = await Room.findOne({ roomCode });
-        if (!room) {
-          console.log(`Room not found: ${roomCode}`);
-          return;
-        }
-
-        const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
-
-        const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
-        const randomWord = randomWordDoc[0].word;
-
-        const updatedRoom = await Room.findByIdAndUpdate(
-          room._id,
-          {
-            word: randomWord,
-            board: Array(6)
-              .fill(null)
-              .map(() => Array(5).fill('')),
-            currentRow: 0,
-            currentPlayer: nextStartingPlayer,
-            lastStartingPlayer: nextStartingPlayer
-          },
-          { new: true, useFindAndModify: false }
-        );
-
-        if (updatedRoom) {
-          const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
-          const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
-          io.to(roomCode).emit('new_game_started', updatedRoom.word);
-          io.to(roomCode).emit('update_keyboard');
-          io.to(room.members[currentPlayerIndex]).emit('your_turn', true);
-          io.to(room.members[nextPlayerIndex]).emit('your_turn', false);
-          console.log(`Started a new game in room: ${roomCode}`);
-        }
-      } catch (error) {
-        console.error('Error starting new game:', error);
       }
     });
 
