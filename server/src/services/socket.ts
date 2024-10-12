@@ -152,9 +152,19 @@ export const initSocketServer = (httpServer: HttpServer) => {
           return;
         }
 
+        if (room.gameStarted) {
+          return;
+        }
+
+        room.gameStarted = true;
+
         const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
         const randomWord = randomWordDoc[0].word;
         const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
+
+        console.log(
+          `Previous starting player: ${room.lastStartingPlayer}, Next starting player: ${nextStartingPlayer}`
+        );
 
         const updatedRoom = await Room.findByIdAndUpdate(
           room._id,
@@ -165,7 +175,8 @@ export const initSocketServer = (httpServer: HttpServer) => {
               .map(() => Array(5).fill('')),
             currentRow: 0,
             currentPlayer: nextStartingPlayer,
-            lastStartingPlayer: nextStartingPlayer
+            lastStartingPlayer: nextStartingPlayer,
+            gameStarted: false
           },
           { new: true, useFindAndModify: false }
         );
