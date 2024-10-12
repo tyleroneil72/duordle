@@ -134,17 +134,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
     });
 
     socket.on('player_ready_for_rematch', async (roomCode: string) => {
-      const room = await Room.findOne({ roomCode });
-      if (!room) return;
-
-      // Notify the other player that the opponent is ready
-      const opponentId = room.members.find((id) => id !== socket.id);
-      if (opponentId) {
-        io.to(opponentId).emit('opponent_ready');
-      }
-    });
-
-    socket.on('start_new_game', async (roomCode) => {
       try {
         const room = await Room.findOne({ roomCode });
         if (!room) {
@@ -152,19 +141,41 @@ export const initSocketServer = (httpServer: HttpServer) => {
           return;
         }
 
-        if (room.gameStarted) {
+        // Determine which player is ready based on their socket id
+        if (room.members[0] === socket.id) {
+          room.playerOneReady = true;
+        } else if (room.members[1] === socket.id) {
+          room.playerTwoReady = true;
+        }
+
+        await room.save();
+
+        // Check if both players are ready for the new game
+        if (room.playerOneReady && room.playerTwoReady) {
+          room.playerOneReady = false;
+          room.playerTwoReady = false;
+          await room.save();
+
+          socket.emit('start_new_game', roomCode);
+          io.to(roomCode).emit('opponent_ready');
+        }
+      } catch (error) {
+        console.error('Error in rematch readiness:', error);
+      }
+    });
+
+    socket.on('start_new_game', async (roomCode: string) => {
+      try {
+        const room = await Room.findOne({ roomCode });
+        if (!room) {
+          console.log(`Room not found: ${roomCode}`);
           return;
         }
 
-        room.gameStarted = true;
+        const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
 
         const randomWordDoc = await Word.aggregate([{ $match: { difficulty: '1' } }, { $sample: { size: 1 } }]);
         const randomWord = randomWordDoc[0].word;
-        const nextStartingPlayer = room.lastStartingPlayer === 1 ? 2 : 1;
-
-        console.log(
-          `Previous starting player: ${room.lastStartingPlayer}, Next starting player: ${nextStartingPlayer}`
-        );
 
         const updatedRoom = await Room.findByIdAndUpdate(
           room._id,
@@ -175,8 +186,7 @@ export const initSocketServer = (httpServer: HttpServer) => {
               .map(() => Array(5).fill('')),
             currentRow: 0,
             currentPlayer: nextStartingPlayer,
-            lastStartingPlayer: nextStartingPlayer,
-            gameStarted: false
+            lastStartingPlayer: nextStartingPlayer
           },
           { new: true, useFindAndModify: false }
         );

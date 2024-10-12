@@ -9,7 +9,8 @@ interface IRoom extends Document {
   createdAt: Date;
   currentPlayer: number;
   lastStartingPlayer: number;
-  gameStarted: boolean;
+  playerOneReady: boolean;
+  playerTwoReady: boolean;
   checkAndDeleteIfEmpty(): Promise<void>;
 }
 
@@ -43,7 +44,11 @@ const RoomSchema: Schema = new Schema(
       type: Number,
       default: 1 // Default to player 1 starting first
     },
-    gameStarted: {
+    playerOneReady: {
+      type: Boolean,
+      default: false
+    },
+    playerTwoReady: {
       type: Boolean,
       default: false
     },
