@@ -85,9 +85,11 @@ const RoomPage: React.FC = () => {
       });
 
       socket.on('game_over', (gameStatus) => {
-        setGameOver(true);
-        setGameStatus(gameStatus);
-        setIsGameOverModalOpen(true);
+        setTimeout(() => {
+          setGameOver(true);
+          setGameStatus(gameStatus);
+          setIsGameOverModalOpen(true);
+        }, 1500);
       });
 
       socket.on('new_game_started', (newWord: string) => {
