@@ -180,7 +180,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
             const currentPlayerIndex = updatedRoom.currentPlayer === 1 ? 0 : 1;
             const nextPlayerIndex = updatedRoom.currentPlayer === 1 ? 1 : 0;
             io.to(room.roomCode).emit('new_game_started', updatedRoom.word);
-            io.to(room.roomCode).emit('update_keyboard');
             io.to(updatedRoom.members[currentPlayerIndex]).emit('your_turn', true);
             io.to(updatedRoom.members[nextPlayerIndex]).emit('your_turn', false);
             console.log(`Started a new game in room: ${roomCode}`);
@@ -228,7 +227,6 @@ export const initSocketServer = (httpServer: HttpServer) => {
           room.currentRow = currentRow + 1;
           await room.save(); // Save the updated room
           io.to(roomCode).emit('update_board', room.board, room.currentRow);
-          io.to(roomCode).emit('update_keyboard');
 
           let gameWon = guess?.toLowerCase() === room.word?.toLowerCase();
           if (gameWon || currentRow + 1 >= 6) {
