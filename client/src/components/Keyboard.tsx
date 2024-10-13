@@ -32,23 +32,30 @@ const Keyboard: React.FC<KeyboardProps> = ({
 
   const updateKeyColors = useCallback(() => {
     const newKeyState: { [key: string]: string } = {};
-    board.forEach((row, rowIndex) => {
-      if (rowIndex <= currentRow) {
-        row.forEach((letter, idx) => {
-          if (letter.toLowerCase() === word[idx]?.toLowerCase()) {
-            newKeyState[letter?.toLowerCase()] = 'bg-green-300';
-          } else if (word?.toLowerCase().includes(letter?.toLowerCase())) {
-            if (newKeyState[letter?.toLowerCase()] !== 'bg-green-300') {
-              newKeyState[letter?.toLowerCase()] = 'bg-yellow-300';
-            }
-          } else {
-            newKeyState[letter?.toLowerCase()] = 'bg-gray-400';
+    for (let rowIndex = 0; rowIndex < currentRow; rowIndex++) {
+      const row = board[rowIndex];
+      row.forEach((letter, idx) => {
+        if (!letter) return; // Skip empty cells
+        const lowerLetter = letter.toLowerCase();
+        const correctLetter = word[idx]?.toLowerCase();
+
+        if (lowerLetter === correctLetter) {
+          newKeyState[lowerLetter] = 'bg-green-300';
+        } else if (word.toLowerCase().includes(lowerLetter)) {
+          if (newKeyState[lowerLetter] !== 'bg-green-300') {
+            newKeyState[lowerLetter] = 'bg-yellow-300';
           }
-        });
-      }
-    });
+        } else {
+          newKeyState[lowerLetter] = 'bg-gray-400';
+        }
+      });
+    }
     setKeyState(newKeyState);
   }, [board, currentRow, word]);
+
+  useEffect(() => {
+    updateKeyColors();
+  }, [currentRow, updateKeyColors, word]);
 
   useEffect(() => {
     socket.on('invalid_word', () => {
@@ -60,17 +67,12 @@ const Keyboard: React.FC<KeyboardProps> = ({
     socket.on('valid_word', () => {
       setCurrentAttempt(Array(5).fill(''));
       setCurrentRow((prevRow) => (prevRow + 1 < board.length ? prevRow + 1 : prevRow));
-      updateKeyColors();
     });
 
     socket.on('not_your_turn', () => {
       setModalMessage("It's not your turn! Please wait for the other player to finish.");
       setIsModalOpen(true);
       setCurrentAttempt(Array(5).fill(''));
-    });
-
-    socket.on('update_keyboard', () => {
-      updateKeyColors();
     });
 
     return () => {
