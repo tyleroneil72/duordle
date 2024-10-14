@@ -13,6 +13,9 @@ const limiter = rateLimit({
     res.status(StatusCodes.TOO_MANY_REQUESTS).json({
       message: ReasonPhrases.TOO_MANY_REQUESTS
     });
+  },
+  keyGenerator: (req) => {
+    return req.ip || 'unknown-ip';
   }
 });
 
