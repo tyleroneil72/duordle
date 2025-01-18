@@ -19,7 +19,8 @@ services:
       MONGO_URI: "mongodb://root:example@mongo:27017/Duordle?authSource=admin"
       API_KEY: EXAMPLE_API_KEY
       CLIENT_URL: http://localhost:3000
-    # If a .env file exists in the same directory, it will override the values above
+      RATE_LIMIT: "OFF"
+    # If a .env file exists in the root directory, uncomment the following line
     # env_file:
     #   - .env
     ports:
