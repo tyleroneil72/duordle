@@ -1,0 +1,31 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: duordle-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: Duordle
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  duordle:
+    build: .
+    container_name: duordle-app
+    environment:
+      PORT: 3000
+      MONGO_URI: "mongodb://root:example@mongo:27017/Duordle?authSource=admin"
+      API_KEY: EXAMPLE_API_KEY
+      CLIENT_URL: http://localhost:3000
+    # If a .env file exists in the same directory, it will override the values above
+    # env_file:
+    #   - .env
+    ports:
+      - "${PORT:-3000}:${PORT:-3000}"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
