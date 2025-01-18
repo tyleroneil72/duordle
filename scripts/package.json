@@ -1,0 +1,13 @@
+{
+  "name": "duordle-scripts",
+  "version": "1.0.0",
+  "main": "initDB.js",
+  "scripts": {
+    "init": "node initDB.js"
+  },
+  "author": "Tyler O'Neil",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  }
+}
