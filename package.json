@@ -8,7 +8,8 @@
     "start": "node server/dist/src/index.js",
     "format": "cd client && npm run format && cd ../server && npm run format",
     "lint": "cd client && npm run lint:prettier && cd ../server && npm run lint:prettier",
-    "test": "cd server && npm run test"
+    "test": "cd server && npm run test",
+    "init": "cd scripts && npm i && npm run init"
   },
   "author": "Tyler O'Neil",
   "license": "MIT"
