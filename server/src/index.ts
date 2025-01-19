@@ -30,8 +30,10 @@ app.use(
     origin: CLIENT_URL
   })
 );
-app.use('/api/room', limiter);
-app.use('/api/word', limiter);
+if (process.env.RATE_LIMIT === 'ON') {
+  app.use('/api/room', limiter);
+  app.use('/api/word', limiter);
+}
 app.use('/api/room', roomRouter);
 app.use('/api/word', wordRouter);
 

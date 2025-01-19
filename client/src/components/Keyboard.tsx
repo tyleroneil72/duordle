@@ -30,8 +30,10 @@ const Keyboard: React.FC<KeyboardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
 
+  // Update key colors based on past guesses
   const updateKeyColors = useCallback(() => {
     const newKeyState: { [key: string]: string } = {};
+
     for (let rowIndex = 0; rowIndex < currentRow; rowIndex++) {
       const row = board[rowIndex];
       row.forEach((letter, idx) => {
@@ -40,12 +42,15 @@ const Keyboard: React.FC<KeyboardProps> = ({
         const correctLetter = word[idx]?.toLowerCase();
 
         if (lowerLetter === correctLetter) {
+          // Correct letter in correct position
           newKeyState[lowerLetter] = 'bg-green-300';
         } else if (word.toLowerCase().includes(lowerLetter)) {
+          // Correct letter, wrong position
           if (newKeyState[lowerLetter] !== 'bg-green-300') {
             newKeyState[lowerLetter] = 'bg-yellow-300';
           }
         } else {
+          // Incorrect letter
           newKeyState[lowerLetter] = 'bg-gray-400';
         }
       });
@@ -53,10 +58,12 @@ const Keyboard: React.FC<KeyboardProps> = ({
     setKeyState(newKeyState);
   }, [board, currentRow, word]);
 
+  // Run the updateKeyColors whenever currentRow or word changes
   useEffect(() => {
     updateKeyColors();
   }, [currentRow, updateKeyColors, word]);
 
+  // Socket event listeners
   useEffect(() => {
     socket.on('invalid_word', () => {
       setModalMessage('Invalid word. Please try again.');
@@ -80,7 +87,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
       socket.off('valid_word');
       socket.off('not_your_turn');
     };
-  }, [socket, setCurrentAttempt, setCurrentRow, board.length, updateKeyColors]);
+  }, [socket, setCurrentAttempt, setCurrentRow, board.length]);
 
   const handleLetterInput = useCallback(
     (letter: string) => {
@@ -94,7 +101,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         return newAttempt;
       });
     },
-    [setCurrentAttempt, disabled]
+    [disabled, setCurrentAttempt]
   );
 
   const handleBackspace = useCallback(() => {
@@ -118,12 +125,14 @@ const Keyboard: React.FC<KeyboardProps> = ({
         currentRow
       });
     }
-  }, [currentAttempt, socket, roomCode, currentRow]);
+  }, [currentAttempt, currentRow, roomCode, socket]);
 
+  // Keyboard event listener for physical keyboard
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      const { key } = event;
       if (disabled) return;
+      const { key } = event;
+
       if (key === 'Enter') {
         handleEnter();
       } else if (key === 'Backspace') {
@@ -135,9 +144,10 @@ const Keyboard: React.FC<KeyboardProps> = ({
         }
       }
     },
-    [handleEnter, handleBackspace, handleLetterInput, disabled]
+    [disabled, handleEnter, handleBackspace, handleLetterInput]
   );
 
+  // Attach/detach the listener
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -145,69 +155,73 @@ const Keyboard: React.FC<KeyboardProps> = ({
     };
   }, [handleKeyDown]);
 
+  // Rows of letters
   const firstRow = 'QWERTYUIOP'.split('');
   const secondRow = 'ASDFGHJKL'.split('');
   const thirdRow = 'ZXCVBNM'.split('');
 
-  const getKeyColor = (letter: string) => keyState[letter?.toLowerCase()] || 'bg-gray-300';
+  // Return a color from keyState if defined, else default to gray
+  const getKeyColor = (letter: string) => keyState[letter.toLowerCase()] || 'bg-gray-300';
 
   return (
     <div className='p-1'>
       <PopupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title='Notice' message={modalMessage} />
+
       {/* First Row */}
       <div className='mb-1 flex justify-center'>
-        {firstRow.map((letter, index) => (
+        {firstRow.map((letter) => (
           <button
-            key={index}
-            className={`${getKeyColor(
-              letter
-            )} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black hover:bg-opacity-80`}
+            key={letter}
             onClick={() => handleLetterInput(letter)}
+            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black focus:outline-none active:brightness-75`}
             disabled={currentRow >= board.length}
           >
             {letter}
           </button>
         ))}
       </div>
+
       {/* Second Row */}
       <div className='mb-1 flex justify-center'>
-        {secondRow.map((letter, index) => (
+        {secondRow.map((letter) => (
           <button
-            key={index}
-            className={`${getKeyColor(
-              letter
-            )} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black hover:bg-opacity-80`}
+            key={letter}
             onClick={() => handleLetterInput(letter)}
+            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black focus:outline-none active:brightness-75`}
             disabled={currentRow >= board.length}
           >
             {letter}
           </button>
         ))}
       </div>
+
       {/* Third Row (with Enter and Backspace) */}
       <div className='mb-1 flex justify-center'>
+        {/* Enter */}
         <button
-          className='m-0.5 h-14 w-16 rounded bg-gray-300 p-2 text-xs font-bold uppercase text-black hover:bg-gray-400'
           onClick={handleEnter}
+          className={`m-0.5 h-14 w-16 rounded bg-gray-300 p-2 text-xs font-bold uppercase text-black focus:outline-none active:brightness-75`}
           disabled={currentRow >= board.length}
         >
           Enter
         </button>
-        {thirdRow.map((letter, index) => (
+
+        {/* Letters in third row */}
+        {thirdRow.map((letter) => (
           <button
-            key={index}
-            className={`${getKeyColor(
-              letter
-            )} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black hover:bg-opacity-80`}
+            key={letter}
             onClick={() => handleLetterInput(letter)}
+            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 rounded p-2 text-xl font-bold uppercase text-black focus:outline-none active:brightness-75`}
             disabled={currentRow >= board.length}
           >
             {letter}
           </button>
         ))}
+
+        {/* Backspace */}
         <button
-          className='text-md m-0.5 flex h-14 w-16 items-center justify-center rounded bg-gray-300 p-2 font-bold uppercase text-black hover:bg-gray-400'
           onClick={handleBackspace}
+          className={`text-md m-0.5 flex h-14 w-16 items-center justify-center rounded bg-gray-300 p-2 font-bold uppercase text-black focus:outline-none active:brightness-75`}
           disabled={currentRow >= board.length}
         >
           <FaDeleteLeft size={25} />

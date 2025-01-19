@@ -1,6 +1,7 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 interface IRoom extends Document {
+  _id: Types.ObjectId;
   members: string[];
   roomCode: string;
   word: string;

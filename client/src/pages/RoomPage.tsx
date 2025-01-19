@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { IoMdMenu } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
+import ConfirmModal from '../components/ConfirmModal';
 import GameBoard from '../components/GameBoard';
 import GameOver from '../components/GameOver';
 import GameStatusMessage from '../components/GameStatusMessage';
@@ -25,6 +26,7 @@ const RoomPage: React.FC = () => {
   const [currentPlayer, setCurrentPlayer] = useState<boolean>(false);
   const [isGameOverModalOpen, setIsGameOverModalOpen] = useState<boolean>(false);
   const [playAgainPressed, setPlayAgainPressed] = useState<boolean>(false);
+  const [isConfirmLeaveOpen, setIsConfirmLeaveOpen] = useState(false);
 
   const startNewGame = useCallback((newWord: string) => {
     setBoard(
@@ -44,9 +46,9 @@ const RoomPage: React.FC = () => {
     if (roomCode) {
       socket.emit('join_room', roomCode);
 
-      socket.on('room_joined', (word: string, board: string[][]) => {
+      socket.on('room_joined', (word: string, existingBoard: string[][]) => {
         setWord(word);
-        setBoard(board);
+        setBoard(existingBoard);
         setCurrentAttempt(Array(5).fill(''));
       });
 
@@ -84,10 +86,10 @@ const RoomPage: React.FC = () => {
         setCurrentRow(newCurrentRow);
       });
 
-      socket.on('game_over', (gameStatus) => {
+      socket.on('game_over', (result) => {
         setTimeout(() => {
           setGameOver(true);
-          setGameStatus(gameStatus);
+          setGameStatus(result);
           setIsGameOverModalOpen(true);
         }, 1500);
       });
@@ -109,7 +111,7 @@ const RoomPage: React.FC = () => {
         socket.off('new_game_started');
       };
     }
-  }, [roomCode, navigate, playAgainPressed, startNewGame]);
+  }, [roomCode, navigate, startNewGame]);
 
   useEffect(() => {
     setBoard((prevBoard) => {
@@ -119,9 +121,13 @@ const RoomPage: React.FC = () => {
     });
   }, [currentAttempt, currentRow]);
 
-  const handleLeaveRoom = () => {
+  const confirmLeaveRoom = () => {
     socket.emit('leave_room', roomCode);
     navigate('/');
+  };
+
+  const handleLeaveRoom = () => {
+    setIsConfirmLeaveOpen(true);
   };
 
   const toggleGameOverModal = () => {
@@ -186,6 +192,7 @@ const RoomPage: React.FC = () => {
           )}
         </div>
       </div>
+
       {connectionStatus === 'connected' && (
         <div className='fixed right-2 top-2 flex flex-row-reverse space-x-2 sm:flex-col sm:items-end sm:space-x-0 sm:space-y-2'>
           <button
@@ -195,6 +202,7 @@ const RoomPage: React.FC = () => {
           >
             Leave Room
           </button>
+
           {gameOver && (
             <button
               className='focus:shadow-outline flex items-center justify-center rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
@@ -206,6 +214,14 @@ const RoomPage: React.FC = () => {
           )}
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={isConfirmLeaveOpen}
+        title='Are you sure?'
+        message='Are you sure you want to leave the room?'
+        onCancel={() => setIsConfirmLeaveOpen(false)}
+        onConfirm={confirmLeaveRoom}
+      />
     </div>
   );
 };
