@@ -52,7 +52,7 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
         <div className='mb-4 text-center text-lg font-bold'>{win ? 'You won!' : 'You lost!'}</div>
         <div className='mb-4 whitespace-pre text-center'>{gameState}</div>
         <div className='mb-4 text-center'>
-          <strong>Word:</strong> {word}
+          <strong>Word:</strong> {word.toUpperCase()}
         </div>
         <div className='flex justify-center space-x-2'>
           <button
