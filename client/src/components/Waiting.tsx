@@ -25,7 +25,7 @@ const Waiting: React.FC<WaitingProps> = ({ code }) => {
         Share this room code:
         <button
           onClick={handleCopy}
-          className='ml-2 inline-flex cursor-pointer items-center rounded bg-indigo-100 px-3 py-1 font-semibold text-indigo-500 hover:bg-indigo-200'
+          className='ml-2 inline-flex cursor-pointer items-center rounded-sm bg-indigo-100 px-3 py-1 font-semibold text-indigo-500 hover:bg-indigo-200'
           title='Click to copy'
         >
           {code} <FaClipboard className='ml-2' />
