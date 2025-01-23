@@ -155,7 +155,7 @@ const RoomPage: React.FC = () => {
             <>
               <Waiting code={roomCode} />
               <button
-                className='focus:shadow-outline mx-auto mt-4 block rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
+                className='focus:shadow-outline mx-auto mt-4 block cursor-pointer rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
                 onClick={handleLeaveRoom}
                 title='Leave Room'
               >
@@ -196,7 +196,7 @@ const RoomPage: React.FC = () => {
       {connectionStatus === 'connected' && (
         <div className='fixed top-2 right-2 flex flex-row-reverse space-x-2 sm:flex-col sm:items-end sm:space-y-2 sm:space-x-0'>
           <button
-            className='focus:shadow-outline rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
+            className='focus:shadow-outline cursor-pointer rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
             onClick={handleLeaveRoom}
             title='Leave Room'
           >
@@ -205,7 +205,7 @@ const RoomPage: React.FC = () => {
 
           {gameOver && (
             <button
-              className='focus:shadow-outline flex items-center justify-center rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
+              className='focus:shadow-outline flex cursor-pointer items-center justify-center rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
               onClick={toggleGameOverModal}
               title='Toggle Game Over Modal'
             >

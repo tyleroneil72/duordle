@@ -58,7 +58,7 @@ const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, title, message
                   <button
                     ref={buttonRef}
                     type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-hidden'
+                    className='inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-hidden'
                     onClick={onClose}
                   >
                     OK

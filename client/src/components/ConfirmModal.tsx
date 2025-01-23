@@ -59,14 +59,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onConfirm, onCancel
                   <button
                     ref={cancelButtonRef}
                     type='button'
-                    className='rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 focus:outline-hidden'
+                    className='cursor-pointer rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 focus:outline-hidden'
                     onClick={onCancel}
                   >
                     Cancel
                   </button>
                   <button
                     type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-hidden'
+                    className='inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-hidden'
                     onClick={onConfirm}
                   >
                     Leave

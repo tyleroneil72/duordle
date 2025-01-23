@@ -173,7 +173,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
           <button
             key={letter}
             onClick={() => handleLetterInput(letter)}
-            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 rounded-sm p-2 text-xl font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
+            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 cursor-pointer rounded-sm p-2 text-xl font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
             disabled={currentRow >= board.length}
           >
             {letter}
@@ -187,7 +187,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
           <button
             key={letter}
             onClick={() => handleLetterInput(letter)}
-            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 rounded-sm p-2 text-xl font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
+            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 cursor-pointer rounded-sm p-2 text-xl font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
             disabled={currentRow >= board.length}
           >
             {letter}
@@ -200,7 +200,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         {/* Enter */}
         <button
           onClick={handleEnter}
-          className={`m-0.5 h-14 w-16 rounded-sm bg-gray-300 p-2 text-xs font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
+          className={`m-0.5 h-14 w-16 cursor-pointer rounded-sm bg-gray-300 p-2 text-xs font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
           disabled={currentRow >= board.length}
         >
           Enter
@@ -211,7 +211,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
           <button
             key={letter}
             onClick={() => handleLetterInput(letter)}
-            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 rounded-sm p-2 text-xl font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
+            className={` ${getKeyColor(letter)} m-0.5 h-14 w-10 cursor-pointer rounded-sm p-2 text-xl font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
             disabled={currentRow >= board.length}
           >
             {letter}
@@ -221,7 +221,7 @@ const Keyboard: React.FC<KeyboardProps> = ({
         {/* Backspace */}
         <button
           onClick={handleBackspace}
-          className={`text-md m-0.5 flex h-14 w-16 items-center justify-center rounded-sm bg-gray-300 p-2 font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
+          className={`text-md m-0.5 flex h-14 w-16 cursor-pointer items-center justify-center rounded-sm bg-gray-300 p-2 font-bold text-black uppercase focus:outline-hidden active:brightness-75`}
           disabled={currentRow >= board.length}
         >
           <FaDeleteLeft size={25} />
