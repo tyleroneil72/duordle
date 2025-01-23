@@ -81,10 +81,10 @@ const GameBoard: React.FC<GameBoardProps> = ({ board, word, currentRow }) => {
           {row.map((letter, cellIndex) => (
             <motion.div
               key={`${rowIndex}-${cellIndex}`}
-              className={`relative aspect-square w-full rounded border-2 border-gray-300 ${getCellColor(
+              className={`relative aspect-square w-full rounded-sm border-2 border-gray-300 ${getCellColor(
                 rowIndex,
                 cellIndex
-              )} flex items-center justify-center text-xl font-bold text-gray-800 shadow`}
+              )} flex items-center justify-center text-xl font-bold text-gray-800 shadow-sm`}
               variants={flipVariants}
             >
               <span className='absolute inset-0 flex items-center justify-center text-lg'>{letter.toUpperCase()}</span>

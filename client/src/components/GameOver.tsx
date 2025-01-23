@@ -46,23 +46,23 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50'>
-      <div className='w-full max-w-md rounded bg-white p-4 shadow-lg'>
+    <div className='fixed inset-0 flex items-center justify-center bg-gray-600/50'>
+      <div className='w-full max-w-md rounded-sm bg-white p-4 shadow-lg'>
         <h2 className='mb-4 text-center text-lg font-bold'>Game Over</h2>
         <div className='mb-4 text-center text-lg font-bold'>{win ? 'You won!' : 'You lost!'}</div>
-        <div className='mb-4 whitespace-pre text-center'>{gameState}</div>
+        <div className='mb-4 text-center whitespace-pre'>{gameState}</div>
         <div className='mb-4 text-center'>
-          <strong>Word:</strong> {word}
+          <strong>Word:</strong> {word.toUpperCase()}
         </div>
         <div className='flex justify-center space-x-2'>
           <button
-            className='focus:shadow-outline rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
+            className='focus:shadow-outline rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
             onClick={copyToClipboard}
           >
             Copy to Clipboard
           </button>
           <button
-            className='focus:shadow-outline rounded bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700 focus:outline-none'
+            className='focus:shadow-outline rounded-sm bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700 focus:outline-hidden'
             onClick={onClose}
           >
             Close
@@ -70,7 +70,7 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
         </div>
         <div className='mt-4 flex justify-center'>
           <button
-            className={`bg-indigo-800 ${playAgainPressed ? 'cursor-not-allowed opacity-50' : 'hover:bg-indigo-900'} focus:shadow-outline rounded px-4 py-2 font-bold text-white focus:outline-none`}
+            className={`bg-indigo-800 ${playAgainPressed ? 'cursor-not-allowed opacity-50' : 'hover:bg-indigo-900'} focus:shadow-outline rounded-sm px-4 py-2 font-bold text-white focus:outline-hidden`}
             onClick={onPlayAgain}
             disabled={playAgainPressed}
           >

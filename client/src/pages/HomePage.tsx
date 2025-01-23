@@ -100,7 +100,7 @@ const HomePage: React.FC = () => {
       </div>
       <button
         onClick={() => navigate('/info')}
-        className='fixed bottom-4 right-4 flex items-center justify-center rounded-full bg-indigo-600 p-3 text-white shadow-lg hover:bg-indigo-700'
+        className='fixed right-4 bottom-4 flex items-center justify-center rounded-full bg-indigo-600 p-3 text-white shadow-lg hover:bg-indigo-700'
         title='Info'
       >
         <FaCog size={24} />
