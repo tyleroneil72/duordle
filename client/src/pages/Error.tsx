@@ -29,7 +29,7 @@ const ErrorPage: React.FC<ErrorPageProps> = ({ type }) => {
         <p className='mb-6 text-lg text-gray-800'>{message}</p>
         <button
           onClick={() => navigate('/')}
-          className='rounded-lg bg-indigo-500 px-6 py-2 font-bold text-white transition-colors duration-300 ease-in-out hover:bg-indigo-700 focus:outline-none'
+          className='rounded-lg bg-indigo-500 px-6 py-2 font-bold text-white transition-colors duration-300 ease-in-out hover:bg-indigo-700 focus:outline-hidden'
         >
           Go Home
         </button>

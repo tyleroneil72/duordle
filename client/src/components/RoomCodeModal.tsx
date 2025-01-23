@@ -53,7 +53,7 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
           leaveFrom='opacity-100 scale-100'
           leaveTo='opacity-0 scale-95'
         >
-          <div className='fixed inset-0 bg-black bg-opacity-25 transition-opacity' />
+          <div className='fixed inset-0 bg-black/25 transition-opacity' />
         </TransitionChild>
 
         <div className='fixed inset-0 z-10 overflow-y-auto'>
@@ -68,7 +68,7 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
               leaveTo='opacity-0 scale-95'
             >
               <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                <DialogTitle as='h3' className='text-lg font-medium leading-6 text-gray-900'>
+                <DialogTitle as='h3' className='text-lg leading-6 font-medium text-gray-900'>
                   Enter Room Code
                 </DialogTitle>
                 <div className='mt-2'>
@@ -77,7 +77,7 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                     value={roomCode}
                     onChange={handleInputChange}
                     placeholder='Room Code'
-                    className='mt-2 w-full rounded border p-2'
+                    className='mt-2 w-full rounded-sm border p-2'
                     maxLength={4}
                     ref={inputRef} // Assign the ref to the input element
                   />
@@ -85,14 +85,14 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                 <div className='mt-4 flex justify-end space-x-2'>
                   <button
                     type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 focus:outline-none'
+                    className='inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 focus:outline-hidden'
                     onClick={() => onClose(null)}
                   >
                     Cancel
                   </button>
                   <button
                     type='button'
-                    className={`inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white focus:outline-none ${
+                    className={`inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white focus:outline-hidden ${
                       isJoinDisabled ? 'cursor-not-allowed bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
                     }`}
                     onClick={handleJoin}

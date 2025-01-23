@@ -149,13 +149,13 @@ const RoomPage: React.FC = () => {
         connectionStatus === 'waiting' ? 'pb-48 sm:pb-0' : 'pt-0'
       }`}
     >
-      <div className='flex flex-grow flex-col items-center justify-center p-4 sm:p-6'>
-        <div className='relative mb-4 w-full max-w-md rounded bg-indigo-50 px-4 py-6 shadow-md'>
+      <div className='flex grow flex-col items-center justify-center p-4 sm:p-6'>
+        <div className='relative mb-4 w-full max-w-md rounded-sm bg-indigo-50 px-4 py-6 shadow-md'>
           {roomCode && connectionStatus === 'waiting' ? (
             <>
               <Waiting code={roomCode} />
               <button
-                className='focus:shadow-outline mx-auto mt-4 block rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
+                className='focus:shadow-outline mx-auto mt-4 block rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
                 onClick={handleLeaveRoom}
                 title='Leave Room'
               >
@@ -194,9 +194,9 @@ const RoomPage: React.FC = () => {
       </div>
 
       {connectionStatus === 'connected' && (
-        <div className='fixed right-2 top-2 flex flex-row-reverse space-x-2 sm:flex-col sm:items-end sm:space-x-0 sm:space-y-2'>
+        <div className='fixed top-2 right-2 flex flex-row-reverse space-x-2 sm:flex-col sm:items-end sm:space-y-2 sm:space-x-0'>
           <button
-            className='focus:shadow-outline rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
+            className='focus:shadow-outline rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
             onClick={handleLeaveRoom}
             title='Leave Room'
           >
@@ -205,7 +205,7 @@ const RoomPage: React.FC = () => {
 
           {gameOver && (
             <button
-              className='focus:shadow-outline flex items-center justify-center rounded bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-none'
+              className='focus:shadow-outline flex items-center justify-center rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
               onClick={toggleGameOverModal}
               title='Toggle Game Over Modal'
             >

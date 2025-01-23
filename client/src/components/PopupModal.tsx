@@ -33,7 +33,7 @@ const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, title, message
           leaveFrom='opacity-100 scale-100'
           leaveTo='opacity-0 scale-95'
         >
-          <div className='fixed inset-0 bg-black bg-opacity-25 transition-opacity' />
+          <div className='fixed inset-0 bg-black/25 transition-opacity' />
         </TransitionChild>
 
         <div className='fixed inset-0 z-10 overflow-y-auto'>
@@ -48,7 +48,7 @@ const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, title, message
               leaveTo='opacity-0 scale-95'
             >
               <DialogPanel className='w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all'>
-                <DialogTitle as='h3' className='text-lg font-medium leading-6 text-gray-900'>
+                <DialogTitle as='h3' className='text-lg leading-6 font-medium text-gray-900'>
                   {title}
                 </DialogTitle>
                 <div className='mt-2'>
@@ -58,7 +58,7 @@ const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, title, message
                   <button
                     ref={buttonRef}
                     type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none'
+                    className='inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-hidden'
                     onClick={onClose}
                   >
                     OK
