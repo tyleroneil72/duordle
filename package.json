@@ -1,7 +1,7 @@
 {
   "name": "duordle",
-  "version": "1.0.0",
-  "description": "duordle app",
+  "version": "1.1.2",
+  "description": "Duordle Web App",
   "main": "server/dist/index.js",
   "scripts": {
     "build": "cd client && npm i && npm run build && cd ../server && npm i && npm run build",
