@@ -85,7 +85,7 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                 <div className='mt-4 flex justify-end space-x-2'>
                   <button
                     type='button'
-                    className='inline-flex justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 focus:outline-hidden'
+                    className='inline-flex cursor-pointer justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-400 focus:outline-hidden'
                     onClick={() => onClose(null)}
                   >
                     Cancel
@@ -93,7 +93,9 @@ const RoomCodeModal: React.FC<RoomCodeModalProps> = ({ isOpen, onClose }) => {
                   <button
                     type='button'
                     className={`inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white focus:outline-hidden ${
-                      isJoinDisabled ? 'cursor-not-allowed bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700'
+                      isJoinDisabled
+                        ? 'cursor-not-allowed bg-indigo-400'
+                        : 'cursor-pointer bg-indigo-600 hover:bg-indigo-700'
                     }`}
                     onClick={handleJoin}
                     disabled={isJoinDisabled}

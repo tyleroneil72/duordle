@@ -56,13 +56,13 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
         </div>
         <div className='flex justify-center space-x-2'>
           <button
-            className='focus:shadow-outline rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
+            className='focus:shadow-outline cursor-pointer rounded-sm bg-indigo-500 px-4 py-2 font-bold text-white hover:bg-indigo-700 focus:outline-hidden'
             onClick={copyToClipboard}
           >
             Copy to Clipboard
           </button>
           <button
-            className='focus:shadow-outline rounded-sm bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700 focus:outline-hidden'
+            className='focus:shadow-outline cursor-pointer rounded-sm bg-gray-500 px-4 py-2 font-bold text-white hover:bg-gray-700 focus:outline-hidden'
             onClick={onClose}
           >
             Close
@@ -70,7 +70,7 @@ const GameOver: React.FC<GameOverProps> = ({ win, board, word, onClose, isOpen, 
         </div>
         <div className='mt-4 flex justify-center'>
           <button
-            className={`bg-indigo-800 ${playAgainPressed ? 'cursor-not-allowed opacity-50' : 'hover:bg-indigo-900'} focus:shadow-outline rounded-sm px-4 py-2 font-bold text-white focus:outline-hidden`}
+            className={`bg-indigo-800 ${playAgainPressed ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-indigo-900'} focus:shadow-outline rounded-sm px-4 py-2 font-bold text-white focus:outline-hidden`}
             onClick={onPlayAgain}
             disabled={playAgainPressed}
           >
