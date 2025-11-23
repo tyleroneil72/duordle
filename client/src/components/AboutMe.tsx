@@ -15,7 +15,7 @@ const AboutMe = () => {
       </p>
       <div className='mt-4 flex justify-center space-x-4'>
         <a
-          href='https://github.com/tyleroneil72'
+          href='https://github.com/tyleroneildev'
           className='text-indigo-500 hover:text-indigo-700'
           target='_blank'
           title='GitHub Profile'

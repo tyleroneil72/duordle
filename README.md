@@ -41,7 +41,7 @@ Below are instructions for running the project **locally**, either **with Docker
 2. **Clone this repo**:
 
 ```bash
-git clone https://github.com/tyleroneil72/duordle.git
+git clone https://github.com/tyleroneildev/duordle.git
 cd duordle
 ```
 
@@ -71,7 +71,7 @@ Access the app at http://localhost:3000 (assuming 3000 is your `PORT`).
 **Clone** this repo:
 
 ```bash
-git clone https://github.com/tyleroneil72/duordle.git
+git clone https://github.com/tyleroneildev/duordle.git
 cd duordle
 ```
 
