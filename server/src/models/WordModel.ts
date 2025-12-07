@@ -26,11 +26,10 @@ const WordSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-WordSchema.pre<IWord>('save', function (next) {
+WordSchema.pre<IWord>('save', function () {
   if (this.isModified('word')) {
     this.length = this.word.length;
   }
-  next();
 });
 
 export default mongoose.model<IWord>('Word', WordSchema);
