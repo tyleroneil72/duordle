@@ -1,4 +1,4 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 const limiter = rateLimit({
@@ -14,9 +14,7 @@ const limiter = rateLimit({
       message: ReasonPhrases.TOO_MANY_REQUESTS
     });
   },
-  keyGenerator: (req) => {
-    return req.ip || 'unknown-ip';
-  }
+  keyGenerator: (req) => ipKeyGenerator(req.ip || '')
 });
 
 export default limiter;
